@@ -150,9 +150,12 @@ def ajaxNot1(request):
     TrueDatausername = 'tdws127'
     TrueDatapassword = 'saaral@127'
 
+    print("Before nse")
+
     nse = Nse()
     fnolist = nse.get_fno_lot_sizes()
     
+    print("After nse")
 
     # Removing 3 symbols from the list as they are not required for equity comparision
     
