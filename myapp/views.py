@@ -201,7 +201,7 @@ def ajaxNot1(request):
             print("Connecting")
 
             td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
-            nifty_chain = td_obj.start_option_chain(item , dt(dte.year,dte.month,dte.day),chain_length=80,bid_ask=True)
+            nifty_chain = td_obj.start_option_chain(item , dt(dte.year,dte.month,dte.day),chain_length=10,bid_ask=True)
             time.sleep(4)
             df = nifty_chain.get_option_chain()
 
