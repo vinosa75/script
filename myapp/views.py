@@ -176,7 +176,7 @@ def ajaxNot1(request):
     # print(ex_list)
     # expiry = ex_list[0]
     # print(expiry)
-    expiry = "30-SEP-21"
+    expiry = "30-SEP-2021"
     dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
 
     sampleDict = {}
