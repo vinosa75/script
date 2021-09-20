@@ -165,18 +165,18 @@ def ajaxNot1(request):
     # remove_list = []
     fnolist = [i for i in fnolist if i not in remove_list]
 
-    # fnolist = ['MRF']
+    fnolist = ['MRF']
 
     # Taking the first date from the expiry list.
     # print(fnolist)
 
     print("Before expiry")
 
-    # ex_list = nsepython.expiry_list('ACC')
-    # print(ex_list)
-    # expiry = ex_list[0]
-    # print(expiry)
-    expiry = "30-SEP-2021"
+    ex_list = nsepython.expiry_list('NIFTY')
+    print(ex_list)
+    expiry = ex_list[0]
+    print(expiry)
+    # expiry = "30-SEP-2021"
     dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
 
     sampleDict = {}
