@@ -6,6 +6,7 @@ from django.contrib.auth.models import User,auth
 from django.shortcuts import redirect,render
 from django.contrib import messages
 from nsepython import *
+import nsepython
 from myapp.models import HistoryOIChange,HistoryOITotal,LiveOIChange,LiveOITotal,LiveOITotalAllSymbol,LiveEquityResult
 
 import pandas as pd
@@ -170,7 +171,7 @@ def ajaxNot1(request):
 
     print("Before expiry")
 
-    ex_list = expiry_list('ACC')
+    ex_list = nsepython.expiry_list('ACC')
     print(ex_list)
     expiry = ex_list[0]
     print(expiry)
