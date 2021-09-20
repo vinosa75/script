@@ -4,3 +4,4 @@ django-heroku
 truedata-ws
 dj-database-url
 nsepython
+nsetools
