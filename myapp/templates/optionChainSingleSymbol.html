@@ -1,7 +1,9 @@
 
 <div style="text-align:center">
 <h2 style="text-align:center;color:black;font-size:medium;" class="btn btn-warning">{{symbol}} </h2>
-</div>
+</div>  
+            
+            {% for value in liveEqui %}
             <nav aria-label="breadcrumb">
 
               <ol class="breadcrumb">
@@ -9,50 +11,52 @@
                 <li class="breadcrumb-item">
                 {% comment %} <button type="submit" class="btn btn-warning"><b>{{ key }}</b></button> {% endcomment %}
                 {% comment %} <button type="submit" id="button_1" class="btn btn-warning" value="Manoj"><b>{{ key }}</b></button> {% endcomment %}
-                <button id="1" name="1" class="btn btn-warning" value="{{ liveEqui.symbol }}">{{ liveEqui.symbol }}</button>
+                <button id="1" name="1" class="btn btn-warning" value="{{ value.symbol }}">{{ value.symbol }}</button>
                 {% comment %} <span class="badge badge-warning"></span> {% endcomment %}
                 
                 </li>
                 <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b>Open</b></span>
-                  <span class="bottom">{{ liveEqui.open }}</span>
+                  <span class="bottom">{{ value.open }}</span>
                 </div>
                 </li>
                 <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b>High</b></span>
-                  <span class="bottom">{{ liveEqui.high }}</span>
+                  <span class="bottom">{{ value.high }}</span>
                 </div>
                 </li>
                 <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b>Low</b></span>
-                  <span class="bottom">{{ liveEqui.low }}</span>
+                  <span class="bottom">{{ value.low }}</span>
                 </div>
                 </li>
                 <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b>Pr_close</b></span>
-                  <span class="bottom">{{ liveEqui.prev_day_close }}</span>
+                  <span class="bottom">{{ value.prev_day_close }}</span>
                 </div>
                 </li>
                 <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b>Ltp</b></span>
-                  <span class="bottom">{{ liveEqui.ltp }}</span>
+                  <span class="bottom">{{ value.ltp }}</span>
                 </div>
                 </li>
 
                 <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b class="badge badge-info">Time</b></span>
-                  <span class="bottom">{{ liveEqui.time }}</span>
+                  <span class="bottom">{{ value.time }}</span>
                 </div>
                 </li>
 
               </ol>
             </nav>
+
+            {% endfor %}
 
 <div class="row">
   <div class="col-sm-6">
