@@ -172,10 +172,11 @@ def ajaxNot1(request):
 
     print("Before expiry")
 
-    ex_list = nsepython.expiry_list('ACC')
-    print(ex_list)
-    expiry = ex_list[0]
-    print(expiry)
+    # ex_list = nsepython.expiry_list('ACC')
+    # print(ex_list)
+    # expiry = ex_list[0]
+    # print(expiry)
+    expiry = "30-SEP-21"
     dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
 
     sampleDict = {}
@@ -1263,6 +1264,7 @@ def entry(request):
     from nsetools import Nse
     nse = Nse()
     fnolist = nse.get_fno_lot_sizes()
+    fnolist = nse.get
     print(len(fnolist))
     return render(request, 'entry.html', {'fnolist':fnolist})
 
