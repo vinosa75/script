@@ -206,7 +206,7 @@ def ajaxNot1(request):
 
                 # response = requests.get('https://api.truedata.in/logoutRequest?user=tdws127&password=saaral@127&port=8082') 
 
-                # print(response)
+                print("Connecting")
 
                 td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
                 nifty_chain = td_obj.start_option_chain(item , dt(dte.year,dte.month,dte.day),chain_length=80,bid_ask=True)
@@ -1288,6 +1288,8 @@ def ajax_load_expiry(request):
 def load_optionChain(request):
     # Getting the Symbol & Expiry selected by user.
     print(request.GET)
+
+    symbol="NIFTY"
     
     if len(request.GET) >0:
         symbol = request.GET["symbol"]
