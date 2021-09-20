@@ -183,7 +183,7 @@ def ajaxNot1(request):
     count=1
 
     print("After expiry")
-    # fnolist = fnolist[0:50]
+    fnolist = fnolist[5:10]
     print(fnolist)
 
     
