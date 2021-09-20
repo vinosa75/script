@@ -2,3 +2,4 @@ django
 gunicorn
 django-heroku
 truedata-ws
+dj-database-url
