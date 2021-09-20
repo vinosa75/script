@@ -18,6 +18,7 @@ from datetime import datetime as dt
 import datetime
 from nsetools import Nse
 from nsepython import *
+import nsepython
 
 from datetime import timedelta
 import websocket
