@@ -196,152 +196,129 @@ def ajaxNot1(request):
 
     
     # LiveEquityResult.objects.all().delete()
-    sym = list(LiveOITotal.objects.values_list('symbol', flat=True))
+    # sym = list(LiveOITotal.objects.values_list('symbol', flat=True))
 
 
     for item in fnolist :
-        if item not in sym:
-            try:
-                import requests
+        # if item not in sym:
+        try:
+            import requests
 
-                # response = requests.get('https://api.truedata.in/logoutRequest?user=tdws127&password=saaral@127&port=8082') 
+            # response = requests.get('https://api.truedata.in/logoutRequest?user=tdws127&password=saaral@127&port=8082') 
 
-                print("Connecting")
+            print("Connecting")
 
-                td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
-                nifty_chain = td_obj.start_option_chain(item , dt(dte.year,dte.month,dte.day),chain_length=80,bid_ask=True)
-                time.sleep(4)
-                df = nifty_chain.get_option_chain()
+            td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
+            nifty_chain = td_obj.start_option_chain(item , dt(dte.year,dte.month,dte.day),chain_length=80,bid_ask=True)
+            time.sleep(4)
+            df = nifty_chain.get_option_chain()
 
-                nifty_chain.stop_option_chain()
-                td_obj.disconnect()
-                sampleDict[item] = df
+            nifty_chain.stop_option_chain()
+            td_obj.disconnect()
+            sampleDict[item] = df
 
-                print(count)
-                print(item)
-                count = count + 1
+            print(count)
+            print(item)
+            count = count + 1
 
-                # Total OI Calculation from Option chain
-                FutureData = {}
+            # Total OI Calculation from Option chain
+            FutureData = {}
 
-                # value1 = LiveOIChange.objects.all()
-                # value2 = LiveOITotal.objects.all()
-
-
-                OIChangeValue = OIChange(df,item,dte)
-                
-                if OIChangeValue == False:
-                    continue
-
-                OITotalValue = OITotal(df,item,dte)
-
-                if OITotalValue == False:
-                    continue
+            # value1 = LiveOIChange.objects.all()
+            # value2 = LiveOITotal.objects.all()
 
 
-                # StrikeGap
-                # Fourrows = df.iloc[:4]
-                # print(Fourrows)
-                # CEFiltered = Fourrows[Fourrows["type"] == "CE"]
-                # print(CEFiltered)
-                # strikeGap = float(CEFiltered.iloc[1]["strike"]) - float(CEFiltered.iloc[0]["strike"])
-                # print(strikeGap)
-                strikeGap =float(df['strike'].unique()[1]) - float(df['strike'].unique()[0])
+            OIChangeValue = OIChange(df,item,dte)
+            
+            if OIChangeValue == False:
+                continue
 
-                FutureData[item] = [OITotalValue['cestrike'],OITotalValue['pestrike'],strikeGap]
+            OITotalValue = OITotal(df,item,dte)
 
-                print(FutureData)
-
-                print("strike gap crossed")
-
-                # Percentage calculation from equity data
-                newDict = {}
-                # for key,value in FutureData.items():
-                # Call 1 percent 
-                callone = float(OITotalValue['cestrike']) - (float(strikeGap))*0.1
-                # Call 1/2 percent 
-                callhalf = float(OITotalValue['cestrike']) - (float(strikeGap))*0.05
-                # Put 1 percent
-                putone = float(OITotalValue['pestrike']) + (float(strikeGap))*0.1
-                # Put 1/2 percent
-                puthalf = float(OITotalValue['pestrike']) + (float(strikeGap))*0.05
-
-                newDict[item] = [float(OITotalValue['cestrike']),float(OITotalValue['pestrike']),callone,putone,callhalf,puthalf]
-                
-                print("equity calculation crossed")
-                # # Fetching today's date
-                dat = dt.today()
-                # # Deleting past historical data in the database
-                HistoryOIChange.objects.filter(time__lte = dt.combine(dat, dt.min.time())).delete()
-                HistoryOITotal.objects.filter(time__lte = dt.combine(dat, dt.min.time())).delete()
-                
-                value1 = LiveOIChange.objects.filter(symbol=item)
+            if OITotalValue == False:
+                continue
 
 
-                if len(value1) > 0:
+            # StrikeGap
+            # Fourrows = df.iloc[:4]
+            # print(Fourrows)
+            # CEFiltered = Fourrows[Fourrows["type"] == "CE"]
+            # print(CEFiltered)
+            # strikeGap = float(CEFiltered.iloc[1]["strike"]) - float(CEFiltered.iloc[0]["strike"])
+            # print(strikeGap)
+            strikeGap =float(df['strike'].unique()[1]) - float(df['strike'].unique()[0])
 
-                    if (value1[0].callstrike != OIChangeValue['cestrike']) or (value1[0].putstrike != OIChangeValue['pestrike']):
-                        # Adding to history table
-                        ChangeOIHistory = HistoryOIChange(time=value1[0].time,call1=value1[0].call1,call2=value1[0].call2,put1=value1[0].put1,put2=value1[0].put2,callstrike=value1[0].callstrike,putstrike=value1[0].putstrike,symbol=value1[0].symbol,expiry=value1[0].expiry)
-                        ChangeOIHistory.save()
+            FutureData[item] = [OITotalValue['cestrike'],OITotalValue['pestrike'],strikeGap]
 
-                        # deleting live table data
-                        value1 = LiveOIChange.objects.filter(symbol=item).delete()
+            print(FutureData)
 
-                        # Creating in live data
-                        ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
-                        ChangeOICreation.save() 
+            print("strike gap crossed")
 
-                    else:
-                        # deleting live table data
-                        value1 = LiveOIChange.objects.filter(symbol=item).delete()
+            # Percentage calculation from equity data
+            newDict = {}
+            # for key,value in FutureData.items():
+            # Call 1 percent 
+            callone = float(OITotalValue['cestrike']) - (float(strikeGap))*0.1
+            # Call 1/2 percent 
+            callhalf = float(OITotalValue['cestrike']) - (float(strikeGap))*0.05
+            # Put 1 percent
+            putone = float(OITotalValue['pestrike']) + (float(strikeGap))*0.1
+            # Put 1/2 percent
+            puthalf = float(OITotalValue['pestrike']) + (float(strikeGap))*0.05
 
-                        # Creating in live data
-                        ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
-                        ChangeOICreation.save() 
-                else:
+            newDict[item] = [float(OITotalValue['cestrike']),float(OITotalValue['pestrike']),callone,putone,callhalf,puthalf]
+            
+            print("equity calculation crossed")
+            # # Fetching today's date
+            dat = dt.today()
+            # # Deleting past historical data in the database
+            HistoryOIChange.objects.filter(time__lte = dt.combine(dat, dt.min.time())).delete()
+            HistoryOITotal.objects.filter(time__lte = dt.combine(dat, dt.min.time())).delete()
+            
+            value1 = LiveOIChange.objects.filter(symbol=item)
+
+
+            if len(value1) > 0:
+
+                if (value1[0].callstrike != OIChangeValue['cestrike']) or (value1[0].putstrike != OIChangeValue['pestrike']):
+                    # Adding to history table
+                    ChangeOIHistory = HistoryOIChange(time=value1[0].time,call1=value1[0].call1,call2=value1[0].call2,put1=value1[0].put1,put2=value1[0].put2,callstrike=value1[0].callstrike,putstrike=value1[0].putstrike,symbol=value1[0].symbol,expiry=value1[0].expiry)
+                    ChangeOIHistory.save()
+
+                    # deleting live table data
+                    value1 = LiveOIChange.objects.filter(symbol=item).delete()
+
+                    # Creating in live data
                     ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
-                    ChangeOICreation.save()
-
-
-                print("value1 crossed")
-
-                value2 = LiveOITotal.objects.filter(symbol=item)
-
-                if len(value2) > 0:
-
-                    if (value2[0].callstrike != OITotalValue['cestrike']) or (value2[0].putstrike != OITotalValue['pestrike']):
-                        # Adding to history table
-                        TotalOIHistory = HistoryOITotal(time=value2[0].time,call1=value2[0].call1,call2=value2[0].call2,put1=value2[0].put1,put2=value2[0].put2,callstrike=value2[0].callstrike,putstrike=value2[0].putstrike,symbol=value2[0].symbol,expiry=value2[0].expiry)
-                        TotalOIHistory.save()
-
-                        # deleting live table data
-                        value1 = LiveOITotal.objects.filter(symbol=item).delete()
-
-                        # Creating in live data
-                        TotalOICreation = LiveOITotal(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte)
-                        TotalOICreation.save()
-
-                        # Live data for equity
-                        LiveOITotalAllSymbol.objects.filter(symbol=item).delete()
-                        TotalOICreationAll = LiveOITotalAllSymbol(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,callone=callone,putone=putone,callhalf=callhalf,puthalf=puthalf)
-                        TotalOICreationAll.save()
-
-
-                    else:
-                        # deleting live table data
-                        value1 = LiveOITotal.objects.filter(symbol=item).delete()
-
-                        # Creating in live data
-                        TotalOICreation = LiveOITotal(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte)
-                        TotalOICreation.save()
-
-                        # Live data for equity
-                        LiveOITotalAllSymbol.objects.filter(symbol=item).delete()
-                        TotalOICreationAll = LiveOITotalAllSymbol(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,callone=callone,putone=putone,callhalf=callhalf,puthalf=puthalf)
-                        TotalOICreationAll.save()
+                    ChangeOICreation.save() 
 
                 else:
+                    # deleting live table data
+                    value1 = LiveOIChange.objects.filter(symbol=item).delete()
+
+                    # Creating in live data
+                    ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
+                    ChangeOICreation.save() 
+            else:
+                ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
+                ChangeOICreation.save()
+
+
+            print("value1 crossed")
+
+            value2 = LiveOITotal.objects.filter(symbol=item)
+
+            if len(value2) > 0:
+
+                if (value2[0].callstrike != OITotalValue['cestrike']) or (value2[0].putstrike != OITotalValue['pestrike']):
+                    # Adding to history table
+                    TotalOIHistory = HistoryOITotal(time=value2[0].time,call1=value2[0].call1,call2=value2[0].call2,put1=value2[0].put1,put2=value2[0].put2,callstrike=value2[0].callstrike,putstrike=value2[0].putstrike,symbol=value2[0].symbol,expiry=value2[0].expiry)
+                    TotalOIHistory.save()
+
+                    # deleting live table data
+                    value1 = LiveOITotal.objects.filter(symbol=item).delete()
+
+                    # Creating in live data
                     TotalOICreation = LiveOITotal(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte)
                     TotalOICreation.save()
 
@@ -350,17 +327,40 @@ def ajaxNot1(request):
                     TotalOICreationAll = LiveOITotalAllSymbol(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,callone=callone,putone=putone,callhalf=callhalf,puthalf=puthalf)
                     TotalOICreationAll.save()
 
-                print("value2 crossed")
 
-            except websocket.WebSocketConnectionClosedException as e:
-                print('This caught the websocket exception ')
-                td_obj.disconnect()
-                continue
-            except IndexError as e:
-                print('This caught the exception')
-                td_obj.disconnect()
-                continue
-            except Exception:
+                else:
+                    # deleting live table data
+                    value1 = LiveOITotal.objects.filter(symbol=item).delete()
+
+                    # Creating in live data
+                    TotalOICreation = LiveOITotal(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte)
+                    TotalOICreation.save()
+
+                    # Live data for equity
+                    LiveOITotalAllSymbol.objects.filter(symbol=item).delete()
+                    TotalOICreationAll = LiveOITotalAllSymbol(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,callone=callone,putone=putone,callhalf=callhalf,puthalf=puthalf)
+                    TotalOICreationAll.save()
+
+            else:
+                TotalOICreation = LiveOITotal(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte)
+                TotalOICreation.save()
+
+                # Live data for equity
+                LiveOITotalAllSymbol.objects.filter(symbol=item).delete()
+                TotalOICreationAll = LiveOITotalAllSymbol(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,callone=callone,putone=putone,callhalf=callhalf,puthalf=puthalf)
+                TotalOICreationAll.save()
+
+            print("value2 crossed")
+
+        except websocket.WebSocketConnectionClosedException as e:
+            print('This caught the websocket exception ')
+            td_obj.disconnect()
+            continue
+        except IndexError as e:
+            print('This caught the exception')
+            td_obj.disconnect()
+            continue
+        except Exception:
                 print("Exception")
                 td_obj.disconnect()
                 continue
