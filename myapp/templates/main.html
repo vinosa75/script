@@ -445,10 +445,10 @@ table#manoj {
                               {% endfor %} </select>
 
 
-                        <label for="StrikePrice" style="color: black;margin-left:10px">Ex: </label>
+                        {% comment %} <label for="StrikePrice" style="color: black;margin-left:10px">Ex: </label>
                          <select name="expiry_selected" class="form-control" id="idexpiry" name="expiryvalues" required>
                          <option value="">---------</option>
-                          </select>
+                          </select> {% endcomment %}
 
                         <button style="margin-left:10px" type="submit" class="btn btn-primary">Calculate</button>
                         <br>
@@ -513,7 +513,7 @@ table#manoj {
         });
 
 
-$("#EntryPrice").change(function () {
+{% comment %} $("#EntryPrice").change(function () {
       $("#overlay").show()
       var url = $("#chartform").attr("data-expiry-url");  // get the url of the `load_cities` view
       var symbolID = $(this).val();  // get the selected country ID from the HTML input
@@ -528,7 +528,7 @@ $("#EntryPrice").change(function () {
         }
       });
 
-    });
+    }); {% endcomment %}
 
 
 function executeQuery2() {

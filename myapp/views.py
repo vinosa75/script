@@ -172,11 +172,16 @@ def ajaxNot1(request):
 
     print("Before expiry")
 
+
+    import pendulum
+    import calendar
+    from datetime import date
+
     ex_list = nsepython.expiry_list('NIFTY')
     print(ex_list)
     expiry = ex_list[0]
     print(expiry)
-    # expiry = "30-SEP-2021"
+
     dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
 
     sampleDict = {}
@@ -190,15 +195,20 @@ def ajaxNot1(request):
     # LiveEquityResult.objects.all().delete()
     # sym = list(LiveOITotal.objects.values_list('symbol', flat=True))
 
-
+    exceptionList = ['NIFTY','BANKNIFTY','FINNIFTY']
     for item in fnolist :
         # if item not in sym:
         try:
-            import requests
-
-            # response = requests.get('https://api.truedata.in/logoutRequest?user=tdws127&password=saaral@127&port=8082') 
-
-            print("Connecting")
+            if item in exceptionList:
+                    if calendar.day_name[date.today().weekday()] == "Thrusday":
+                        expiry = date.today()
+                        dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
+                    else:
+                        expiry = pendulum.now().next(pendulum.THURSDAY).strftime('%d-%b-%Y')
+                        dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
+            else:
+                expiry = "30-Sep-2021"
+                dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
 
             td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
             nifty_chain = td_obj.start_option_chain(item , dt(dte.year,dte.month,dte.day),chain_length=10,bid_ask=True)
