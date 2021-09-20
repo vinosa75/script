@@ -167,6 +167,9 @@ def ajaxNot1(request):
 
     # Taking the first date from the expiry list.
     # print(fnolist)
+
+    print("Before expiry")
+
     ex_list = expiry_list('ACC')
     print(ex_list)
     expiry = ex_list[0]
@@ -176,24 +179,7 @@ def ajaxNot1(request):
     sampleDict = {}
     count=1
 
-    symlist = [  'PNB'
-,'TRENT'
-,'SRTRANSFIN'
-,'TATACONSUM'
-,'TORNTPHARM'
-,'UBL'
-,'VOLTAS'
-,'BHARATFORG'
-,'CONCOR'
-,'GODREJCP'
-,'HAVELLS'
-,'INDUSTOWER'
-,'KOTAKBANK'
-,'L&TFH'
-,'M&M'
-]
-
-
+    print("After expiry")
     # fnolist = fnolist[0:50]
     print(fnolist)
 
