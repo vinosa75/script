@@ -229,7 +229,6 @@ def ajaxNot1(request):
             # value1 = LiveOIChange.objects.all()
             # value2 = LiveOITotal.objects.all()
 
-
             OIChangeValue = OIChange(df,item,dte)
             
             if OIChangeValue == False:
@@ -1294,13 +1293,16 @@ def load_optionChain(request):
 
     symbol="NIFTY"
     
-    if len(request.GET) >0:
+    if len(request.GET)>0:
         symbol = request.GET["symbol"]
         print("GET")
     else:
         symbol = request.POST['symbol']
         print("POST")
     # expiry = request.POST['expiry_selected']
+
+    liveEqui = LiveEquityResult.objects.filter(symbol=symbol)
+
 
     LiveOI = LiveOITotal.objects.filter(symbol=symbol)
     print(LiveOI)
@@ -1312,7 +1314,7 @@ def load_optionChain(request):
     HistoryOIChg = HistoryOIChange.objects.filter(symbol=symbol).order_by('-time')
 
     if len(LiveOI) > 0:
-        return render(request, 'optionChainSingleSymbol.html', {'symbol':symbol,'OITotalValue':LiveOI,'OIChangeValue':LiveChangeOI,'HistoryOITot':HistoryOITot,'HistoryOIChg':HistoryOIChg})
+        return render(request, 'optionChainSingleSymbol.html', {'liveEqui':liveEqui,'symbol':symbol,'OITotalValue':LiveOI,'OIChangeValue':LiveChangeOI,'HistoryOITot':HistoryOITot,'HistoryOIChg':HistoryOIChg})
     else:
         return render(request, 'optionChainNoData.html')
 
