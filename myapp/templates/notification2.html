@@ -1,0 +1,318 @@
+
+<h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">CALL CROSSED </h2><b>- {{callCrossed|length}}</b>
+
+
+  
+        {% if callCrossed|length == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols crossed call.
+        </div>
+        {% else %}
+
+        <div class="fixTableHead">
+              {% for value in callCrossed %}
+
+            <nav aria-label="breadcrumb">
+
+              <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+                {% comment %} <button type="submit" class="btn btn-warning"><b>{{ key }}</b></button> {% endcomment %}
+                {% comment %} <button type="submit" id="button_1" class="btn btn-warning" value="Manoj"><b>{{ key }}</b></button> {% endcomment %}
+                <button id="1" name="1" class="btn btn-warning" value="{{ value.symbol }}">{{ value.symbol }}</button>
+                {% comment %} <span class="badge badge-warning"></span> {% endcomment %}
+                
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Open</b></span>
+                  <span class="bottom">{{ value.open }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>High</b></span>
+                  <span class="bottom">{{ value.high }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Low</b></span>
+                  <span class="bottom">{{ value.low }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Pr_close</b></span>
+                  <span class="bottom">{{ value.prev_day_close }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Ltp</b></span>
+                  <span class="bottom">{{ value.ltp }}</span>
+                </div>
+                </li>
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-info">Time</b></span>
+                  <span class="bottom">{{ value.time }}</span>
+                </div>
+                </li>
+
+              </ol>
+            </nav>
+
+              {% endfor %} 
+      
+        </div>
+
+        {% endif %}
+
+
+
+
+<h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-danger text-wrap">Put Crossed </h2><b>- {{putCrossed|length}}</b>
+
+
+        {% if putCrossed|length == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols crossed put.
+        </div>
+        {% else %}
+
+        <div class="fixTableHead">
+              {% for value in putCrossed %}
+
+            <nav aria-label="breadcrumb">
+
+              <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+                <button id="1" name="1" class="btn btn-warning" value="{{ value.symbol }}">{{ value.symbol }}</button>
+                {% comment %} <button  type="submit" class="btn btn-warning"><b>{{ key }}</b></button> {% endcomment %}
+                {% comment %} <span class="badge badge-warning"></span> {% endcomment %}
+                
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Open</b></span>
+                  <span class="bottom">{{ value.open }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>High</b></span>
+                  <span class="bottom">{{ value.high }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Low</b></span>
+                  <span class="bottom">{{ value.low }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Pr_close</b></span>
+                  <span class="bottom">{{ value.prev_day_close }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Ltp</b></span>
+                  <span class="bottom">{{ value.ltp }}</span>
+                </div>
+                </li>
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-info">Time</b></span>
+                  <span class="bottom">{{ value.time }}</span>
+                </div>
+                </li>
+
+              </ol>
+            </nav>
+
+              {% endfor %} 
+      
+        </div>
+
+        {% endif %}
+
+
+<h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-success text-wrap">Call (1%) </h2><b>- {{callOnePercent|length}}</b>
+
+        {% if callOnePercent|length == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols near to call(1%).
+        </div>
+        {% else %}
+
+        <div class="fixTableHead">
+              {% for value in callOnePercent %}
+
+            <nav aria-label="breadcrumb">
+
+              <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+                {% comment %} <button type="submit" class="btn btn-warning"><b>{{ key }}</b></button> {% endcomment %}
+                <button id="1" name="1" class="btn btn-warning" value="{{ value.symbol }}">{{ value.symbol }}</button>
+                {% comment %} <span class="badge badge-warning"></span> {% endcomment %}
+                
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Open</b></span>
+                  <span class="bottom">{{ value.open }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>High</b></span>
+                  <span class="bottom">{{ value.high }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Low</b></span>
+                  <span class="bottom">{{ value.low }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Pr_close</b></span>
+                  <span class="bottom">{{ value.prev_day_close }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Ltp</b></span>
+                  <span class="bottom">{{ value.ltp }}</span>
+                </div>
+                </li>
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-info">Time</b></span>
+                  <span class="bottom">{{ value.time }}</span>
+                </div>
+                </li>
+
+              </ol>
+            </nav>
+
+              {% endfor %} 
+      
+        </div>
+
+        {% endif %}
+
+
+<h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-danger text-wrap">Put (1%) </h2><b>- {{putOnePercent|length}}</b>
+
+          {% if putOnePercent|length == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols near to put(1%).
+        </div>
+        {% else %}
+
+        <div class="fixTableHead">
+              {% for value in putOnePercent %}
+
+            <nav aria-label="breadcrumb">
+
+              <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+                {% comment %} <button type="submit" id="button_1" class="btn btn-warning"><b>{{ key }}</b></button> {% endcomment %}
+                <button id="1" name="1" class="btn btn-warning" value="{{ value.symbol }}">{{ value.symbol }}</button>
+                {% comment %} <span class="badge badge-warning"></span> {% endcomment %}
+                
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Open</b></span>
+                  <span class="bottom">{{ value.open }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>High</b></span>
+                  <span class="bottom">{{ value.high }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Low</b></span>
+                  <span class="bottom">{{ value.low }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Pr_close</b></span>
+                  <span class="bottom">{{ value.prev_day_close }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Ltp</b></span>
+                  <span class="bottom">{{ value.ltp }}</span>
+                </div>
+                </li>
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-info">Time</b></span>
+                  <span class="bottom">{{ value.time }}</span>
+                </div>
+                </li>
+
+
+              </ol>
+            </nav>
+
+              {% endfor %} 
+      
+        </div>
+
+        {% endif %}
+
+<script>
+
+$("button").click(function() {
+   var url = '{% url 'load_optionChain' %}';
+    var fired_button = $(this).val();
+        $.ajax({
+        url:url,
+        data: {
+          'symbol': fired_button       // add the country id to the GET parameters
+        },
+      success: function (data) { 
+          console.log(data);  // `data` is the return of the `load_cities` view function
+          $("#OptionChainSingleSymbol").html(data);   // replace the contents of the city input with the data that came from the server
+        }
+    });
+});
+
+
+    {% comment %} $("#button_1").click(function() {
+    var url = '{% url 'load_optionChain' %}';
+    var fired_button = $("button_1").val(); 
+    alert(fired_button);
+    $.ajax({
+      
+        url:url,
+        data: {
+          'symbol': fired_button       // add the country id to the GET parameters
+        },
+      success: function (data) { 
+          console.log(data);  // `data` is the return of the `load_cities` view function
+          $("#OptionChainSingleSymbol").html(data);   // replace the contents of the city input with the data that came from the server
+        }
+    });
+    }); {% endcomment %}
+</script>
