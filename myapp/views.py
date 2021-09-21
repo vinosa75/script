@@ -328,6 +328,8 @@ def optionChainClick(request):
     # remove_list = []
     fnolist = [i for i in fnolist if i not in remove_list]
 
+    fnolist = fnolist[0:2]
+
     return render(request,"optionChainProgress.html",{'fnolist':fnolist}) 
 
 
@@ -498,7 +500,9 @@ def ajaxNot1(request):
     exceptionList = ['NIFTY','BANKNIFTY','FINNIFTY']
     for item in fnolist :
         # if item not in sym:
+        
         try:
+            print("date selection list")
             if item in exceptionList:
                     if calendar.day_name[date.today().weekday()] == "Thrusday":
                         expiry = date.today()
@@ -509,6 +513,11 @@ def ajaxNot1(request):
             else:
                 expiry = "30-Sep-2021"
                 dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
+
+
+            print("After date selection list")
+
+            print("Before Connection")
 
             td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
             nifty_chain = td_obj.start_option_chain(item , dt(dte.year,dte.month,dte.day),chain_length=50,bid_ask=True)
