@@ -35,6 +35,8 @@ def testhtml(request):
     counter = request.GET['counter']
     print(item)
 
+    print("Before oi func")
+
     def OITotal(df,item,dte):
         print("inside oitotal")
         print(df)
@@ -88,6 +90,7 @@ def testhtml(request):
         return OITot
 
     # Calculation of Change in OI
+    print("Before oi change func")
     def OIChange(df,item,dte):
 
 
@@ -140,10 +143,12 @@ def testhtml(request):
         
         return OIChan
 
+    print("before credentials")
     # Fetching the F&NO symbol list
     TrueDatausername = 'tdws135'
     TrueDatapassword = 'saaral@135'
 
+    print("before import")
     import pendulum
     import calendar
     from datetime import date
@@ -153,7 +158,7 @@ def testhtml(request):
 
     # LiveEquityResult.objects.all().delete()
     # sym = list(LiveOITotal.objects.values_list('symbol', flat=True))
-
+    print("before exception list")
     exceptionList = ['NIFTY','BANKNIFTY','FINNIFTY']
     # if item not in sym:
     try:
@@ -169,7 +174,7 @@ def testhtml(request):
             expiry = "30-Sep-2021"
             dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
         print("After Expiry")
-        
+
         td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
         nifty_chain = td_obj.start_option_chain(item , dt(dte.year,dte.month,dte.day),chain_length=80,bid_ask=True)
         time.sleep(4)
