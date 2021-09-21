@@ -157,6 +157,7 @@ def testhtml(request):
     exceptionList = ['NIFTY','BANKNIFTY','FINNIFTY']
     # if item not in sym:
     try:
+        print("Before expiry")
         if item in exceptionList:
                 if calendar.day_name[date.today().weekday()] == "Thrusday":
                     expiry = date.today()
@@ -167,7 +168,8 @@ def testhtml(request):
         else:
             expiry = "30-Sep-2021"
             dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
-
+        print("After Expiry")
+        
         td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
         nifty_chain = td_obj.start_option_chain(item , dt(dte.year,dte.month,dte.day),chain_length=80,bid_ask=True)
         time.sleep(4)
