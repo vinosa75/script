@@ -689,8 +689,8 @@ def ajaxNot2(request):
     # TrueDatausername = 'wssand020'
     # TrueDatapassword = 'vinosa020'
 
-    TrueDatausername = 'tdws127'
-    TrueDatapassword = 'saaral@127'
+    TrueDatausername = 'tdws135'
+    TrueDatapassword = 'saaral@135'
 
     nse = Nse()
     fnolist = nse.get_fno_lot_sizes()
@@ -720,102 +720,111 @@ def ajaxNot2(request):
 
     td_app.disconnect()
 
-    callOnePercent = {}
-    putOnePercent = {}
-    callHalfPercent = {}
-    putHalfPercent = {}
-    callCrossed = {}
-    putCrossed = {}
-
-    print()
-
-    
+    from datetime import datetime, timedelta
+    pastDate = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
+  
     # LiveEquityResult.objects.all().delete()
-    LiveEquityResult.objects.filter(date__lte = date.today()).delete()
+    LiveEquityResult.objects.filter(date = pastDate).delete()
+
+    removeList = ["NIFTY","BANKNIFTY","FINNIFTY"]
+
+    callcrossedset = LiveEquityResult.objects.filter(strike__contains="Call Crossed")
+    callonepercentset = LiveEquityResult.objects.filter(strike="Call 1 percent")
+    putcrossedset = LiveEquityResult.objects.filter(strike="Put Crossed")
+    putonepercentset = LiveEquityResult.objects.filter(strike="Put 1 percent")
+
+    print(callcrossedset)
+
+    callcrossedsetDict = {}
+    callonepercentsetDict = {}
+    putcrossedsetDict = {}
+    putonepercentsetDict = {}
+
+    for i in callcrossedset:
+        callcrossedsetDict[i.symbol] = i.time
+    for i in callonepercentset:
+        callonepercentsetDict[i.symbol] = i.time
+    for i in putcrossedset:
+        putcrossedsetDict[i.symbol] = i.time
+    for i in putonepercentset:
+        putonepercentsetDict[i.symbol] = i.time
 
     for e in LiveOITotalAllSymbol.objects.all():
         print(e.symbol)
-
-        removeList = ["NIFTY","BANKNIFTY","FINNIFTY"]
         
         if e.symbol in liveData and e.symbol not in removeList:
             # Call
-            print(liveData[e.symbol])
-            print(liveData[e.symbol][0])
 
             if liveData[e.symbol][0] > float(e.callstrike):
-                if LiveEquityResult.objects.filter(symbol=e.symbol,strike="Call Crossed").exists():
-                    pass
+                print(callonepercentsetDict)
+
+                if e.symbol in callcrossedsetDict:
+                    print("Yes")
+                    # Deleting the older
+                    LiveEquityResult.objects.filter(symbol = e.symbol).delete()
+                    # updating latest data
+                    print("Yes")
+                    callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",time=callcrossedsetDict[e.symbol],date=date.today())
+                    callcross.save()
+                    continue
+
                 else:
                     print("Call crossed")
-                    callCrossed[e.symbol] = liveData[e.symbol]
-                    print(liveData[e.symbol])
-                    print(liveData[e.symbol][0])
-                    print(liveData[e.symbol][1])
-                    print(liveData[e.symbol][2])
-                    print(liveData[e.symbol][3])
-                    print(liveData[e.symbol][4])
                     callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",time=liveData[e.symbol][5],date=date.today())
                     callcross.save()
                 
             elif liveData[e.symbol][0] >= float(e.callone) and liveData[e.symbol][0] <= float(e.callstrike):
-                if LiveEquityResult.objects.filter(symbol=e.symbol,strike="Call Crossed").exists():
-                    pass
+
+                if e.symbol in callcrossedsetDict:
+                    print("Already crossed")
+                    continue
                 else:
-                    if LiveEquityResult.objects.filter(symbol=e.symbol,strike="Call 1 percent").exists():
-                        pass
+                    if e.symbol in callonepercentsetDict:
+                        print("Already crossed 1 percent")
+                        LiveEquityResult.objects.filter(symbol = e.symbol).delete()
+                        # updating latest data
+                        callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",time=callonepercentsetDict[e.symbol],date=date.today())
+                        callcross.save()
+
+                        continue
                     else:
                         print("Call 1 percent")
-                        callOnePercent[e.symbol] = liveData[e.symbol]
+
                         callone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",time=liveData[e.symbol][5],date=date.today())
                         callone.save()
 
-            elif liveData[e.symbol][0] >= float(e.callhalf) and liveData[e.symbol][0] <= float(e.callstrike):
-                if LiveEquityResult.objects.filter(symbol=e.symbol,strike="Call Crossed").exists():
-                    pass
-                else:
-                    if LiveEquityResult.objects.filter(symbol=e.symbol,strike="Call 1/2 percent").exists():
-                        pass
-                    else:
-                        print("Call 1/2 percent")
-                        callHalfPercent[e.symbol] = liveData[e.symbol]
-                        callhalf = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1/2 percent",time=liveData[e.symbol][5],date=date.today())
-                        callhalf.save()
-
             # Put
             elif liveData[e.symbol][0] < float(e.putstrike):
-                if LiveEquityResult.objects.filter(symbol=e.symbol,strike="Put Crossed").exists():
-                    pass
+                if e.symbol in putcrossedsetDict:
+                    # Deleting the older
+                    LiveEquityResult.objects.filter(symbol =e.symbol).delete()
+                    # updating latest data
+                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",time=putcrossedsetDict[e.symbol],date=date.today())
+                    putcross.save()
+                    continue
                 else:
                     print("Put crossed")
-                    putCrossed[e.symbol] = liveData[e.symbol]
                     putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put crossed",time=liveData[e.symbol][5],date=date.today())
                     putcross.save()
 
+
             elif liveData[e.symbol][0] <= float(e.putone) and liveData[e.symbol][0] >= float(e.putstrike):
-                if LiveEquityResult.objects.filter(symbol=e.symbol,strike="Put Crossed").exists():
-                    pass
+                if e.symbol in putcrossedsetDict:
+                    print("Already crossed put")
+                    continue
                 else:
-                    if LiveEquityResult.objects.filter(symbol=e.symbol,strike="Put 1 percent").exists():
-                        pass
+                    if e.symbol in putonepercentsetDict:
+                        print("Already crossed 1 percent")
+                        LiveEquityResult.objects.filter(symbol =e.symbol).delete()
+                        # updating latest data
+                        putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",time=putonepercentsetDict[e.symbol],date=date.today())
+                        putcross.save()
+                        continue
                     else:
                         print("Put 1 percent")
-                        putOnePercent[e.symbol] = liveData[e.symbol]
                         putone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",time=liveData[e.symbol][5],date=date.today())
                         putone.save()
-                        print("saved")
-
-            elif liveData[e.symbol][0] <= float(e.puthalf) and liveData[e.symbol][0] >= float(e.putstrike):
-                if LiveEquityResult.objects.filter(symbol=e.symbol,strike="Put Crossed").exists():
-                    pass
-                else:
-                    if LiveEquityResult.objects.filter(symbol=e.symbol,strike="Put 1/2 percent").exists():
-                        pass
-                    else:
-                        print("Put 1/2 percent")
-                        putHalfPercent[e.symbol] = liveData[e.symbol]
-                        puthalf = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1/2 percent",time=liveData[e.symbol][5],date=date.today())
-                        puthalf.save()
+        
 
     OITotalValue ={}
     OIChangeValue = {}
