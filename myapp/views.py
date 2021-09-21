@@ -91,51 +91,42 @@ def testhtml(request):
     # Calculation of Change in O
     def OIChange(df,item,dte):
 
-
         ce = df.loc[df['type'] == "CE"]
         pe = df.loc[df['type'] == "PE"]
 
-        column = ce["oi_change"]
-        max_value = column.max()
+        final_df = ce.sort_values(by=['oi_change'], ascending=False)
 
-        cedf1 = ce.loc[ce['oi_change'] == max_value]
+        peoi1 = pe.loc[pe['strike']==final_df.iloc[0]['strike']].iloc[0]['oi_change']
+        count = 0
 
-        print(cedf1['strike'].iloc[0])
+        while peoi1 == 0:
+            count = count + 1
+            peoi1 = pe.loc[pe['strike']==final_df.iloc[count]['strike']].iloc[0]['oi_change']
 
-        pedf1 = pe.loc[pe['strike']==cedf1['strike'].iloc[0]]
+        cestrike = final_df.iloc[count]['strike']
+        ceoi1 = final_df.iloc[count]['oi_change']
+        celtt = final_df.iloc[count]['ltt']
 
-        if pedf1.empty == True:
-            print("dataframe is empty")
-            return False
+        print(ceoi1)
+        print(cestrike)
+        print(peoi1)
 
-        celtt = cedf1['ltt'].iloc[0]
-        ceoi1 = cedf1['oi_change'].iloc[0]
-        cestrike = cedf1['strike'].iloc[0]
-        peoi1 = pedf1['oi_change'].iloc[0]
+        final_df = pe.sort_values(by=['oi_change'], ascending=False)
 
-        column = pe["oi_change"]
-        max_value = column.max()
+        ceoi2 = ce.loc[ce['strike']==final_df.iloc[0]['strike']].iloc[0]['oi_change']
+        count = 0
 
-        pedf2 = pe.loc[pe['oi_change'] == max_value]
-        cedf2 = ce.loc[ce['strike']==pedf2['strike'].iloc[0]]
-        
-        if cedf2.empty == True:
-            print("dataframe is empty")
-            return False
+        while ceoi2 == 0:
+            count = count + 1
+            ceoi2 = ce.loc[ce['strike']==final_df.iloc[count]['strike']].iloc[0]['oi_change']
 
-        print("change started 3")
+        pestrike = final_df.iloc[count]['strike']
+        peoi2 = final_df.iloc[count]['oi_change']
+        peltt = final_df.iloc[count]['ltt']
 
-        peltt = pedf2['ltt'].iloc[0]
-        print("change started 4")
-        peoi2 = pedf2['oi_change'].iloc[0]
-        print("change started 5")
-        pestrike = pedf2['strike'].iloc[0]
-        print("change started 6")
-        print(cedf2)
-        ceoi2 = cedf2['oi_change'].iloc[0]
-        print("change started 7")
-
-        
+        print(ceoi2)
+        print(pestrike)
+        print(peoi2)      
 
         OIChan = {"celtt":celtt,"ceoi1":ceoi1,"cestrike":cestrike,"peoi1":peoi1,"peltt":peltt,"peoi2":peoi2,"pestrike":pestrike,"ceoi2":ceoi2}
         
