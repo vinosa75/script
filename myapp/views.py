@@ -25,7 +25,7 @@ import websocket
 from datetime import date
 
 import random
-
+from pytz import timezone
 #<Code>
 
 # Create your views here.
@@ -716,7 +716,7 @@ def ajaxNot2(request):
         if (td_app.live_data[req_id].ltp) == None:
             continue
         else:
-            liveData[td_app.live_data[req_id].symbol] = [td_app.live_data[req_id].ltp,td_app.live_data[req_id].day_open,td_app.live_data[req_id].day_high,td_app.live_data[req_id].day_low,td_app.live_data[req_id].prev_day_close,dt.now().strftime('%H:%M:%S')]
+            liveData[td_app.live_data[req_id].symbol] = [td_app.live_data[req_id].ltp,td_app.live_data[req_id].day_open,td_app.live_data[req_id].day_high,td_app.live_data[req_id].day_low,td_app.live_data[req_id].prev_day_close,dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S')]
 
     td_app.disconnect()
 
