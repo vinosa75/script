@@ -1,7 +1,7 @@
 
 <div style="text-align:center">
 {% for record in OITotalValue %}
-<h2 style="text-align:center;color:black;font-size:medium;" class="btn btn-warning">{{symbol}}</h2> - Strikegap ({{record.strikegap}}) 
+<h2 style="text-align:center;color:black;font-size:medium;" class="btn btn-warning"><span class="badge badge-secondary">{{record.expiry}}</span> - {{symbol}}</h2> - Strikegap ({{record.strikegap}}) 
 {% endfor %}
 </div>  
             
