@@ -5,3 +5,4 @@ truedata-ws
 dj-database-url
 nsepython
 nsetools
+pendulum
