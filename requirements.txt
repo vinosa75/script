@@ -1,7 +1,7 @@
 django
 gunicorn
 django-heroku
-truedata-ws
+# truedata-ws
 dj-database-url
 nsepython
 nsetools

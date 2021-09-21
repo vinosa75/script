@@ -33,5 +33,7 @@ urlpatterns = [
     path('notification1/', views.ajaxNot1, name='ajaxNot1'),
     path('notification2/', views.ajaxNot2, name='ajaxNot2'),
     path('OptionChainSingle/', views.load_optionChain, name='load_optionChain'),
+    path('OptionChainclick/', views.optionChainClick, name='optionChainClick'),
+    path('testhtml/', views.testhtml, name='testhtml'),
 ]
 

@@ -55,6 +55,7 @@ class LiveOITotal(models.Model):
     putstrike = models.CharField(max_length=20)
     symbol = models.CharField(max_length=20)
     expiry = models.DateField(auto_now_add=False)
+    strikegap = models.CharField(max_length=20,default="")
 
     def __str__(self):
         return self.call1+" "+self.callstrike+" "+self.symbol

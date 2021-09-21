@@ -426,7 +426,7 @@ table#manoj {
         <div class="row">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title" style="width:700px">Option Chain - Realtime  - <button style="margin-left:10px" onclick="executeQuery2()" class="btn btn-primary">Run OpChain</button></h5>
+                        <h5 class="card-title" style="width:700px">Option Chain - Realtime  - <button style="margin-left:10px" onclick="executeQuery3()" class="btn btn-primary">Run OpChain</button> - <span id ="optionClick" class="badge badge-light">4</span> - <span id ="optionCli" class="badge badge-light">4</span></h5>
                 <form class="form-inline" method="POST" id="chartform" data-slots-url="{% url 'load_optionChain' %}" data-expiry-url="{%url 'ajax_load_expiry' %}" option-chain-url="{%url 'ajax_optionChain' %}" equity-url="{% url 'ajax_equity' %}" >
                     {% csrf_token %}
 
@@ -490,7 +490,6 @@ table#manoj {
 
 
         $("#chartform").submit(function() {
- 
             var url = $("#chartform").attr("data-slots-url")
             var mydata = $("form#chartform").serialize();
             // console.log(mydata); // it's only for test
@@ -548,6 +547,20 @@ function executeQuery2() {
   // run the first time; all subsequent calls will take care of themselves
   setTimeout(executeQuery2, 150000);
 }); {% endcomment %}
+
+
+function executeQuery3() {
+    var url = '{% url 'optionChainClick' %}';
+  $.ajax({
+    url: url,
+    success: function(response) {
+        console.log(url);
+        $("#optionClick").html(response);
+      // do something with the return value here if you like
+    }
+  });
+  //setTimeout(executeQuery2, 150000); // you could choose not to continue on failure...
+}
 
 
 function executeQuery1() {

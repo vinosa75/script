@@ -1,6 +1,8 @@
 
 <div style="text-align:center">
-<h2 style="text-align:center;color:black;font-size:medium;" class="btn btn-warning">{{symbol}} </h2>
+{% for record in OITotalValue %}
+<h2 style="text-align:center;color:black;font-size:medium;" class="btn btn-warning">{{symbol}}</h2> - Strikegap ({{record.strikegap}}) 
+{% endfor %}
 </div>  
             
             {% for value in liveEqui %}

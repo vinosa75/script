@@ -1,0 +1,53 @@
+{% comment %} {{fnolist|length}} {% endcomment %}
+{{ fnolist|length }}
+{% for i in fnolist %}
+
+<script>
+    var fire = '{{i}}';
+    var counter = '{{forloop.counter}}';
+    var url = '{% url 'testhtml' %}';
+      $.ajax({
+    url: url,
+    async: false, 
+    data: {
+    'symbol': fire,
+    'counter' : counter       // add the country id to the GET parameters
+        },
+    success: function(response) {
+        console.log(url);
+        $('#optionCli').html(response);
+
+      // do something with the return value here if you like
+    }
+  });
+
+</script>
+
+
+{% comment %} <script> executeQuery4( '{{i}}' );  
+    function executeQuery4(value) {
+    var fire = value;
+    var counter = '{{forloop.counter}}';
+    var url = '{% url 'testhtml' %}';
+  $.ajax({
+    url: url,
+    data: {
+    'symbol': fire,
+    'counter' : counter       // add the country id to the GET parameters
+        },
+    success: function(response) {
+        console.log(url);
+        $('#optionCli').html(response);
+
+      // do something with the return value here if you like
+    }
+  });
+  //setTimeout(executeQuery2, 150000); // you could choose not to continue on failure...
+}
+    </script> {% endcomment %}
+{% endfor %}
+
+
+<script>
+
+</script>
