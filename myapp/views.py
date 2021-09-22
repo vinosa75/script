@@ -7,7 +7,7 @@ from django.shortcuts import redirect,render
 from django.contrib import messages
 from nsepython import *
 import nsepython
-from myapp.models import HistoryOIChange,HistoryOITotal,LiveOIChange,LiveOITotal,LiveOITotalAllSymbol,LiveEquityResult
+from myapp.models import HistoryOIChange,HistoryOITotal,LiveOIChange,LiveOITotal,LiveOITotalAllSymbol,LiveEquityResult,LiveOIPercentChange,HistoryOIPercentChange
 
 import pandas as pd
 from truedata_ws.websocket.TD import TD
@@ -35,6 +35,39 @@ def testhtml(request):
     counter = request.GET['counter']
     print(item)
 
+    def OIPercentChange(df):
+        ce = df.loc[df['type'] == "CE"]
+        pe = df.loc[df['type'] == "PE"]
+
+        ce_oipercent_df = ce.sort_values(by=['oi_change_perc'], ascending=False)
+
+        print(ce_oipercent_df)
+
+        ceoi1 = ce_oipercent_df.iloc[0]['oi_change_perc']
+        cestrike = ce_oipercent_df.iloc[0]['strike']
+        peoi1 = pe.loc[pe['strike']==ce_oipercent_df.iloc[0]['strike']].iloc[0]['oi_change_perc']
+
+        print(ceoi1)
+        print(cestrike)
+        print(peoi1)
+
+        pe_oipercent_df = pe.sort_values(by=['oi_change_perc'], ascending=False)
+
+        ceoi2 = pe_oipercent_df.iloc[0]['oi_change_perc']
+        pestrike = pe_oipercent_df.iloc[0]['strike']
+        peoi2 = ce.loc[ce['strike']==pe_oipercent_df.iloc[0]['strike']].iloc[0]['oi_change_perc']
+
+        print(ceoi2)
+        print(pestrike)
+        print(peoi2)
+
+        celtt = ce_oipercent_df.iloc[0]['ltt']
+        peltt = pe_oipercent_df.iloc[0]['ltt']
+
+
+        OIPercentChange = {"celtt":celtt,"ceoi1":ceoi1,"cestrike":cestrike,"peoi1":peoi1,"peltt":peltt,"peoi2":peoi2,"pestrike":pestrike,"ceoi2":ceoi2}
+        
+        return OIPercentChange
 
     def OITotal(df,item,dte):
         print("inside oitotal")
@@ -94,7 +127,11 @@ def testhtml(request):
         ce = df.loc[df['type'] == "CE"]
         pe = df.loc[df['type'] == "PE"]
 
-        final_df = ce.sort_values(by=['oi_change'], ascending=False)
+        print("before final df")
+
+        final_df = ce.loc[ce['oi_change'] != 0].sort_values('oi_change', ascending=False)
+
+        print("crossed final df")
 
         peoi1 = pe.loc[pe['strike']==final_df.iloc[0]['strike']].iloc[0]['oi_change']
         count = 0
@@ -111,7 +148,7 @@ def testhtml(request):
         print(cestrike)
         print(peoi1)
 
-        final_df = pe.sort_values(by=['oi_change'], ascending=False)
+        final_df = pe.loc[pe['oi_change'] != 0].sort_values('oi_change', ascending=False)
 
         ceoi2 = ce.loc[ce['strike']==final_df.iloc[0]['strike']].iloc[0]['oi_change']
         count = 0
@@ -134,13 +171,14 @@ def testhtml(request):
 
 
     # Fetching the F&NO symbol list
-    TrueDatausername = 'tdws135'
-    TrueDatapassword = 'saaral@135'
+    TrueDatausername = 'tdws127'
+    TrueDatapassword = 'saaral@127'
 
 
     import pendulum
     import calendar
     from datetime import date
+    import time
 
     sampleDict = {}
     count=1
@@ -151,21 +189,31 @@ def testhtml(request):
     exceptionList = ['NIFTY','BANKNIFTY','FINNIFTY']
     # if item not in sym:
     try:
+        print("Before exception list")
 
         if item in exceptionList:
                 if calendar.day_name[date.today().weekday()] == "Thrusday":
                     expiry = date.today()
-                    dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
+                    dte = dt.strptime(expiry, '%d-%b-%Y')
+                    print("inside thursday")
                 else:
                     expiry = pendulum.now().next(pendulum.THURSDAY).strftime('%d-%b-%Y')
-                    dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
+                    dte = dt.strptime(expiry, '%d-%b-%Y')
         else:
+            print("inside monthend")
             expiry = "30-Sep-2021"
-            dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
+            dte = dt.strptime(expiry, '%d-%b-%Y')
 
+        print("After exception")
 
-        td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
-        nifty_chain = td_obj.start_option_chain(item , dt(dte.year,dte.month,dte.day),chain_length=80,bid_ask=True)
+        print(dte)
+        print(dte.year)
+        print(dte.month)
+        print(dte.day)
+
+        # td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
+        td_obj = TD('tdws127', 'saaral@127')
+        nifty_chain = td_obj.start_option_chain( item , dt(dte.year , dte.month , dte.day) ,chain_length = 100)
         time.sleep(4)
         df = nifty_chain.get_option_chain()
 
@@ -173,6 +221,7 @@ def testhtml(request):
         td_obj.disconnect()
         sampleDict[item] = df
 
+        print(df)
         print(count)
         print(item)
         count = count + 1
@@ -182,25 +231,27 @@ def testhtml(request):
 
         # value1 = LiveOIChange.objects.all()
         # value2 = LiveOITotal.objects.all()
-
+        print("Before changev")
         OIChangeValue = OIChange(df,item,dte)
+        print("after change")
         
         if OIChangeValue == False:
+            print("returning false")
             return render(request,"testhtml.html",{'symbol':item,'counter':counter})
 
         OITotalValue = OITotal(df,item,dte)
 
         if OITotalValue == False:
+            print("returning false")
             return render(request,"testhtml.html",{'symbol':item,'counter':counter})
 
+        percentChange = OIPercentChange(df)
 
         strikeGap =float(df['strike'].unique()[1]) - float(df['strike'].unique()[0])
 
         FutureData[item] = [OITotalValue['cestrike'],OITotalValue['pestrike'],strikeGap]
 
         print(FutureData)
-
-
 
         # Percentage calculation from equity data
         newDict = {}
@@ -218,12 +269,26 @@ def testhtml(request):
         
         # # Fetching today's date
         dat = dt.today()
+
+        print("before deletiong")
+
+        from datetime import datetime, time
+        pastDate = datetime.combine(datetime.today(), time.min)
+  
+        # LiveEquityResult.objects.all().delete()
+        LiveOITotalAllSymbol.objects.filter(time__lte = pastDate).delete()
+
         # # Deleting past historical data in the database
-        HistoryOIChange.objects.filter(time__lte = dt.combine(dat, dt.min.time())).delete()
-        HistoryOITotal.objects.filter(time__lte = dt.combine(dat, dt.min.time())).delete()
+        HistoryOIChange.objects.filter(time__lte = pastDate).delete()
+        HistoryOITotal.objects.filter(time__lte = pastDate).delete()
+
+        # Deleting live data
+        LiveOITotal.objects.filter(time__lte = pastDate).delete()
+        LiveOIChange.objects.filter(time__lte = pastDate).delete()
+
+        print("After deletion")
         
         value1 = LiveOIChange.objects.filter(symbol=item)
-
 
         if len(value1) > 0:
 
@@ -233,7 +298,7 @@ def testhtml(request):
                 ChangeOIHistory.save()
 
                 # deleting live table data
-                value1 = LiveOIChange.objects.filter(symbol=item).delete()
+                LiveOIChange.objects.filter(symbol=item).delete()
 
                 # Creating in live data
                 ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
@@ -241,7 +306,7 @@ def testhtml(request):
 
             else:
                 # deleting live table data
-                value1 = LiveOIChange.objects.filter(symbol=item).delete()
+                LiveOIChange.objects.filter(symbol=item).delete()
 
                 # Creating in live data
                 ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
@@ -263,7 +328,7 @@ def testhtml(request):
                 TotalOIHistory.save()
 
                 # deleting live table data
-                value1 = LiveOITotal.objects.filter(symbol=item).delete()
+                LiveOITotal.objects.filter(symbol=item).delete()
 
                 # Creating in live data
                 TotalOICreation = LiveOITotal(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,strikegap=strikeGap)
@@ -277,7 +342,7 @@ def testhtml(request):
 
             else:
                 # deleting live table data
-                value1 = LiveOITotal.objects.filter(symbol=item).delete()
+                LiveOITotal.objects.filter(symbol=item).delete()
 
                 # Creating in live data
                 TotalOICreation = LiveOITotal(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,strikegap=strikeGap)
@@ -297,7 +362,32 @@ def testhtml(request):
             TotalOICreationAll = LiveOITotalAllSymbol(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,callone=callone,putone=putone,callhalf=callhalf,puthalf=puthalf)
             TotalOICreationAll.save()
 
-        print("value2 crossed")
+        value3 = LiveOIPercentChange.objects.filter(symbol=item)
+
+        if len(value3) > 0:
+
+            if (value3[0].callstrike != percentChange['cestrike']) or (value3[0].putstrike != percentChange['pestrike']):
+                # Adding to history table
+                ChangeOIPercentHistory = HistoryOIPercentChange(time=value3[0].time,call1=value3[0].call1,call2=value3[0].call2,put1=value3[0].put1,put2=value3[0].put2,callstrike=value3[0].callstrike,putstrike=value3[0].putstrike,symbol=value3[0].symbol,expiry=value3[0].expiry)
+                ChangeOIPercentHistory.save()
+
+                # deleting live table data
+                LiveOIPercentChange.objects.filter(symbol=item).delete()
+
+                # Creating in live data
+                ChangeOIPercentCreation = LiveOIPercentChange(time=percentChange['celtt'],call1=percentChange['ceoi1'],call2=percentChange['ceoi2'],put1=percentChange['peoi1'],put2=percentChange['peoi2'],callstrike=percentChange['cestrike'],putstrike=percentChange['pestrike'],symbol=item,expiry=dte)
+                ChangeOIPercentCreation.save() 
+
+            else:
+                # deleting live table data
+                LiveOIPercentChange.objects.filter(symbol=item).delete()
+
+                # Creating in live data
+                ChangeOIPercentCreation = LiveOIPercentChange(time=percentChange['celtt'],call1=percentChange['ceoi1'],call2=percentChange['ceoi2'],put1=percentChange['peoi1'],put2=percentChange['peoi2'],callstrike=percentChange['cestrike'],putstrike=percentChange['pestrike'],symbol=item,expiry=dte)
+                ChangeOIPercentCreation.save() 
+        else:
+            ChangeOIPercentCreation = LiveOIPercentChange(time=percentChange['celtt'],call1=percentChange['ceoi1'],call2=percentChange['ceoi2'],put1=percentChange['peoi1'],put2=percentChange['peoi2'],callstrike=percentChange['cestrike'],putstrike=percentChange['pestrike'],symbol=item,expiry=dte)
+            ChangeOIPercentCreation.save()
 
     except websocket.WebSocketConnectionClosedException as e:
         print('This caught the websocket exception ')
@@ -307,8 +397,8 @@ def testhtml(request):
         print('This caught the exception')
         td_obj.disconnect()
         return render(request,"testhtml.html",{'symbol':item,'counter':counter}) 
-    except Exception:
-        print("Exception")
+    except Exception as e:
+        print(e)
         td_obj.disconnect()
         return render(request,"testhtml.html",{'symbol':item,'counter':counter}) 
 
@@ -724,12 +814,15 @@ def ajaxNot2(request):
     putcrossedset = LiveEquityResult.objects.filter(strike="Put Crossed")
     putonepercentset = LiveEquityResult.objects.filter(strike="Put 1 percent")
 
-    print(callcrossedset)
+    opencallcross = LiveEquityResult.objects.filter(opencrossed="call")
+    openputcross = LiveEquityResult.objects.filter(opencrossed="put")
 
     callcrossedsetDict = {}
     callonepercentsetDict = {}
     putcrossedsetDict = {}
     putonepercentsetDict = {}
+    opencallcrossDict = {}
+    openputcrossDict = {}
 
     for i in callcrossedset:
         callcrossedsetDict[i.symbol] = i.time
@@ -739,6 +832,10 @@ def ajaxNot2(request):
         putcrossedsetDict[i.symbol] = i.time
     for i in putonepercentset:
         putonepercentsetDict[i.symbol] = i.time
+    for i in opencallcross:
+        opencallcrossDict[i.symbol] = i.time
+    for i in openputcross:
+        openputcrossDict[i.symbol] = i.time
 
     for e in LiveOITotalAllSymbol.objects.all():
         print(e.symbol)
@@ -746,22 +843,38 @@ def ajaxNot2(request):
         if e.symbol in liveData and e.symbol not in removeList:
             # Call
 
-            if liveData[e.symbol][0] > float(e.callstrike):
-                print(callonepercentsetDict)
+            if liveData[e.symbol][1] > float(e.callstrike):
+                if e.symbol in opencallcrossDict:
+                    LiveEquityResult.objects.filter(symbol = e.symbol).delete()
+                    callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="call",time=opencallcrossDict[e.symbol],date=date.today())
+                    callcross.save()
+                else:
+                    callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="call",time=liveData[e.symbol][5],date=date.today())
+                    callcross.save()
+            
+            if liveData[e.symbol][1] < float(e.putstrike):
+                if e.symbol in openputcrossDict:
+                    LiveEquityResult.objects.filter(symbol = e.symbol).delete()
+                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=openputcrossDict[e.symbol],date=date.today())
+                    putcross.save()
+                else:
+                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=liveData[e.symbol][5],date=date.today())
+                    putcross.save()
 
+            if liveData[e.symbol][0] > float(e.callstrike) or liveData[e.symbol][1] > float(e.callstrike):
                 if e.symbol in callcrossedsetDict:
                     print("Yes")
                     # Deleting the older
                     LiveEquityResult.objects.filter(symbol = e.symbol).delete()
                     # updating latest data
                     print("Yes")
-                    callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",time=callcrossedsetDict[e.symbol],date=date.today())
+                    callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="Nil",time=callcrossedsetDict[e.symbol],date=date.today())
                     callcross.save()
                     continue
 
                 else:
                     print("Call crossed")
-                    callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",time=liveData[e.symbol][5],date=date.today())
+                    callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=date.today())
                     callcross.save()
                 
             elif liveData[e.symbol][0] >= float(e.callone) and liveData[e.symbol][0] <= float(e.callstrike):
@@ -774,28 +887,27 @@ def ajaxNot2(request):
                         print("Already crossed 1 percent")
                         LiveEquityResult.objects.filter(symbol = e.symbol).delete()
                         # updating latest data
-                        callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",time=callonepercentsetDict[e.symbol],date=date.today())
+                        callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",opencrossed="Nil",time=callonepercentsetDict[e.symbol],date=date.today())
                         callcross.save()
-
                         continue
                     else:
                         print("Call 1 percent")
 
-                        callone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",time=liveData[e.symbol][5],date=date.today())
+                        callone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=date.today())
                         callone.save()
 
             # Put
-            elif liveData[e.symbol][0] < float(e.putstrike):
+            elif liveData[e.symbol][0] < float(e.putstrike) or liveData[e.symbol][2] < float(e.putstrike):
                 if e.symbol in putcrossedsetDict:
                     # Deleting the older
                     LiveEquityResult.objects.filter(symbol =e.symbol).delete()
                     # updating latest data
-                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",time=putcrossedsetDict[e.symbol],date=date.today())
+                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=putcrossedsetDict[e.symbol],date=date.today())
                     putcross.save()
                     continue
                 else:
                     print("Put crossed")
-                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put crossed",time=liveData[e.symbol][5],date=date.today())
+                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=date.today())
                     putcross.save()
 
 
@@ -808,12 +920,12 @@ def ajaxNot2(request):
                         print("Already crossed 1 percent")
                         LiveEquityResult.objects.filter(symbol =e.symbol).delete()
                         # updating latest data
-                        putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",time=putonepercentsetDict[e.symbol],date=date.today())
+                        putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=putonepercentsetDict[e.symbol],date=date.today())
                         putcross.save()
                         continue
                     else:
                         print("Put 1 percent")
-                        putone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",time=liveData[e.symbol][5],date=date.today())
+                        putone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=date.today())
                         putone.save()
         
 
@@ -1623,11 +1735,15 @@ def load_optionChain(request):
     LiveChangeOI = LiveOIChange.objects.filter(symbol=symbol)
     print(LiveChangeOI)
 
+    LiveChangePercentOI = LiveOIPercentChange.objects.filter(symbol=symbol)
+    print(LiveChangePercentOI)
+
     HistoryOITot = HistoryOITotal.objects.filter(symbol=symbol).order_by('-time')
     HistoryOIChg = HistoryOIChange.objects.filter(symbol=symbol).order_by('-time')
+    HistoryOIPercentChg = HistoryOIPercentChange.objects.filter(symbol=symbol).order_by('-time')
 
     if len(LiveOI) > 0:
-        return render(request, 'optionChainSingleSymbol.html', {'liveEqui':liveEqui,'symbol':symbol,'OITotalValue':LiveOI,'OIChangeValue':LiveChangeOI,'HistoryOITot':HistoryOITot,'HistoryOIChg':HistoryOIChg})
+        return render(request, 'optionChainSingleSymbol.html', {'LiveChangePercentOI':LiveChangePercentOI,'HistoryOIPercentChg':HistoryOIPercentChg,'liveEqui':liveEqui,'symbol':symbol,'OITotalValue':LiveOI,'OIChangeValue':LiveChangeOI,'HistoryOITot':HistoryOITot,'HistoryOIChg':HistoryOIChg})
     else:
         return render(request, 'optionChainNoData.html')
 

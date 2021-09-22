@@ -25,11 +25,18 @@
                 </li>
                 <li class="breadcrumb-item">
                 <div class="div-container">
+                {%if value.opencrossed == "call" %}
+                <span class="top" style="text-align:center"><b class="badge badge-success">Open</b></span>
+                  <span class="bottom">{{ value.open }}</span>
+                {% else %}
                   <span class="top" style="text-align:center"><b>Open</b></span>
                   <span class="bottom">{{ value.open }}</span>
+                {% endif %}
+
                 </div>
                 </li>
-                <li class="breadcrumb-item">
+
+                {% comment %} <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b>High</b></span>
                   <span class="bottom">{{ value.high }}</span>
@@ -52,7 +59,7 @@
                   <span class="top" style="text-align:center"><b>Ltp</b></span>
                   <span class="bottom">{{ value.ltp }}</span>
                 </div>
-                </li>
+                </li> {% endcomment %}
 
                 <li class="breadcrumb-item">
                 <div class="div-container">
@@ -97,11 +104,22 @@
                 </li>
                 <li class="breadcrumb-item">
                 <div class="div-container">
+                
+                {%if value.opencrossed == "put" %}
+                  <span class="top" style="text-align:center"><b class="badge badge-danger">Open</b></span>
+                  <span class="bottom">{{ value.open }}</span>
+                {% else %}
                   <span class="top" style="text-align:center"><b>Open</b></span>
                   <span class="bottom">{{ value.open }}</span>
+                {% endif %}
+
+                  {% comment %} <span class="top" style="text-align:center"><b class="badge badge-danger">Open</b></span>
+                  <span class="bottom">{{ value.opencrossed }}</span> {% endcomment %}
+
                 </div>
                 </li>
-                <li class="breadcrumb-item">
+
+                {% comment %} <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b>High</b></span>
                   <span class="bottom">{{ value.high }}</span>
@@ -124,7 +142,8 @@
                   <span class="top" style="text-align:center"><b>Ltp</b></span>
                   <span class="bottom">{{ value.ltp }}</span>
                 </div>
-                </li>
+                </li> {% endcomment %}
+
 
                 <li class="breadcrumb-item">
                 <div class="div-container">
@@ -170,7 +189,8 @@
                   <span class="bottom">{{ value.open }}</span>
                 </div>
                 </li>
-                <li class="breadcrumb-item">
+
+                {% comment %} <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b>High</b></span>
                   <span class="bottom">{{ value.high }}</span>
@@ -193,7 +213,7 @@
                   <span class="top" style="text-align:center"><b>Ltp</b></span>
                   <span class="bottom">{{ value.ltp }}</span>
                 </div>
-                </li>
+                </li> {% endcomment %}
 
                 <li class="breadcrumb-item">
                 <div class="div-container">
@@ -239,7 +259,8 @@
                   <span class="bottom">{{ value.open }}</span>
                 </div>
                 </li>
-                <li class="breadcrumb-item">
+
+                {% comment %} <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b>High</b></span>
                   <span class="bottom">{{ value.high }}</span>
@@ -262,7 +283,7 @@
                   <span class="top" style="text-align:center"><b>Ltp</b></span>
                   <span class="bottom">{{ value.ltp }}</span>
                 </div>
-                </li>
+                </li> {% endcomment %}
 
                 <li class="breadcrumb-item">
                 <div class="div-container">

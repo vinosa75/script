@@ -1,7 +1,6 @@
-
 <div style="text-align:center">
 {% for record in OITotalValue %}
-<h2 style="text-align:center;color:black;font-size:medium;" class="btn btn-warning"><span class="badge badge-secondary">{{record.expiry}}</span> - {{symbol}}</h2> - Strikegap (<b>{{record.strikegap}}</b>) 
+<h2 style="text-align:center;color:black;font-size:medium;" class="btn btn-warning"><span class="badge badge-secondary">{{record.expiry}}</span> - {{symbol}}</h2> - <b>Strikegap ({{record.strikegap}})</b>
 {% endfor %}
 </div>  
             
@@ -62,7 +61,46 @@
 
 <div class="row">
 
-    <div class="col-sm-6">
+    <div class="col-sm-4">
+      <table id="manoj" style="font-size:14px">
+          <thead>
+              <tr>
+              <tr>
+                  <td colspan=4 style="width:10%;text-align:center;background-color: grey"><b>Change % OI</b></td>
+              </tr>
+              <th><span>TIME</span></th>
+              <th><span>CALL</span></th>
+              <th><span>STRIKE</span></th>
+              <th><span>PUT</span></th>
+              </tr>
+          </thead>
+          <tbody>
+                      <tbody>
+
+                      {% for record in LiveChangePercentOI %}
+
+                        <tr>
+                        {% comment %} colspan=2 {% endcomment %}
+                          <td rowspan=2 style="width:2%"><b>{{ record.time|time }}</b></td>
+                          <td style="width:2%" class="bg-success"><b>{{ record.call1 }}<b></td>
+                          <td style="width:2%;text-align:center"><b>{{ record.callstrike }}</b></td>
+                          <td style="width:2%">{{ record.put1 }}</td>
+                        </tr>
+                        <tr>
+                          {% comment %} <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> {% endcomment %}
+                          <td style="width:2%">{{ record.call2 }}</td>
+                          <td style="width:2%;text-align:center"><b>{{ record.putstrike }}</b></td>
+                          <td style="width:2%;background-color:red"><b>{{ record.put2 }}</b></td>
+                        </tr>
+
+                      {% endfor %}
+                      </tbody>
+          </tbody>
+            
+      </table>
+  </div>
+
+    <div class="col-sm-4">
       <table id="manoj" style="font-size:14px">
           <thead>
               <tr>
@@ -101,7 +139,7 @@
       </table>
   </div>
 
-  <div class="col-sm-6">
+  <div class="col-sm-4">
       <table id="manoj" style="font-size:14px">
           <thead>
               <tr>
@@ -148,7 +186,67 @@
 <div style="margin-top:15px"></div>
 <div class="row">
 
-<div class="col-sm-6">
+<div class="col-sm-4">
+
+  {% if HistoryOIChg|length == 0 %}
+
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>No data!</strong> No History found for this symbol, Try other symbols.
+  </div>
+
+  {% else %}
+  <div class="fixTableHeadHistory">
+    <table class="table-striped">
+      <thead>
+        <tr class="header">
+              <tr>
+                  <td colspan=4 style="width:10%;text-align:center;background-color: grey"><b>Change % OI</b></td>
+              </tr>
+
+              <th><span>TIME</span></th>
+              <th><span>CALL</span></th>
+              <th><span>STRIKE</span></th>
+              <th><span>PUT</span></th>
+
+              </tr>
+
+      </thead>
+  
+      <tbody>
+                      {% for record in HistoryOIPercentChg %}
+
+                        <tr>
+                        {% comment %} colspan=2 {% endcomment %}
+                          <td rowspan=2 style="width:5%"><b>{{ record.time|time }}<b></td>
+                          <td style="width:2%" class="bg-success"><b>{{ record.call1 }}<b></td>
+                          <td style="width:2%;text-align:center"><b>{{ record.callstrike }}</b></td>
+                          <td style="width:2%">{{ record.put1 }}</td>
+                        </tr>
+                        <tr>
+                          {% comment %} <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> {% endcomment %}
+                          <td style="width:2%">{{ record.call2 }}</td>
+                          <td style="width:2%;text-align:center"><b>{{ record.putstrike }}</b></td>
+                          <td style="width:2%;background-color:red"><b>{{ record.put2 }}</b></td>
+                        </tr>
+
+                        {% comment %} <tr style="background-color: black;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        </tr> {% endcomment %}
+
+
+                      {% endfor %}
+      </tbody>
+        
+    </table>
+  </div>
+  {% endif %}
+  
+</div>
+
+<div class="col-sm-4">
 
   {% if HistoryOIChg|length == 0 %}
 
@@ -208,7 +306,7 @@
   
 </div>
 
-<div class="col-sm-6">
+<div class="col-sm-4">
     {% if HistoryOITot|length == 0 %}
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
     <strong>No data!</strong> No History found for this symbol, Try other symbols.
