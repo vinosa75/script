@@ -411,7 +411,8 @@ def optionChainClick(request):
 
     return render(request,"optionChainProgress.html",{'fnolist':fnolist}) 
 
-
+@csrf_protect
+@login_required(login_url='login')
 def mainView(request):
     nse = Nse()
     fnolist = nse.get_fno_lot_sizes()
