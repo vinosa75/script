@@ -39,7 +39,8 @@ def testhtml(request):
         ce = df.loc[df['type'] == "CE"]
         pe = df.loc[df['type'] == "PE"]
 
-        ce_oipercent_df = ce.sort_values(by=['oi_change_perc'], ascending=False)
+        # ce_oipercent_df = ce.sort_values(by=['oi_change_perc'], ascending=False)
+        ce_oipercent_df = ce.where(ce['oi_change_perc'] !=0 ).sort_values(by=['oi_change_perc'], ascending=False)
 
         print(ce_oipercent_df)
 
@@ -51,7 +52,7 @@ def testhtml(request):
         print(cestrike)
         print(peoi1)
 
-        pe_oipercent_df = pe.sort_values(by=['oi_change_perc'], ascending=False)
+        pe_oipercent_df = pe.where(pe['oi_change_perc'] !=0 ).sort_values(by=['oi_change_perc'], ascending=False)
 
         ceoi2 = pe_oipercent_df.iloc[0]['oi_change_perc']
         pestrike = pe_oipercent_df.iloc[0]['strike']
@@ -70,58 +71,52 @@ def testhtml(request):
         return OIPercentChange
 
     def OITotal(df,item,dte):
-        print("inside oitotal")
-        print(df)
+
         ce = df.loc[df['type'] == "CE"]
         pe = df.loc[df['type'] == "PE"]
 
-        column = ce["oi"]
-        max_value = column.max()
+        print("before final df")
 
-        cedf1 = ce.loc[ce['oi'] == max_value]
-        print(cedf1['strike'].iloc[0])
-        pedf1 = pe.loc[pe['strike']==cedf1['strike'].iloc[0]]
-        
-        if pedf1.empty == True:
-            print("dataframe is empty")
-            return False
+        final_df = ce.loc[ce['oi'] != 0].sort_values('oi', ascending=False)
 
+        print("crossed final df")
 
-        celtt = cedf1['ltt'].iloc[0]
-         
-        ceoi1 = cedf1['oi'].iloc[0]
-        
-        cestrike = cedf1['strike'].iloc[0]
-        print(pedf1['oi'])
-        peoi1 = pedf1['oi'].iloc[0]
+        peoi1 = pe.loc[pe['strike']==final_df.iloc[0]['strike']].iloc[0]['oi']
+        count = 0
 
-        print("place1 crossed")
+        while peoi1 == 0:
+            count = count + 1
+            peoi1 = pe.loc[pe['strike']==final_df.iloc[count]['strike']].iloc[0]['oi']
 
-        column = pe["oi"]
-        max_value = column.max()
+        cestrike = final_df.iloc[count]['strike']
+        ceoi1 = final_df.iloc[count]['oi']
+        celtt = final_df.iloc[count]['ltt']
 
-        print("max crossed") 
+        print(ceoi1)
+        print(cestrike)
+        print(peoi1)
 
-        pedf2 = pe.loc[pe['oi'] == max_value]
-        cedf2 = ce.loc[ce['strike']==pedf2['strike'].iloc[0]]
+        final_df = pe.loc[pe['oi'] != 0].sort_values('oi', ascending=False)
 
-        if cedf2.empty == True:
-            print("dataframe is empty")
-            return False
+        ceoi2 = ce.loc[ce['strike']==final_df.iloc[0]['strike']].iloc[0]['oi']
+        count = 0
 
-        print("cedf2 crossed") 
+        while ceoi2 == 0:
+            count = count + 1
+            ceoi2 = ce.loc[ce['strike']==final_df.iloc[count]['strike']].iloc[0]['oi']
 
-        peltt = pedf2['ltt'].iloc[0]
-        peoi2 = pedf2['oi'].iloc[0]
-        pestrike = pedf2['strike'].iloc[0]
-        ceoi2 = cedf2['oi'].iloc[0]
+        pestrike = final_df.iloc[count]['strike']
+        peoi2 = final_df.iloc[count]['oi']
+        peltt = final_df.iloc[count]['ltt']
 
-        print("ceoi2 crossed") 
+        print(ceoi2)
+        print(pestrike)
+        print(peoi2)   
+
         OITot = {"celtt":celtt,"ceoi1":ceoi1,"cestrike":cestrike,"peoi1":peoi1,"peltt":peltt,"peoi2":peoi2,"pestrike":pestrike,"ceoi2":ceoi2}
         
         return OITot
 
-    # Calculation of Change in O
     def OIChange(df,item,dte):
 
         ce = df.loc[df['type'] == "CE"]
@@ -168,7 +163,6 @@ def testhtml(request):
         OIChan = {"celtt":celtt,"ceoi1":ceoi1,"cestrike":cestrike,"peoi1":peoi1,"peltt":peltt,"peoi2":peoi2,"pestrike":pestrike,"ceoi2":ceoi2}
         
         return OIChan
-
 
     # Fetching the F&NO symbol list
     TrueDatausername = 'tdws127'
