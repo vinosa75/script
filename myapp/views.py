@@ -411,7 +411,6 @@ def optionChainClick(request):
 
     return render(request,"optionChainProgress.html",{'fnolist':fnolist}) 
 
-@csrf_protect
 @login_required(login_url='login')
 def mainView(request):
     nse = Nse()
@@ -1657,7 +1656,7 @@ def login(request):
             if user is not None:
                 auth.login(request,user)
                 # messages.info(request, f"You are now logged in as {username}")
-                return redirect('entry')
+                return redirect('mainView')
             else:
                 messages.info(request,'incorrect password')
                 return redirect('login')
