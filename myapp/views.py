@@ -407,7 +407,7 @@ def optionChainClick(request):
     fnolist = [i for i in fnolist if i not in remove_list]
 
     # fnolist = fnolist[0:2]
-    fnolist = ["JINDALSTEL"]
+    # fnolist = ["JINDALSTEL"]
 
     return render(request,"optionChainProgress.html",{'fnolist':fnolist}) 
 
