@@ -1131,7 +1131,6 @@ def selected_equity(request):
 
     return render(request, template_name='new.html')
 
-
 def ajax_equity(request):
 
     TrueDatausername = 'tdws127'
@@ -1735,9 +1734,9 @@ def load_optionChain(request):
     LiveChangePercentOI = LiveOIPercentChange.objects.filter(symbol=symbol)
     print(LiveChangePercentOI)
 
-    HistoryOITot = HistoryOITotal.objects.filter(symbol=symbol).order_by('-time')
-    HistoryOIChg = HistoryOIChange.objects.filter(symbol=symbol).order_by('-time')
-    HistoryOIPercentChg = HistoryOIPercentChange.objects.filter(symbol=symbol).order_by('-time')
+    HistoryOITot = HistoryOITotal.objects.filter(symbol=symbol).order_by('time')
+    HistoryOIChg = HistoryOIChange.objects.filter(symbol=symbol).order_by('time')
+    HistoryOIPercentChg = HistoryOIPercentChange.objects.filter(symbol=symbol).order_by('time')
 
     if len(LiveOI) > 0:
         return render(request, 'optionChainSingleSymbol.html', {'LiveChangePercentOI':LiveChangePercentOI,'HistoryOIPercentChg':HistoryOIPercentChg,'liveEqui':liveEqui,'symbol':symbol,'OITotalValue':LiveOI,'OIChangeValue':LiveChangeOI,'HistoryOITot':HistoryOITot,'HistoryOIChg':HistoryOIChg})
