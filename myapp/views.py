@@ -177,9 +177,6 @@ def testhtml(request):
     sampleDict = {}
     count=1
 
-    # LiveEquityResult.objects.all().delete()
-    # sym = list(LiveOITotal.objects.values_list('symbol', flat=True))
-
     exceptionList = ['NIFTY','BANKNIFTY','FINNIFTY']
     # if item not in sym:
     try:
@@ -408,6 +405,7 @@ def optionChainClick(request):
     fnolist = [i for i in fnolist if i not in remove_list]
 
     # fnolist = fnolist[0:2]
+    fnolist = ["JINDALSTEL"]
 
     return render(request,"optionChainProgress.html",{'fnolist':fnolist}) 
 
@@ -805,7 +803,7 @@ def ajaxNot2(request):
 
     callcrossedset = LiveEquityResult.objects.filter(strike__contains="Call Crossed")
     callonepercentset = LiveEquityResult.objects.filter(strike="Call 1 percent")
-    putcrossedset = LiveEquityResult.objects.filter(strike="Put Crossed")
+    putcrossedset = LiveEquityResult.objects.filter(strike="Put crossed")
     putonepercentset = LiveEquityResult.objects.filter(strike="Put 1 percent")
 
     opencallcross = LiveEquityResult.objects.filter(opencrossed="call")
@@ -831,7 +829,7 @@ def ajaxNot2(request):
     for i in openputcross:
         openputcrossDict[i.symbol] = i.time
 
-    for e in LiveOITotalAllSymbol.objects.all():
+    for e in LiveOITotalAllSymbol.objects.filter(symbol="JINDALSTEL"):
         print(e.symbol)
         
         if e.symbol in liveData and e.symbol not in removeList:
@@ -854,6 +852,8 @@ def ajaxNot2(request):
                 else:
                     putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=liveData[e.symbol][5],date=date.today())
                     putcross.save()
+
+
 
             if liveData[e.symbol][0] > float(e.callstrike) or liveData[e.symbol][1] > float(e.callstrike):
                 if e.symbol in callcrossedsetDict:
@@ -898,10 +898,11 @@ def ajaxNot2(request):
                     # updating latest data
                     putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=putcrossedsetDict[e.symbol],date=date.today())
                     putcross.save()
+                    print("put crossed updating only the data")
                     continue
                 else:
                     print("Put crossed")
-                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=date.today())
+                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=date.today())
                     putcross.save()
 
 
@@ -1743,199 +1744,207 @@ def load_optionChain(request):
 
 def load_charts(request):
 
-    # Fetching today's date
-    dat = dt.today()
-    # Deleting past historical data in the database
-    HistoryOIChange.objects.filter(time__lte = dt.combine(dat, dt.min.time())).delete()
-    HistoryOITotal.objects.filter(time__lte = dt.combine(dat, dt.min.time())).delete()
+    nse = Nse()
+    fnolist = nse.get_fno_lot_sizes()
+    print(len(fnolist))
 
-    # Getting the Symbol & Expiry selected by user.
-    symbol = request.POST['symbol']
-    expiry = request.POST['expiry_selected']
+    # Removing 3 symbols from the list as they are not required for equity comparision
+    remove_list = ['HEROMOTOCO','PFC','BEL','MANAPPURAM','EXIDEIND','PETRONET', 'TATAPOWER', 'ONGC', 'VEDL', 'LALPATHLAB', 'ITC', 'INDHOTEL', 'IDEA','POWERGRID', 'COALINDIA', 'CANBK','HINDPETRO','BANKBARODA','RECLTD','CUB']
+    # remove_list = []
+    fnolist = [i for i in fnolist if i not in remove_list]
 
-    # Converting the expiry date format to required format to store in DB  
-    new_date=datetime.datetime.strptime(expiry, '%d-%b-%Y').strftime('%Y-%m-%d')
+    fnolist = fnolist[0:5]
+    print(fnolist)
 
-    TrueDatausername = 'wssand020'
-    TrueDatapassword = 'vinosa020'
-    td_obj = TD(TrueDatausername, TrueDatapassword , log_level= logging.WARNING )
-
-    # Changing the expiry dateformat
-    # Fetching the option chain data
-    dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
-    nifty_chain = td_obj.start_option_chain( symbol, dt(dte.year,dte.month,dte.day),chain_length = 10,bid_ask=True)
-    time.sleep(3)
-    print("Getting option chain")
-    df = nifty_chain.get_option_chain()
-
-    # calculating the strike gap
-    Fourrows = df.iloc[:4]
-    CEFiltered = Fourrows[Fourrows["type"] == "CE"]
-    strikeGap = int(CEFiltered.iloc[1]["strike"]) - int(CEFiltered.iloc[0]["strike"])
-
-    # Disconnecting user
-    td_obj.disconnect()
-
-    #  Calcuation of Total OI
-    def OITotal():
-        print(df)
+    def OIPercentChange(df):
+        print("OI percent started")
         ce = df.loc[df['type'] == "CE"]
         pe = df.loc[df['type'] == "PE"]
 
-        column = ce["oi"]
-        max_value = column.max()
+        # ce_oipercent_df = ce.sort_values(by=['oi_change_perc'], ascending=False)
+        ce_oipercent_df = ce.where(ce['oi_change_perc'] !=0 ).sort_values(by=['oi_change_perc'], ascending=False)
 
-        cedf1 = ce.loc[ce['oi'] == max_value]
-        pedf1 = pe.loc[(pe['strike']==cedf1['strike'].iloc[0])]
-        print(pedf1)    
+        print(ce_oipercent_df)
+
+        ceoi1 = ce_oipercent_df.iloc[0]['oi_change_perc']
+        cestrike = ce_oipercent_df.iloc[0]['strike']
+        peoi1 = pe.loc[pe['strike']==ce_oipercent_df.iloc[0]['strike']].iloc[0]['oi_change_perc']
+
+        print(ceoi1)
+        print(cestrike)
+        print(peoi1)
+
+        pe_oipercent_df = pe.where(pe['oi_change_perc'] !=0 ).sort_values(by=['oi_change_perc'], ascending=False)
+
+        ceoi2 = pe_oipercent_df.iloc[0]['oi_change_perc']
+        pestrike = pe_oipercent_df.iloc[0]['strike']
+        peoi2 = ce.loc[ce['strike']==pe_oipercent_df.iloc[0]['strike']].iloc[0]['oi_change_perc']
+
+        print(ceoi2)
+        print(pestrike)
+        print(peoi2)
+
+        celtt = ce_oipercent_df.iloc[0]['ltt']
+        peltt = pe_oipercent_df.iloc[0]['ltt']
 
 
-        celtt = cedf1['ltt'].iloc[0]
-        ceoi1 = cedf1['oi'].iloc[0]
-        cestrike = cedf1['strike'].iloc[0]
-        peoi1 = pedf1['oi'].iloc[0]
+        OIPercentChange = {"celtt":celtt,"ceoi1":ceoi1,"cestrike":cestrike,"peoi1":peoi1,"peltt":peltt,"peoi2":peoi2,"pestrike":pestrike,"ceoi2":ceoi2}
+        print("OI percent Ended")
+        return OIPercentChange
 
-        column = pe["oi"]
-        max_value = column.max()
+    def OITotal(df,item,dte):
+        print("OI Total started")
 
-        pedf2 = pe.loc[pe['oi'] == max_value]
-        cedf2 = ce.loc[(ce['strike']==pedf2['strike'].iloc[0])]
+        ce = df.loc[df['type'] == "CE"]
+        pe = df.loc[df['type'] == "PE"]
 
-        peltt = pedf2['ltt'].iloc[0]
-        peoi2 = pedf2['oi'].iloc[0]
-        pestrike = pedf2['strike'].iloc[0]
-        ceoi2 = cedf2['oi'].iloc[0]
+        print("before final df")
+
+        final_df = ce.loc[ce['oi'] != 0].sort_values('oi', ascending=False)
+
+        print("crossed final df")
+
+        peoi1 = pe.loc[pe['strike']==final_df.iloc[0]['strike']].iloc[0]['oi']
+        count = 0
+
+        while peoi1 == 0:
+            count = count + 1
+            peoi1 = pe.loc[pe['strike']==final_df.iloc[count]['strike']].iloc[0]['oi']
+
+        cestrike = final_df.iloc[count]['strike']
+        ceoi1 = final_df.iloc[count]['oi']
+        celtt = final_df.iloc[count]['ltt']
+
+        print(ceoi1)
+        print(cestrike)
+        print(peoi1)
+
+        final_df = pe.loc[pe['oi'] != 0].sort_values('oi', ascending=False)
+
+        ceoi2 = ce.loc[ce['strike']==final_df.iloc[0]['strike']].iloc[0]['oi']
+        count = 0
+
+        while ceoi2 == 0:
+            count = count + 1
+            ceoi2 = ce.loc[ce['strike']==final_df.iloc[count]['strike']].iloc[0]['oi']
+
+        pestrike = final_df.iloc[count]['strike']
+        peoi2 = final_df.iloc[count]['oi']
+        peltt = final_df.iloc[count]['ltt']
+
+        print(ceoi2)
+        print(pestrike)
+        print(peoi2)   
 
         OITot = {"celtt":celtt,"ceoi1":ceoi1,"cestrike":cestrike,"peoi1":peoi1,"peltt":peltt,"peoi2":peoi2,"pestrike":pestrike,"ceoi2":ceoi2}
-        
-        value2 = LiveOITotal.objects.all()
-        print(value2)
-
-        if len(value2) > 0:
-
-            if (value2[0].callstrike != cestrike) or (value2[0].putstrike != pestrike):
-                # Adding to history table
-                TotalOIHistory = HistoryOITotal(time=value2[0].time,call1=value2[0].call1,call2=value2[0].call2,put1=value2[0].put1,put2=value2[0].put2,callstrike=value2[0].callstrike,putstrike=value2[0].putstrike,symbol=value2[0].symbol,expiry=value2[0].expiry)
-                TotalOIHistory.save()
-
-                # deleting live table data
-                value1 = LiveOITotal.objects.all().delete()
-
-                # Creating in live data
-                TotalOICreation = LiveOITotal(time=celtt,call1=ceoi1,call2=ceoi2,put1=peoi1,put2=peoi2,callstrike=cestrike,putstrike=pestrike,symbol=symbol,expiry=new_date)
-                TotalOICreation.save() 
-
-            else:
-                # deleting live table data
-                value1 = LiveOITotal.objects.all().delete()
-
-                # Creating in live data
-                TotalOICreation = LiveOITotal(time=celtt,call1=ceoi1,call2=ceoi2,put1=peoi1,put2=peoi2,callstrike=cestrike,putstrike=pestrike,symbol=symbol,expiry=new_date)
-                TotalOICreation.save()
-        else:
-            TotalOICreation = LiveOITotal(time=celtt,call1=ceoi1,call2=ceoi2,put1=peoi1,put2=peoi2,callstrike=cestrike,putstrike=pestrike,symbol=symbol,expiry=new_date)
-            TotalOICreation.save()
-        # live Data Creation
-        # TotalOICreation = LiveOITotal(time=celtt,call1=ceoi1,call2=ceoi2,put1=peoi1,put2=peoi2,callstrike=cestrike,putstrike=pestrike,symbol=symbol,expiry=new_date)
-        # TotalOICreation.save()
-
+        print("OI Total ended")
         return OITot
 
-    # Calculation of Change in OI
-    def OIChange():
+    def OIChange(df,item,dte):
+        print("OI Change started")
+
         ce = df.loc[df['type'] == "CE"]
         pe = df.loc[df['type'] == "PE"]
 
-        column = ce["oi_change"]
-        max_value = column.max()
+        print("before final df")
 
-        cedf1 = ce.loc[ce['oi_change'] == max_value]
-        pedf1 = pe.loc[(pe['strike']==cedf1['strike'].iloc[0])]
+        final_df = ce.loc[ce['oi_change'] != 0].sort_values('oi_change', ascending=False)
 
-        celtt = cedf1['ltt'].iloc[0]
-        ceoi1 = cedf1['oi_change'].iloc[0]
-        cestrike = cedf1['strike'].iloc[0]
-        peoi1 = pedf1['oi_change'].iloc[0]
+        print("crossed final df")
 
-        column = pe["oi_change"]
-        max_value = column.max()
+        peoi1 = pe.loc[pe['strike']==final_df.iloc[0]['strike']].iloc[0]['oi_change']
+        count = 0
 
-        pedf2 = pe.loc[pe['oi_change'] == max_value]
-        cedf2 = ce.loc[(ce['strike']==pedf2['strike'].iloc[0])]
+        while peoi1 == 0:
+            count = count + 1
+            peoi1 = pe.loc[pe['strike']==final_df.iloc[count]['strike']].iloc[0]['oi_change']
 
-        peltt = pedf2['ltt'].iloc[0]
-        peoi2 = pedf2['oi_change'].iloc[0]
-        pestrike = pedf2['strike'].iloc[0]
-        ceoi2 = cedf2['oi_change'].iloc[0]
+        cestrike = final_df.iloc[count]['strike']
+        ceoi1 = final_df.iloc[count]['oi_change']
+        celtt = final_df.iloc[count]['ltt']
+
+        print(ceoi1)
+        print(cestrike)
+        print(peoi1)
+
+        final_df = pe.loc[pe['oi_change'] != 0].sort_values('oi_change', ascending=False)
+
+        ceoi2 = ce.loc[ce['strike']==final_df.iloc[0]['strike']].iloc[0]['oi_change']
+        count = 0
+
+        while ceoi2 == 0:
+            count = count + 1
+            ceoi2 = ce.loc[ce['strike']==final_df.iloc[count]['strike']].iloc[0]['oi_change']
+
+        pestrike = final_df.iloc[count]['strike']
+        peoi2 = final_df.iloc[count]['oi_change']
+        peltt = final_df.iloc[count]['ltt']
+
+        print(ceoi2)
+        print(pestrike)
+        print(peoi2)      
 
         OIChan = {"celtt":celtt,"ceoi1":ceoi1,"cestrike":cestrike,"peoi1":peoi1,"peltt":peltt,"peoi2":peoi2,"pestrike":pestrike,"ceoi2":ceoi2}
         
-        value1 = LiveOIChange.objects.all()
-        print(value1)
-
-        if len(value1) > 0:
-
-            if (value1[0].callstrike != cestrike) or (value1[0].putstrike != pestrike):
-                # Adding to history table
-                ChangeOIHistory = HistoryOIChange(time=value1[0].time,call1=value1[0].call1,call2=value1[0].call2,put1=value1[0].put1,put2=value1[0].put2,callstrike=value1[0].callstrike,putstrike=value1[0].putstrike,symbol=value1[0].symbol,expiry=value1[0].expiry)
-                ChangeOIHistory.save()
-
-                # deleting live table data
-                value1 = LiveOIChange.objects.all().delete()
-
-                # Creating in live data
-                ChangeOICreation = LiveOIChange(time=celtt,call1=ceoi1,call2=ceoi2,put1=peoi1,put2=peoi2,callstrike=cestrike,putstrike=pestrike,symbol=symbol,expiry=new_date)
-                ChangeOICreation.save() 
-
-            else:
-                # deleting live table data
-                value1 = LiveOIChange.objects.all().delete()
-
-                # Creating in live data
-                ChangeOICreation = LiveOIChange(time=celtt,call1=ceoi1,call2=ceoi2,put1=peoi1,put2=peoi2,callstrike=cestrike,putstrike=pestrike,symbol=symbol,expiry=new_date)
-                ChangeOICreation.save() 
-        else:
-            ChangeOICreation = LiveOIChange(time=celtt,call1=ceoi1,call2=ceoi2,put1=peoi1,put2=peoi2,callstrike=cestrike,putstrike=pestrike,symbol=symbol,expiry=new_date)
-            ChangeOICreation.save()
-
-        # ChangeOICreation = LiveOIChange(time=celtt,call1=ceoi1,call2=ceoi2,put1=peoi1,put2=peoi2,callstrike=cestrike,putstrike=pestrike,symbol=symbol,expiry=new_date)
-        # ChangeOICreation.save()
-
+        print("OI Change ended")
         return OIChan
 
-    # Equity data Calculation
-    def equityCheck():
-        # Fetching the F&NO symbol list
-        nse = Nse()
-        fnolist = nse.get_fno_lot_sizes()
-    
-        # Removing 3 symbols from the list as they are not required for equity comparision
-        remove_list = ['BANKNIFTY', 'PFC','NIFTY', 'FINNIFTY', 'EXIDEIND','PETRONET', 'MANAPPURAM','TATAPOWER', 'ONGC', 'VEDL', 'LALPATHLAB', 'ITC', 'INDHOTEL', 'IDEA','POWERGRID', 'COALINDIA', 'CANBK','HINDPETRO','BANKBARODA','RECLTD']
-        fnolist = [i for i in fnolist if i not in remove_list]
+    # Fetching the F&NO symbol list
+    TrueDatausername = 'tdws127'
+    TrueDatapassword = 'saaral@127'
 
-        # Taking the first date from the expiry list.
-        ex_list = expiry_list(fnolist[0])
-        expiry = ex_list[0]
-        dte = datetime.datetime.strptime(expiry, '%d-%b-%Y')
 
-        sampleDict = {}
-        count=1
+    import pendulum
+    import calendar
+    from datetime import date
+    import time as te
 
-        symlist = ['NESTLEIND']
+    sampleDict = {}
+    count=1
 
-        # fnolist = fnolist[0:100]
-        print(fnolist)
-        LiveOITotalAllSymbol.objects.all().delete()
-        for item in fnolist:
+    exceptionList = ['NIFTY','BANKNIFTY','FINNIFTY']
+    # if item not in sym:
 
-            td_obj = TD('tdws127', 'saaral@127' , log_level= logging.WARNING )
-            nifty_chain = td_obj.start_option_chain(item , dt(dte.year,dte.month,dte.day),chain_length=20,bid_ask=True)
-            time.sleep(2)
+    LiveOITotalAllSymbol.objects.all().delete()
+    LiveEquityResult.objects.all().delete()
+
+    for item in fnolist:
+        try:
+            print("Before exception list")
+
+            if item in exceptionList:
+                    if calendar.day_name[date.today().weekday()] == "Thrusday":
+                        expiry = date.today()
+                        expiry = "23-Sep-2021"
+                        dte = dt.strptime(expiry, '%d-%b-%Y')
+                        print("inside thursday")
+                    else:
+                        expiry = pendulum.now().next(pendulum.THURSDAY).strftime('%d-%b-%Y')
+                        expiry = "23-Sep-2021"
+                        dte = dt.strptime(expiry, '%d-%b-%Y')
+            else:
+                print("inside monthend")
+                expiry = "30-Sep-2021"
+                dte = dt.strptime(expiry, '%d-%b-%Y')
+
+            print("After exception")
+
+            print(dte)
+            print(dte.year)
+            print(dte.month)
+            print(dte.day)
+
+            # td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
+            td_obj = TD('tdws127', 'saaral@127')
+            nifty_chain = td_obj.start_option_chain( item , dt(dte.year , dte.month , dte.day) ,chain_length = 100)
+            te.sleep(4)
             df = nifty_chain.get_option_chain()
+
+            nifty_chain.stop_option_chain()
+            td_obj.disconnect()
             sampleDict[item] = df
 
-            td_obj.disconnect()
-
+            print(df)
             print(count)
             print(item)
             count = count + 1
@@ -1943,17 +1952,29 @@ def load_charts(request):
             # Total OI Calculation from Option chain
             FutureData = {}
 
-            value1 = LiveOIChange.objects.all()
-            value2 = LiveOITotal.objects.all()
+            # value1 = LiveOIChange.objects.all()
+            # value2 = LiveOITotal.objects.all()
+            print("Before changev")
+            OIChangeValue = OIChange(df,item,dte)
+            print("after change")
+            
+            if OIChangeValue == False:
+                print("returning false")
+                return render(request,"testhtml.html",{'symbol':item,'counter':1})
 
+            OITotalValue = OITotal(df,item,dte)
 
-            OIChangeValue = OIChange()
-            OITotalValue = OITotal()
+            if OITotalValue == False:
+                print("returning false")
+                return render(request,"testhtml.html",{'symbol':item,'counter':1})
 
-            Fourrows = df.iloc[:4]
-            CEFiltered = Fourrows[Fourrows["type"] == "CE"]
-            strikeGap = float(CEFiltered.iloc[1]["strike"]) - float(CEFiltered.iloc[0]["strike"])
+            percentChange = OIPercentChange(df)
+
+            strikeGap =float(df['strike'].unique()[1]) - float(df['strike'].unique()[0])
+
             FutureData[item] = [OITotalValue['cestrike'],OITotalValue['pestrike'],strikeGap]
+
+            print(FutureData)
 
             # Percentage calculation from equity data
             newDict = {}
@@ -1964,12 +1985,33 @@ def load_charts(request):
             callhalf = float(OITotalValue['cestrike']) - (float(strikeGap))*0.05
             # Put 1 percent
             putone = float(OITotalValue['pestrike']) + (float(strikeGap))*0.1
-
             # Put 1/2 percent
             puthalf = float(OITotalValue['pestrike']) + (float(strikeGap))*0.05
-            newDict[item] = [float(OITotalValue['cestrike']),float(OITotalValue['pestrike']),callone,putone,callhalf,puthalf]
 
-            value1 = LiveOIChange.objects.all()
+            newDict[item] = [float(OITotalValue['cestrike']),float(OITotalValue['pestrike']),callone,putone,callhalf,puthalf]
+            
+            # # Fetching today's date
+            dat = dt.today()
+
+            print("before deletiong")
+
+            from datetime import datetime, time
+            pastDate = datetime.combine(datetime.today(), time.min)
+    
+            # LiveEquityResult.objects.all().delete()
+            LiveOITotalAllSymbol.objects.filter(time__lte = pastDate).delete()
+
+            # # Deleting past historical data in the database
+            HistoryOIChange.objects.filter(time__lte = pastDate).delete()
+            HistoryOITotal.objects.filter(time__lte = pastDate).delete()
+
+            # Deleting live data
+            LiveOITotal.objects.filter(time__lte = pastDate).delete()
+            LiveOIChange.objects.filter(time__lte = pastDate).delete()
+
+            print("After deletion")
+            
+            value1 = LiveOIChange.objects.filter(symbol=item)
 
             if len(value1) > 0:
 
@@ -1979,24 +2021,25 @@ def load_charts(request):
                     ChangeOIHistory.save()
 
                     # deleting live table data
-                    value1 = LiveOIChange.objects.all().delete()
+                    LiveOIChange.objects.filter(symbol=item).delete()
 
                     # Creating in live data
-                    ChangeOICreation = LiveOIChange(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte)
+                    ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
                     ChangeOICreation.save() 
 
                 else:
                     # deleting live table data
-                    value1 = LiveOIChange.objects.all().delete()
+                    LiveOIChange.objects.filter(symbol=item).delete()
 
                     # Creating in live data
-                    ChangeOICreation = LiveOIChange(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte)
+                    ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
                     ChangeOICreation.save() 
             else:
-                ChangeOICreation = LiveOIChange(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte)
+                ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
                 ChangeOICreation.save()
 
 
+            print("value1 crossed")
 
             value2 = LiveOITotal.objects.filter(symbol=item)
 
@@ -2008,138 +2051,78 @@ def load_charts(request):
                     TotalOIHistory.save()
 
                     # deleting live table data
-                    value1 = LiveOITotal.objects.all().delete()
+                    LiveOITotal.objects.filter(symbol=item).delete()
 
                     # Creating in live data
-                    TotalOICreation = LiveOITotal(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte)
+                    TotalOICreation = LiveOITotal(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,strikegap=strikeGap)
                     TotalOICreation.save()
+
+                    # Live data for equity
+                    LiveOITotalAllSymbol.objects.filter(symbol=item).delete()
+                    TotalOICreationAll = LiveOITotalAllSymbol(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,callone=callone,putone=putone,callhalf=callhalf,puthalf=puthalf)
+                    TotalOICreationAll.save()
+
 
                 else:
                     # deleting live table data
-                    value1 = LiveOITotal.objects.all().delete()
+                    LiveOITotal.objects.filter(symbol=item).delete()
 
                     # Creating in live data
-                    TotalOICreation = LiveOITotal(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte)
+                    TotalOICreation = LiveOITotal(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,strikegap=strikeGap)
                     TotalOICreation.save()
+
+                    # Live data for equity
+                    LiveOITotalAllSymbol.objects.filter(symbol=item).delete()
+                    TotalOICreationAll = LiveOITotalAllSymbol(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,callone=callone,putone=putone,callhalf=callhalf,puthalf=puthalf)
+                    TotalOICreationAll.save()
+
             else:
-                TotalOICreation = LiveOITotal(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte)
+                TotalOICreation = LiveOITotal(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,strikegap=strikeGap)
                 TotalOICreation.save()
 
-            # Creating in live data
-            TotalOICreationAll = LiveOITotalAllSymbol(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,callone=callone,putone=putone,callhalf=callhalf,puthalf=puthalf)
-            TotalOICreationAll.save() 
+                # Live data for equity
+                LiveOITotalAllSymbol.objects.filter(symbol=item).delete()
+                TotalOICreationAll = LiveOITotalAllSymbol(time=OITotalValue['celtt'],call1=OITotalValue['ceoi1'],call2=OITotalValue['ceoi2'],put1=OITotalValue['peoi1'],put2=OITotalValue['peoi2'],callstrike=OITotalValue['cestrike'],putstrike=OITotalValue['pestrike'],symbol=item,expiry=dte,callone=callone,putone=putone,callhalf=callhalf,puthalf=puthalf)
+                TotalOICreationAll.save()
 
-        nse = Nse()
-        fnolist = nse.get_fno_lot_sizes()
+            value3 = LiveOIPercentChange.objects.filter(symbol=item)
 
-        symbols = list(fnolist.keys())
+            if len(value3) > 0:
 
-        # Default production port is 8082 in the library. Other ports may be given t oyou during trial.
-        realtime_port = 8082
+                if (value3[0].callstrike != percentChange['cestrike']) or (value3[0].putstrike != percentChange['pestrike']):
+                    # Adding to history table
+                    ChangeOIPercentHistory = HistoryOIPercentChange(time=value3[0].time,call1=value3[0].call1,call2=value3[0].call2,put1=value3[0].put1,put2=value3[0].put2,callstrike=value3[0].callstrike,putstrike=value3[0].putstrike,symbol=value3[0].symbol,expiry=value3[0].expiry)
+                    ChangeOIPercentHistory.save()
 
-        td_app = TD(TrueDatausername, TrueDatapassword, live_port=realtime_port, historical_api=False)
+                    # deleting live table data
+                    LiveOIPercentChange.objects.filter(symbol=item).delete()
 
-        print('Starting Real Time Feed.... ')
-        print(f'Port > {realtime_port}')
+                    # Creating in live data
+                    ChangeOIPercentCreation = LiveOIPercentChange(time=percentChange['celtt'],call1=percentChange['ceoi1'],call2=percentChange['ceoi2'],put1=percentChange['peoi1'],put2=percentChange['peoi2'],callstrike=percentChange['cestrike'],putstrike=percentChange['pestrike'],symbol=item,expiry=dte)
+                    ChangeOIPercentCreation.save() 
 
-        req_ids = td_app.start_live_data(symbols)
-        live_data_objs = {}
+                else:
+                    # deleting live table data
+                    LiveOIPercentChange.objects.filter(symbol=item).delete()
 
-        time.sleep(1)
+                    # Creating in live data
+                    ChangeOIPercentCreation = LiveOIPercentChange(time=percentChange['celtt'],call1=percentChange['ceoi1'],call2=percentChange['ceoi2'],put1=percentChange['peoi1'],put2=percentChange['peoi2'],callstrike=percentChange['cestrike'],putstrike=percentChange['pestrike'],symbol=item,expiry=dte)
+                    ChangeOIPercentCreation.save() 
+            else:
+                ChangeOIPercentCreation = LiveOIPercentChange(time=percentChange['celtt'],call1=percentChange['ceoi1'],call2=percentChange['ceoi2'],put1=percentChange['peoi1'],put2=percentChange['peoi2'],callstrike=percentChange['cestrike'],putstrike=percentChange['pestrike'],symbol=item,expiry=dte)
+                ChangeOIPercentCreation.save()
 
-        liveData = {}
-        for req_id in req_ids:
-            liveData[td_app.live_data[req_id].symbol] = [td_app.live_data[req_id].ltp,td_app.live_data[req_id].day_open,td_app.live_data[req_id].day_high,td_app.live_data[req_id].day_low,td_app.live_data[req_id].prev_day_close]
+        except websocket.WebSocketConnectionClosedException as e:
+            print('This caught the websocket exception ')
+            td_obj.disconnect()
+            return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
+        except IndexError as e:
+            print('This caught the exception')
+            td_obj.disconnect()
+            return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
+        except Exception as e:
+            print(e)
+            td_obj.disconnect()
+            return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
 
-        td_app.disconnect()
-
-        callOnePercent = {}
-        putOnePercent = {}
-        callHalfPercent = {}
-        putHalfPercent = {}
-        callCrossed = {}
-        putCrossed = {}
-
-        LiveEquityResult.objects.all().delete()
-
-        for e in LiveOITotalAllSymbol.objects.all():
-            if e.symbol in liveData:
-                # Call
-                if liveData[e.symbol][0] > float(e.callstrike):
-                    print("Call crossed")
-                    callCrossed[e.symbol] = liveData[e.symbol]
-                    callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed")
-                    callcross.save()
-                    
-                elif liveData[e.symbol][0] >= float(e.callone) and liveData[e.symbol][0] <= float(e.callstrike):
-                    print("Call 1 percent")
-                    callOnePercent[e.symbol] = liveData[e.symbol]
-                    callone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent")
-                    callone.save()
-
-                elif liveData[e.symbol][0] >= float(e.callhalf) and liveData[e.symbol][0] <= float(e.callstrike):
-                    print("Call 1/2 percent")
-                    callHalfPercent[e.symbol] = liveData[e.symbol]
-                    callhalf = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1/2 percent")
-                    callhalf.save()
-
-                # Put
-                elif liveData[e.symbol][0] < float(e.putstrike):
-                    print("Put crossed")
-                    putCrossed[e.symbol] = liveData[e.symbol]
-                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put crossed")
-                    putcross.save()
-
-                elif liveData[e.symbol][0] <= float(e.putone) and liveData[e.symbol][0] >= float(e.putstrike):
-                    print("Put 1 percent")
-                    putOnePercent[e.symbol] = liveData[e.symbol]
-                    putone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent")
-                    putone.save()
-
-                elif liveData[e.symbol][0] <= float(e.puthalf) and liveData[e.symbol][0] >= float(e.putstrike):
-                    print("Put 1/2 percent")
-                    putHalfPercent[e.symbol] = liveData[e.symbol]
-                    puthalf = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1/2 percent")
-                    puthalf.save()
-
-        # callOnePercent["ACC"] = [438.35, 432.95, 440.35, 432.1, 435.95]
-        # callOnePercent["RAMCOCEM"] = [438.35, 432.95, 440.35, 432.1, 435.95]
-        # callOnePercent["PAGEIND"] = [438.35, 432.95, 440.35, 432.1, 435.95]
-        # callOnePercent["UPL"] = [438.35, 432.95, 440.35, 432.1, 435.95]
-        # callOnePercent["HAL"] = [438.35, 432.95, 440.35, 432.1, 435.95]
-        # callOnePercent["IEX"] = [438.35, 432.95, 440.35, 432.1, 435.95]
-        # callOnePercent["IPCALAB"] = [438.35, 432.95, 440.35, 432.1, 435.95]
-        # callOnePercent["MCX"] = [438.35, 432.95, 440.35, 432.1, 435.95]
-        # callOnePercent["POLYCAB"] = [438.35, 432.95, 440.35, 432.1, 435.95]
-
-        # putOnePercent["ACC"] =  [438.35, 432.95, 440.35, 432.1, 435.95]
-        # callCrossed["ACC"] = [438.35, 432.95, 440.35, 432.1, 435.95]
-        # putCrossed["ACC"] = [438.35, 432.95, 440.35, 432.1, 435.95]
-        # callHalfPercent["ACC"] = [438.35, 432.95, 440.35, 432.1, 435.95]
-        # putHalfPercent["ACC"] = [438.35, 432.95, 440.35, 432.1, 435.95]
-
-        return callOnePercent,putOnePercent,callCrossed,putCrossed,callHalfPercent,putHalfPercent
-        
-    # Calcuation of Total OI - Function Call
-    OITotalValue = OITotal()
-    # Calculation of Change in OI - Function Call
-    OIChangeValue = OIChange()
-
-    # Equity data Calculation - Function Call
-    # callOnePercent,putOnePercent,callCrossed,putCrossed,callHalfPercent,putHalfPercent = equityCheck()
-    
-    value1 = HistoryOIChange.objects.filter(symbol=symbol)
-    value2 = HistoryOITotal.objects.filter(symbol=symbol)
-
-    callOnePercent ={}
-    putOnePercent ={}
-    callCrossed ={}
-    putCrossed ={}
-    callHalfPercent ={}
-    putHalfPercent ={}
-
-    
-    
-    return render(request, 'sample.html', {'OITotalValue': OITotalValue,'OIChangeValue': OIChangeValue,'value1':value1,'value2':value2,'strikeGap':strikeGap,'callOnePercent':callOnePercent,'putOnePercent':putOnePercent,'callCrossed':callCrossed,'putCrossed':putCrossed,'putHalfPercent':putHalfPercent,'callHalfPercent':callHalfPercent
-    } )
-
+    return render(request,"testhtml.html",{'symbol':"NIFTY",'counter':1}) 

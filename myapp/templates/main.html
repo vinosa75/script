@@ -490,6 +490,48 @@ table#manoj {
 <script>
 
 
+{% comment %} function getAjaxRequest() {
+    var url = '{% url 'ajax_load' %}';
+  $.ajax({
+    url: url,
+    async: false, 
+    success: function(response) {
+        console.log(url);
+        $("#optionCli").html(response);
+      // do something with the return value here if you like
+    }
+  });
+  setTimeout(getAjaxRequest, 3000); // you could choose not to continue on failure...
+}
+
+$(document).ready(function() {
+  // run the first time; all subsequent calls will take care of themselves
+  setTimeout(getAjaxRequest, 3000);
+}); {% endcomment %}
+
+
+
+  {% comment %} $(function(){
+  getAjaxRequest();
+});
+
+function getAjaxRequest(){
+  var url = '{% url 'ajax_load' %}';
+  $.ajax({
+    url: url,
+    async: false, 
+    success:function(result){
+       //result retrieval queries
+       //and
+       $('#optionCli').html(response);
+       setInterval(getAjaxRequest,1000); //call the same function every 1s.
+    },
+    error:function(err){
+       //error handler
+    } 
+  });
+} {% endcomment %}
+
         $("#chartform").submit(function() {
             var url = $("#chartform").attr("data-slots-url")
             var mydata = $("form#chartform").serialize();
@@ -600,6 +642,7 @@ $(document).ready(function() {
         }
     });
     });
+
 
 </script>
 
