@@ -573,7 +573,7 @@ function getAjaxRequest(){
     }); {% endcomment %}
 
 
-function executeQuery2() {
+{% comment %} function executeQuery2() {
     var url = '{% url 'ajaxNot1' %}';
   $.ajax({
     url: url,
@@ -584,7 +584,7 @@ function executeQuery2() {
     }
   });
   //setTimeout(executeQuery2, 150000); // you could choose not to continue on failure...
-}
+} {% endcomment %}
 
 {% comment %} $(document).ready(function() {
   // run the first time; all subsequent calls will take care of themselves
@@ -592,7 +592,7 @@ function executeQuery2() {
 }); {% endcomment %}
 
 
-function executeQuery3() {
+{% comment %} function executeQuery3() {
     var url = '{% url 'optionChainClick' %}';
   $.ajax({
     url: url,
@@ -603,7 +603,7 @@ function executeQuery3() {
     }
   });
   //setTimeout(executeQuery2, 150000); // you could choose not to continue on failure...
-}
+} {% endcomment %}
 
 
 function executeQuery1() {
@@ -625,7 +625,7 @@ $(document).ready(function() {
 });
 
 
-    $("#button_1").click(function(e) {
+    {% comment %} $("#button_1").click(function(e) {
     e.preventDefault();
     var url = '{% url 'load_optionChain' %}';
     var fired_button = $("button_1").val(); 
@@ -641,7 +641,7 @@ $(document).ready(function() {
             alert('error');
         }
     });
-    });
+    }); {% endcomment %}
 
 
 </script>
