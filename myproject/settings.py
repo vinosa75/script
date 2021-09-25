@@ -103,7 +103,7 @@ DATABASES = {
 
 
 import dj_database_url
-
+#
 DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
@@ -139,7 +139,11 @@ USE_L10N = True
 
 USE_TZ = False
 
-
+# CELERY_BROKER_URL = 'amqp://localhost'
+# CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+# BROKER_URL = 'django://'
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 

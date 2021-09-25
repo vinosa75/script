@@ -43,10 +43,11 @@ def testhtml(request):
         ce_oipercent_df = ce.where(ce['oi_change_perc'] !=0 ).sort_values(by=['oi_change_perc'], ascending=False)
 
         print(ce_oipercent_df)
-
-        minvalue = ce_oipercent_df['strike'].dropna().min(skipna=True)
-        print(type(minvalue))
-        pe = pe[pe['strike'].astype(int) >= int(minvalue)]
+        
+        minvalue = ce.loc[ce['strike'] != 0].sort_values('strike', ascending=True)
+        ceindex = minvalue.iloc[0].name
+        peindex = ceindex.replace("CE", "PE")
+        pe = pe[peindex:]
 
         ceoi1 = ce_oipercent_df.iloc[0]['oi_change_perc']
         cestrike = ce_oipercent_df.iloc[0]['strike']
@@ -82,11 +83,12 @@ def testhtml(request):
         print("before final df")
 
         final_df = ce.loc[ce['oi'] != 0].sort_values('oi', ascending=False)
-        minvalue = final_df['strike'].dropna().min(skipna=True)
-        print(type(minvalue))
-        pe = pe[pe['strike'].astype(int) >= int(minvalue)]
 
-        print("crossed final df")
+        minvalue = ce.loc[ce['strike'] != 0].sort_values('strike', ascending=True)
+
+        ceindex = minvalue.iloc[0].name
+        peindex = ceindex.replace("CE", "PE")
+        pe = pe[peindex:]
 
         peoi1 = pe.loc[pe['strike']==final_df.iloc[0]['strike']].iloc[0]['oi']
         count = 0
@@ -133,11 +135,11 @@ def testhtml(request):
 
         final_df = ce.loc[ce['oi_change'] != 0].sort_values('oi_change', ascending=False)
 
-        minvalue = final_df['strike'].dropna().min(skipna=True)
-        print(type(minvalue))
-        pe = pe[pe['strike'].astype(int) >= int(minvalue)]
+        minvalue = ce.loc[ce['strike'] != 0].sort_values('strike', ascending=True)
 
-        print("crossed final df")
+        ceindex = minvalue.iloc[0].name
+        peindex = ceindex.replace("CE", "PE")
+        pe = pe[peindex:]
 
         peoi1 = pe.loc[pe['strike']==final_df.iloc[0]['strike']].iloc[0]['oi_change']
         count = 0
