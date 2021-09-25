@@ -36,30 +36,6 @@
                 </div>
                 </li>
 
-                {% comment %} <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>High</b></span>
-                  <span class="bottom">{{ value.high }}</span>
-                </div>
-                </li>
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>Low</b></span>
-                  <span class="bottom">{{ value.low }}</span>
-                </div>
-                </li>
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>Pr_close</b></span>
-                  <span class="bottom">{{ value.prev_day_close }}</span>
-                </div>
-                </li>
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>Ltp</b></span>
-                  <span class="bottom">{{ value.ltp }}</span>
-                </div>
-                </li> {% endcomment %}
 
                 <li class="breadcrumb-item">
                 <div class="div-container">
@@ -119,30 +95,7 @@
                 </div>
                 </li>
 
-                {% comment %} <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>High</b></span>
-                  <span class="bottom">{{ value.high }}</span>
-                </div>
-                </li>
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>Low</b></span>
-                  <span class="bottom">{{ value.low }}</span>
-                </div>
-                </li>
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>Pr_close</b></span>
-                  <span class="bottom">{{ value.prev_day_close }}</span>
-                </div>
-                </li>
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>Ltp</b></span>
-                  <span class="bottom">{{ value.ltp }}</span>
-                </div>
-                </li> {% endcomment %}
+           
 
 
                 <li class="breadcrumb-item">
@@ -190,30 +143,6 @@
                 </div>
                 </li>
 
-                {% comment %} <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>High</b></span>
-                  <span class="bottom">{{ value.high }}</span>
-                </div>
-                </li>
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>Low</b></span>
-                  <span class="bottom">{{ value.low }}</span>
-                </div>
-                </li>
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>Pr_close</b></span>
-                  <span class="bottom">{{ value.prev_day_close }}</span>
-                </div>
-                </li>
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>Ltp</b></span>
-                  <span class="bottom">{{ value.ltp }}</span>
-                </div>
-                </li> {% endcomment %}
 
                 <li class="breadcrumb-item">
                 <div class="div-container">
@@ -260,31 +189,6 @@
                 </div>
                 </li>
 
-                {% comment %} <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>High</b></span>
-                  <span class="bottom">{{ value.high }}</span>
-                </div>
-                </li>
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>Low</b></span>
-                  <span class="bottom">{{ value.low }}</span>
-                </div>
-                </li>
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>Pr_close</b></span>
-                  <span class="bottom">{{ value.prev_day_close }}</span>
-                </div>
-                </li>
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b>Ltp</b></span>
-                  <span class="bottom">{{ value.ltp }}</span>
-                </div>
-                </li> {% endcomment %}
-
                 <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b class="badge badge-info">Time</b></span>
@@ -305,7 +209,7 @@
 <script>
 
 $("button").click(function() {
-   var url = '{% url 'load_optionChain' %}';
+   var url = '{% url 'optionChain' %}';
     var fired_button = $(this).val();
         $.ajax({
         url:url,
@@ -320,20 +224,4 @@ $("button").click(function() {
 });
 
 
-    {% comment %} $("#button_1").click(function() {
-    var url = '{% url 'load_optionChain' %}';
-    var fired_button = $("button_1").val(); 
-    alert(fired_button);
-    $.ajax({
-      
-        url:url,
-        data: {
-          'symbol': fired_button       // add the country id to the GET parameters
-        },
-      success: function (data) { 
-          console.log(data);  // `data` is the return of the `load_cities` view function
-          $("#OptionChainSingleSymbol").html(data);   // replace the contents of the city input with the data that came from the server
-        }
-    });
-    }); {% endcomment %}
 </script>

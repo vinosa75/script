@@ -18,22 +18,14 @@ from django.urls import path
 from myapp import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('sample/', views.sample),
-    path('dashboard/',views.dashboard),
-    path('noname',views.entry,name="entry"),
-    path('ajax-load/', views.load_charts, name='ajax_load'),
     path("login", views.login, name="login"),
     path("logout", views.logout, name="logout"),
+    path('', views.home, name='home'),
+    path('equity/', views.equity, name='equity'),
+    path('OptionChainSingle/', views.optionChain, name='optionChain'),
+    path('admin/', admin.site.urls),
     path('load-expiry/', views.ajax_load_expiry, name='ajax_load_expiry'),
-    path('load-optionChain/', views.ajax_optionChain, name='ajax_optionChain'),
-    path('load-equity/', views.ajax_equity, name='ajax_equity'),
-    path('selected-equity/', views.selected_equity, name='selected_equity'),
-    path('', views.mainView, name='mainView'),
-    path('notification1/', views.ajaxNot1, name='ajaxNot1'),
-    path('notification2/', views.ajaxNot2, name='ajaxNot2'),
-    path('OptionChainSingle/', views.load_optionChain, name='load_optionChain'),
-    path('OptionChainclick/', views.optionChainClick, name='optionChainClick'),
-    path('testhtml/', views.testhtml, name='testhtml'),
+
+
 ]
 

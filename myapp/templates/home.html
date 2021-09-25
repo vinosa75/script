@@ -6,7 +6,7 @@
   <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
   <meta content="utf-8" http-equiv="encoding">
 
-
+  </head>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -27,7 +27,7 @@
 
 
 <style>
-        body{
+body{
     background:#dcdcdc;
     margin-top:20px;}
 
@@ -400,8 +400,7 @@ table#manoj {
   align-items: flex-end;
 }
 
-
-    </style>
+</style>
 
   </head>
   <body style="background-color: #146b34;">
@@ -427,43 +426,31 @@ table#manoj {
         <div class="row">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title" style="width:700px">Option Chain - Realtime  - <button style="margin-left:10px" onclick="executeQuery3()" class="btn btn-primary">Run OpChain</button> - <span id ="optionClick" class="badge badge-light"></span> - <span id ="optionCli" class="badge badge-light"></span></h5>
-                <form class="form-inline" method="POST" id="chartform" data-slots-url="{% url 'load_optionChain' %}" data-expiry-url="{%url 'ajax_load_expiry' %}" option-chain-url="{%url 'ajax_optionChain' %}" equity-url="{% url 'ajax_equity' %}" >
-                    {% csrf_token %}
+                    {% comment %} <button style="margin-left:10px" onclick="executeQuery3()" class="btn btn-primary">Run OpChain</button> {% endcomment %}
+                        <h5 class="card-title" style="width:700px">Option Chain - Realtime<span id ="optionClick" class="badge badge-light"></span><span id ="optionCli" class="badge badge-light"></span></h5>
+                        <form class="form-inline" method="POST" id="optionchainform" fno-optionchain-url="{% url 'optionChain' %}" >
+                            {% csrf_token %}
 
-                    <div class="form-group mx-sm-3 mb-2">
+                                <div class="form-group mx-sm-3 mb-2"></div>
+                              
+                                <div class="form-group mx-sm-3 mb-2">
 
-                    </div>
-                   
-    
-                    <div class="form-group mx-sm-3 mb-2">
+                                  <label for="EntryPrice" style="color: black;">Symbol: </label>
 
-                      <label for="EntryPrice" style="color: black;">Symbol: </label>
-                        <select class="form-control" id="EntryPrice" name="symbol" required>
-                              <option value="">---------</option>
-                              {% for post in fnolist %}
-                                  <option value="{{ post }}">{{ post }}</option>
-                              {% endfor %} </select>
+                                    <select class="form-control" id="EntryPrice" name="symbol" required>
+                                          <option value="">---------</option>
+                                          {% for post in fnolist %}
+                                              <option value="{{ post }}">{{ post }}</option>
+                                          {% endfor %} 
+                                    </select>
+                                      <input style="margin-left:10px" class="btn btn-secondary" type="submit" value="Get data">
+                                    {% comment %} <button style="margin-left:10px" type="submit" class="btn btn-primary">Get data</button> {% endcomment %}
+                                    <br>
 
+                                </div>
+                        </form>  
 
-                        {% comment %} <label for="StrikePrice" style="color: black;margin-left:10px">Ex: </label>
-                         <select name="expiry_selected" class="form-control" id="idexpiry" name="expiryvalues" required>
-                         <option value="">---------</option>
-                          </select> {% endcomment %}
-
-                        <button style="margin-left:10px" type="submit" class="btn btn-primary">Get data</button>
-                        <br>
-                       
-
-                    </div>
-                                           {% comment %} <div class="form-group mx-sm-3 mb-2">
-                        <button onclick="executeQuery2()" class="btn btn-primary">Run OpChain</button>
-                      </div> {% endcomment %}
-
-                    </form>  
-                    
-
-                <div id="OptionChainSingleSymbol" class="slot"> </div>
+                        <div id="OptionChainSingleSymbol" class="slot"> </div>
 
                     </div>
                 </div>
@@ -475,12 +462,9 @@ table#manoj {
   <div class="col-sm-4">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">Equity - Realtime - <button onclick="executeQuery1()" class="btn btn-primary">Run Equity</button></h5>
-          {% comment %} <div class="form-group mx-sm-3 mb-2">
-                        <button onclick="executeQuery1()" class="btn btn-primary">Run Equity</button>
-          </div> {% endcomment %}
-        {% comment %} <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> {% endcomment %}
-        <div id="id_notf2" class="slot">          
+      {% comment %} <button onclick="executeQuery1()" class="btn btn-primary">Run Equity</button> {% endcomment %}
+        <h5 class="card-title">Equity - Realtime - <input type='button' onclick='executeQuery1()' class="btn btn-primary" value='Status Update'> </h5>
+           <div id="EquitySpace" class="slot">
         </div>
       </div>
     </div>
@@ -490,51 +474,9 @@ table#manoj {
 <script>
 
 
-{% comment %} function getAjaxRequest() {
-    var url = '{% url 'ajax_load' %}';
-  $.ajax({
-    url: url,
-    async: false, 
-    success: function(response) {
-        console.log(url);
-        $("#optionCli").html(response);
-      // do something with the return value here if you like
-    }
-  });
-  setTimeout(getAjaxRequest, 3000); // you could choose not to continue on failure...
-}
-
-$(document).ready(function() {
-  // run the first time; all subsequent calls will take care of themselves
-  setTimeout(getAjaxRequest, 3000);
-}); {% endcomment %}
-
-
-
-  {% comment %} $(function(){
-  getAjaxRequest();
-});
-
-function getAjaxRequest(){
-  var url = '{% url 'ajax_load' %}';
-  $.ajax({
-    url: url,
-    async: false, 
-    success:function(result){
-       //result retrieval queries
-       //and
-       $('#optionCli').html(response);
-       setInterval(getAjaxRequest,1000); //call the same function every 1s.
-    },
-    error:function(err){
-       //error handler
-    } 
-  });
-} {% endcomment %}
-
-        $("#chartform").submit(function() {
-            var url = $("#chartform").attr("data-slots-url")
-            var mydata = $("form#chartform").serialize();
+$("#optionchainform").submit(function() {
+            var url = $("#optionchainform").attr("fno-optionchain-url")
+            var mydata = $("form#optionchainform").serialize();
             // console.log(mydata); // it's only for test
             $.ajax({
                 type: "POST",
@@ -555,94 +497,24 @@ function getAjaxRequest(){
         });
 
 
-{% comment %} $("#EntryPrice").change(function () {
-      $("#overlay").show()
-      var url = $("#chartform").attr("data-expiry-url");  // get the url of the `load_cities` view
-      var symbolID = $(this).val();  // get the selected country ID from the HTML input
-      $.ajax({                       // initialize an AJAX request
-        url: url,                    // set the url of the request (= localhost:8000/hr/ajax/load-cities/)
-        data: {
-          'symbol': symbolID       // add the country id to the GET parameters
-        },
-        success: function (data) {   // `data` is the return of the `load_cities` view function
-          $("#idexpiry").html(data);  // replace the contents of the city input with the data that came from the server
-          $("#overlay").hide()
-        }
-      });
-
-    }); {% endcomment %}
-
-
-{% comment %} function executeQuery2() {
-    var url = '{% url 'ajaxNot1' %}';
-  $.ajax({
-    url: url,
-    success: function(response) {
-        console.log(url);
-        $("#id_notf1").html(response);
-      // do something with the return value here if you like
-    }
-  });
-  //setTimeout(executeQuery2, 150000); // you could choose not to continue on failure...
-} {% endcomment %}
-
-{% comment %} $(document).ready(function() {
-  // run the first time; all subsequent calls will take care of themselves
-  setTimeout(executeQuery2, 150000);
-}); {% endcomment %}
-
-
-{% comment %} function executeQuery3() {
-    var url = '{% url 'optionChainClick' %}';
-  $.ajax({
-    url: url,
-    success: function(response) {
-        console.log(url);
-        $("#optionClick").html(response);
-      // do something with the return value here if you like
-    }
-  });
-  //setTimeout(executeQuery2, 150000); // you could choose not to continue on failure...
-} {% endcomment %}
-
-
 function executeQuery1() {
-    var url = '{% url 'ajaxNot2' %}';
-  $.ajax({
+    var url = '{% url 'equity' %}';
+    $.ajax({
     url: url,
     success: function(response) {
         console.log(url);
-        $("#id_notf2").html(response);
+        $("#EquitySpace").html(response);
       // do something with the return value here if you like
     }
   });
-  setTimeout(executeQuery1, 1500000); // you could choose not to continue on failure...
+setTimeout(executeQuery1, 3000);
 }
+{% comment %}  {% endcomment %}
 
 $(document).ready(function() {
   // run the first time; all subsequent calls will take care of themselves
-  setTimeout(executeQuery1, 1500000);
+  setTimeout(executeQuery1, 3000);
 });
-
-
-    {% comment %} $("#button_1").click(function(e) {
-    e.preventDefault();
-    var url = '{% url 'load_optionChain' %}';
-    var fired_button = $("button_1").val(); 
-    $.ajax({
-        type: "POST",
-        url:url,
-        data: fired_button,
-        success: function(response, textStatus, xhr) {
-            console.log(url);
-            $("#OptionChainSingleSymbol").html(response);            
-        },
-        error: function(result) {
-            alert('error');
-        }
-    });
-    }); {% endcomment %}
-
 
 </script>
 
