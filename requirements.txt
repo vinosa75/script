@@ -7,3 +7,4 @@ nsepython
 nsetools
 pendulum
 redis
+celery
