@@ -1,7 +1,5 @@
 from time import sleep
 from celery import shared_task
-from bs4 import BeautifulSoup
-from urllib.request import urlopen, Request
 from .models import *
 from nsetools import *
 from datetime import datetime as dt
