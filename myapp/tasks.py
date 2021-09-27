@@ -573,7 +573,8 @@ def create_equity():
                         putone.save()
 
     print("Realtime Excution")
-while True:
-    create_currency()
+
+# while True:
+#     create_currency()
 
     
