@@ -501,6 +501,7 @@ function executeQuery1() {
     var url = '{% url 'equity' %}';
     $.ajax({
     url: url,
+    async: false, 
     success: function(response) {
         console.log(url);
         $("#EquitySpace").html(response);
