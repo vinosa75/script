@@ -72,6 +72,7 @@ def logout(request):
 @login_required(login_url='login')
 def home(request):
     # Importing symbol list from nse and dropdown it for selection
+    from nsetools import Nse
     nse = Nse()
     fnolist = nse.get_fno_lot_sizes()
 
