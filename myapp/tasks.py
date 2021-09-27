@@ -42,8 +42,8 @@ def create_currency():
 
     req_ids = td_app.start_live_data(symbols)
     live_data_objs = {}
-
-    time.sleep(1)
+    
+    sleep(1)
 
     liveData = {}
     for req_id in req_ids:
