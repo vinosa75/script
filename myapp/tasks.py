@@ -9,14 +9,88 @@ import websocket
 from celery.schedules import crontab
 from celery import Celery
 from celery.schedules import crontab
+import time
+from nsetools import Nse
 
 
 @shared_task
 def create_currency():
 
+    # nse = Nse()
+    # fnolist = nse.get_fno_lot_sizes()
+    # print(len(fnolist))
+
     nse = Nse()
     fnolist = nse.get_fno_lot_sizes()
+
     print(len(fnolist))
+    symbols = list(fnolist.keys()) 
+
+
+    TrueDatausername = 'tdws135'
+    TrueDatapassword = 'saaral@135'
+
+    # Default production port is 8082 in the library. Other ports may be given t oyou during trial.
+    realtime_port = 8082
+
+    td_app = TD(TrueDatausername, TrueDatapassword, live_port=realtime_port, historical_api=False)
+
+    # symbols = 
+
+    print('Starting Real Time Feed.... ')
+    print(f'Port > {realtime_port}')
+
+    req_ids = td_app.start_live_data(symbols)
+    live_data_objs = {}
+
+    time.sleep(1)
+
+    liveData = {}
+    for req_id in req_ids:
+        # print(td_app.live_data[req_id])
+        if (td_app.live_data[req_id].ltp) == None:
+            continue
+        else:
+            print(td_app.live_data[req_id])
+            liveData[td_app.live_data[req_id].symbol] = [td_app.live_data[req_id].ltp,td_app.live_data[req_id].day_open,td_app.live_data[req_id].day_high,td_app.live_data[req_id].day_low,td_app.live_data[req_id].prev_day_close]
+
+
+    td_app.stop_live_data(symbols)
+    td_app.disconnect()
+
+    top_gainers = {}
+    top_losers = {}
+
+    for key,value in liveData.items():
+        print(key)
+        print(value)
+        gainpercent = (value[4] + (value[4]*0.03))
+        losspercent = (value[4] - (value[4]*0.03))
+        if value[0] > gainpercent:
+            top_gainers[key] = value
+        elif value[0] < losspercent:
+            top_losers[key] = value
+
+    print(top_gainers.keys())
+    print(top_losers.keys())
+    print(len(top_gainers))
+    print(len(top_losers))
+
+    LiveSegment.objects.all().delete()
+
+    for key,value in top_gainers.items():
+
+        gain = LiveSegment(symbol=key,segment="gain")
+        gain.save()
+
+    for key,value in top_losers.items():
+
+        loss = LiveSegment(symbol=key,segment="loss")
+        loss.save()
+
+
+    fnolist = list(LiveSegment.objects.values_list('symbol', flat=True))
+
 
     # Removing 3 symbols from the list as they are not required for equity comparision
     remove_list = ['HEROMOTOCO','PFC','BEL','MANAPPURAM','EXIDEIND','PETRONET', 'TATAPOWER', 'ONGC', 'VEDL', 'LALPATHLAB', 'ITC', 'INDHOTEL', 'IDEA','POWERGRID', 'COALINDIA', 'CANBK','HINDPETRO','BANKBARODA','RECLTD','CUB']

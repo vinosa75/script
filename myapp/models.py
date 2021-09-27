@@ -2,6 +2,8 @@ from django.db import models
 from django.db.models.base import Model
 from datetime import date
 
+from scipy.stats.stats import mode
+
 # Create your models here.
 
 class HistoryOIChange(models.Model):
@@ -123,3 +125,13 @@ class LiveEquityResult(models.Model):
 
     def __str__(self):
         return self.symbol+" "+self.ltp+" "+self.strike
+
+
+class LiveSegment(models.Model):
+    symbol = models.CharField(max_length=20)
+    segment = models.CharField(max_length=20)
+    time = models.TimeField(auto_now_add=True)
+    date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return self.symbol+" "+self.segment+" "+self.date

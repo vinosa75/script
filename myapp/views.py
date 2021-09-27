@@ -7,7 +7,7 @@ from django.shortcuts import redirect,render
 from django.contrib import messages
 from nsepython import *
 import nsepython
-from myapp.models import HistoryOIChange,HistoryOITotal,LiveOIChange,LiveOITotal,LiveOITotalAllSymbol,LiveEquityResult,LiveOIPercentChange,HistoryOIPercentChange
+from myapp.models import HistoryOIChange,HistoryOITotal,LiveOIChange,LiveOITotal,LiveOITotalAllSymbol,LiveEquityResult,LiveOIPercentChange,HistoryOIPercentChange, LiveSegment
 
 import pandas as pd
 from truedata_ws.websocket.TD import TD
@@ -72,9 +72,11 @@ def logout(request):
 @login_required(login_url='login')
 def home(request):
     # Importing symbol list from nse and dropdown it for selection
-    from nsetools import Nse
-    nse = Nse()
-    fnolist = nse.get_fno_lot_sizes()
+    # from nsetools import Nse
+    # nse = Nse()
+    # fnolist = nse.get_fno_lot_sizes()
+
+    fnolist = list(LiveSegment.objects.values_list('symbol', flat=True))
 
     return render(request,"home.html",{'fnolist':fnolist})
 
@@ -291,7 +293,6 @@ def optionChain(request):
         return render(request, 'optionChainSingleSymbol.html', {'LiveChangePercentOI':LiveChangePercentOI,'HistoryOIPercentChg':HistoryOIPercentChg,'liveEqui':liveEqui,'symbol':symbol,'OITotalValue':LiveOI,'OIChangeValue':LiveChangeOI,'HistoryOITot':HistoryOITot,'HistoryOIChg':HistoryOIChg})
     else:
         return render(request, 'optionChainNoData.html')
-
 
 #Backup 1
 def testhtml(request):
@@ -686,3 +687,101 @@ def ajax_load_expiry(request):
 
     return render(request,'expiry_dropdown_list_options.html',{'ex_list':ex_list})
 
+def gainer(request):
+    # import datetime
+
+    # dt = datetime.datetime.strptime("09-Sep-2021", '%d-%b-%Y')
+    # print('{0},{1},{2:02}'.format(dt.year, dt.month, dt.day % 100))
+
+    from datetime import datetime as dt
+    from truedata_ws.websocket.TD import TD
+    import time
+    from nsetools import Nse
+
+    nse = Nse()
+    fnolist = nse.get_fno_lot_sizes()
+
+    print(len(fnolist))
+    symbols = list(fnolist.keys()) 
+
+
+    TrueDatausername = 'tdws135'
+    TrueDatapassword = 'saaral@135'
+
+    # Default production port is 8082 in the library. Other ports may be given t oyou during trial.
+    realtime_port = 8082
+
+    td_app = TD(TrueDatausername, TrueDatapassword, live_port=realtime_port, historical_api=False)
+
+    # symbols = 
+
+    print('Starting Real Time Feed.... ')
+    print(f'Port > {realtime_port}')
+
+    req_ids = td_app.start_live_data(symbols)
+    live_data_objs = {}
+
+    time.sleep(1)
+
+    liveData = {}
+    for req_id in req_ids:
+        # print(td_app.live_data[req_id])
+        if (td_app.live_data[req_id].ltp) == None:
+            continue
+        else:
+            print(td_app.live_data[req_id])
+            liveData[td_app.live_data[req_id].symbol] = [td_app.live_data[req_id].ltp,td_app.live_data[req_id].day_open,td_app.live_data[req_id].day_high,td_app.live_data[req_id].day_low,td_app.live_data[req_id].prev_day_close]
+
+
+    # print(len(liveData))
+
+    # print(liveData)
+
+    top_gainers = {}
+    top_losers = {}
+
+    for key,value in liveData.items():
+        # print(key)
+        # print(value)
+        gainpercent = (value[4] + (value[4]*0.03))
+        losspercent = (value[4] - (value[4]*0.03))
+        if value[0] > gainpercent:
+            top_gainers[key] = value
+        elif value[0] < losspercent:
+            top_losers[key] = value
+
+    # print(top_gainers.keys())
+    # print(top_losers.keys())
+    # print(len(top_gainers))
+    # print(len(top_losers))
+
+    LiveSegment.objects.all().delete()
+
+    for key,value in top_gainers.items():
+
+        gain = LiveSegment(symbol=key,segment="gain")
+        gain.save()
+
+    for key,value in top_losers.items():
+
+        loss = LiveSegment(symbol=key,segment="loss")
+        loss.save()
+
+   
+    fnolist = list(LiveSegment.objects.values_list('symbol', flat=True))
+
+    print(fnolist)
+
+    OITotalValue ={}
+    OIChangeValue = {}
+    value1 = {}
+    value2 = {}
+    strikeGap = {}
+    callOnePercent = LiveEquityResult.objects.filter(strike="Call 1 percent")
+    putOnePercent = LiveEquityResult.objects.filter(strike="Put 1 percent")
+    callHalfPercent = LiveEquityResult.objects.filter(strike="Call 1/2 percent")
+    putHalfPercent = LiveEquityResult.objects.filter(strike="Put 1/2 percent")
+    callCrossed = LiveEquityResult.objects.filter(strike="Call Crossed")
+    putCrossed = LiveEquityResult.objects.filter(strike="Put Crossed")
+
+    return render(request,"equity.html",{'OITotalValue': OITotalValue,'OIChangeValue': OIChangeValue,'value1':value1,'value2':value2,'strikeGap':strikeGap,'callOnePercent':callOnePercent,'putOnePercent':putOnePercent,'callCrossed':callCrossed,'putCrossed':putCrossed,'putHalfPercent':putHalfPercent,'callHalfPercent':callHalfPercent})
