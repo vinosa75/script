@@ -5,6 +5,12 @@ from nsetools import *
 from datetime import datetime as dt
 from truedata_ws.websocket.TD import TD
 import websocket
+
+from celery.schedules import crontab
+from celery import Celery
+from celery.schedules import crontab
+
+
  
 @shared_task
 # some heavy stuff here
