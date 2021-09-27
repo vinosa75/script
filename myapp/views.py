@@ -76,7 +76,7 @@ def home(request):
     # nse = Nse()
     # fnolist = nse.get_fno_lot_sizes()
 
-    fnolist = list(LiveSegment.objects.values_list('symbol', flat=True))
+    fnolist = list(LiveSegment.objects.values_list('symbol', flat=True).distinct())
 
     return render(request,"home.html",{'fnolist':fnolist})
 

@@ -76,7 +76,7 @@ def create_currency():
     print(len(top_gainers))
     print(len(top_losers))
 
-    LiveSegment.objects.all().delete()
+    # LiveSegment.objects.all().delete()
 
     for key,value in top_gainers.items():
 
@@ -89,7 +89,7 @@ def create_currency():
         loss.save()
 
 
-    fnolist = list(LiveSegment.objects.values_list('symbol', flat=True))
+    fnolist = list(LiveSegment.objects.values_list('symbol', flat=True).distinct())
 
 
     # Removing 3 symbols from the list as they are not required for equity comparision
