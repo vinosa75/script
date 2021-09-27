@@ -16,16 +16,16 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()
 
-app.conf.beat_schedule = {
-    'add-every-30-seconds': {
-        'task': 'tasks.create_equity',
-        'schedule': 20.0,
-    },
-}
-app.conf.timezone = 'UTC'
+# app.conf.beat_schedule = {
+#     'add-every-30-seconds': {
+#         'task': 'tasks.create_equity',
+#         'schedule': 20.0,
+#     },
+# }
+# app.conf.timezone = 'UTC'
 
-@app.task(bind=True)
-def debug_task(self):
-    print(f'Request: {self.request!r}')
+# @app.task(bind=True)
+# def debug_task(self):
+#     print(f'Request: {self.request!r}')
 
 

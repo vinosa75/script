@@ -575,7 +575,7 @@ def create_equity():
 
     print("Realtime Excution")
 
-# while True:
-#     create_currency()
+while True:
+    create_currency()
 
     
