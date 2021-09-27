@@ -16,81 +16,9 @@ from nsetools import Nse
 @shared_task
 def create_currency():
 
-    # nse = Nse()
-    # fnolist = nse.get_fno_lot_sizes()
-    # print(len(fnolist))
-
     nse = Nse()
     fnolist = nse.get_fno_lot_sizes()
-
     print(len(fnolist))
-    symbols = list(fnolist.keys()) 
-
-
-    TrueDatausername = 'tdws135'
-    TrueDatapassword = 'saaral@135'
-
-    # Default production port is 8082 in the library. Other ports may be given t oyou during trial.
-    realtime_port = 8082
-
-    td_app = TD(TrueDatausername, TrueDatapassword, live_port=realtime_port, historical_api=False)
-
-    # symbols = 
-
-    print('Starting Real Time Feed.... ')
-    print(f'Port > {realtime_port}')
-
-    req_ids = td_app.start_live_data(symbols)
-    live_data_objs = {}
-    
-    sleep(1)
-
-    liveData = {}
-    for req_id in req_ids:
-        # print(td_app.live_data[req_id])
-        if (td_app.live_data[req_id].ltp) == None:
-            continue
-        else:
-            print(td_app.live_data[req_id])
-            liveData[td_app.live_data[req_id].symbol] = [td_app.live_data[req_id].ltp,td_app.live_data[req_id].day_open,td_app.live_data[req_id].day_high,td_app.live_data[req_id].day_low,td_app.live_data[req_id].prev_day_close]
-
-
-    td_app.stop_live_data(symbols)
-    td_app.disconnect()
-
-    top_gainers = {}
-    top_losers = {}
-
-    for key,value in liveData.items():
-        print(key)
-        print(value)
-        gainpercent = (value[4] + (value[4]*0.03))
-        losspercent = (value[4] - (value[4]*0.03))
-        if value[0] > gainpercent:
-            top_gainers[key] = value
-        elif value[0] < losspercent:
-            top_losers[key] = value
-
-    print(top_gainers.keys())
-    print(top_losers.keys())
-    print(len(top_gainers))
-    print(len(top_losers))
-
-    # LiveSegment.objects.all().delete()
-
-    for key,value in top_gainers.items():
-
-        gain = LiveSegment(symbol=key,segment="gain")
-        gain.save()
-
-    for key,value in top_losers.items():
-
-        loss = LiveSegment(symbol=key,segment="loss")
-        loss.save()
-
-
-    fnolist = list(LiveSegment.objects.values_list('symbol', flat=True).distinct())
-
 
     # Removing 3 symbols from the list as they are not required for equity comparision
     remove_list = ['HEROMOTOCO','PFC','BEL','MANAPPURAM','EXIDEIND','PETRONET', 'TATAPOWER', 'ONGC', 'VEDL', 'LALPATHLAB', 'ITC', 'INDHOTEL', 'IDEA','POWERGRID', 'COALINDIA', 'CANBK','HINDPETRO','BANKBARODA','RECLTD','CUB']
@@ -245,7 +173,6 @@ def create_currency():
     # Fetching the F&NO symbol list
     TrueDatausername = 'tdws127'
     TrueDatapassword = 'saaral@127'
-
 
     import pendulum
     import calendar
@@ -481,5 +408,172 @@ def create_currency():
         sleep(5)
 
 
+@shared_task
+def create_equity():
+
+    TrueDatausername = 'tdws135'
+    TrueDatapassword = 'saaral@135'
+
+    nse = Nse()
+    fnolist = nse.get_fno_lot_sizes()
+    symbols = list(fnolist.keys())
+
+    # Default production port is 8082 in the library. Other ports may be given t oyou during trial.
+    realtime_port = 8082
+
+    td_app = TD(TrueDatausername, TrueDatapassword, live_port=realtime_port, historical_api=False)
+
+    print('Starting Real Time Feed.... ')
+    print(f'Port > {realtime_port}')
+
+    req_ids = td_app.start_live_data(symbols)
+    live_data_objs = {}
+
+    liveData = {}
+    for req_id in req_ids:
+        # print(td_app.live_data[req_id])
+        if (td_app.live_data[req_id].ltp) == None:
+            continue
+        else:
+            liveData[td_app.live_data[req_id].symbol] = [td_app.live_data[req_id].ltp,td_app.live_data[req_id].day_open,td_app.live_data[req_id].day_high,td_app.live_data[req_id].day_low,td_app.live_data[req_id].prev_day_close,dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S')]
+
+    # Graceful exit
+    td_app.stop_live_data(symbols)
+    td_app.disconnect()
+
+    # Finding out the pastdate
+    from datetime import datetime, timedelta
+    pastDate = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
+  
+    # LiveEquityResult.objects.all().delete()
+    LiveEquityResult.objects.filter(date = pastDate).delete()
+
+    removeList = ["NIFTY","BANKNIFTY","FINNIFTY"]
+
+    callcrossedset = LiveEquityResult.objects.filter(strike__contains="Call Crossed")
+    callonepercentset = LiveEquityResult.objects.filter(strike="Call 1 percent")
+    putcrossedset = LiveEquityResult.objects.filter(strike="Put Crossed")
+    putonepercentset = LiveEquityResult.objects.filter(strike="Put 1 percent")
+
+    opencallcross = LiveEquityResult.objects.filter(opencrossed="call")
+    openputcross = LiveEquityResult.objects.filter(opencrossed="put")
+
+    callcrossedsetDict = {}
+    callonepercentsetDict = {}
+    putcrossedsetDict = {}
+    putonepercentsetDict = {}
+    opencallcrossDict = {}
+    openputcrossDict = {}
+
+    for i in callcrossedset:
+        callcrossedsetDict[i.symbol] = i.time
+    for i in callonepercentset:
+        callonepercentsetDict[i.symbol] = i.time
+    for i in putcrossedset:
+        putcrossedsetDict[i.symbol] = i.time
+    for i in putonepercentset:
+        putonepercentsetDict[i.symbol] = i.time
+    for i in opencallcross:
+        opencallcrossDict[i.symbol] = i.time
+    for i in openputcross:
+        openputcrossDict[i.symbol] = i.time
+
+    for e in LiveOITotalAllSymbol.objects.all():
+        print(e.symbol)
+        
+        if e.symbol in liveData and e.symbol not in removeList:
+
+            # Call
+            if liveData[e.symbol][1] > float(e.callstrike):
+                if e.symbol in opencallcrossDict:
+                    LiveEquityResult.objects.filter(symbol = e.symbol).delete()
+                    callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="call",time=opencallcrossDict[e.symbol],date=date.today())
+                    callcross.save()
+                else:
+                    callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="call",time=liveData[e.symbol][5],date=date.today())
+                    callcross.save()
+            
+            if liveData[e.symbol][1] < float(e.putstrike):
+                if e.symbol in openputcrossDict:
+                    LiveEquityResult.objects.filter(symbol = e.symbol).delete()
+                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=openputcrossDict[e.symbol],date=date.today())
+                    putcross.save()
+                else:
+                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=liveData[e.symbol][5],date=date.today())
+                    putcross.save()
+
+
+
+            if liveData[e.symbol][0] > float(e.callstrike) or liveData[e.symbol][1] > float(e.callstrike):
+                if e.symbol in callcrossedsetDict:
+                    print("Yes")
+                    # Deleting the older
+                    LiveEquityResult.objects.filter(symbol = e.symbol).delete()
+                    # updating latest data
+                    print("Yes")
+                    callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="Nil",time=callcrossedsetDict[e.symbol],date=date.today())
+                    callcross.save()
+                    continue
+
+                else:
+                    print("Call crossed")
+                    callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=date.today())
+                    callcross.save()
+                
+            elif liveData[e.symbol][0] >= float(e.callone) and liveData[e.symbol][0] <= float(e.callstrike):
+
+                if e.symbol in callcrossedsetDict:
+                    print("Already crossed")
+                    continue
+                else:
+                    if e.symbol in callonepercentsetDict:
+                        print("Already crossed 1 percent")
+                        LiveEquityResult.objects.filter(symbol = e.symbol).delete()
+                        # updating latest data
+                        callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",opencrossed="Nil",time=callonepercentsetDict[e.symbol],date=date.today())
+                        callcross.save()
+                        continue
+                    else:
+                        print("Call 1 percent")
+
+                        callone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=date.today())
+                        callone.save()
+
+            # Put
+            elif liveData[e.symbol][0] < float(e.putstrike) or liveData[e.symbol][2] < float(e.putstrike):
+                if e.symbol in putcrossedsetDict:
+                    # Deleting the older
+                    LiveEquityResult.objects.filter(symbol =e.symbol).delete()
+                    # updating latest data
+                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=putcrossedsetDict[e.symbol],date=date.today())
+                    putcross.save()
+                    print("put crossed updating only the data")
+                    continue
+                else:
+                    print("Put crossed")
+                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=date.today())
+                    putcross.save()
+
+
+            elif liveData[e.symbol][0] <= float(e.putone) and liveData[e.symbol][0] >= float(e.putstrike):
+                if e.symbol in putcrossedsetDict:
+                    print("Already crossed put")
+                    continue
+                else:
+                    if e.symbol in putonepercentsetDict:
+                        print("Already crossed 1 percent")
+                        LiveEquityResult.objects.filter(symbol =e.symbol).delete()
+                        # updating latest data
+                        putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=putonepercentsetDict[e.symbol],date=date.today())
+                        putcross.save()
+                        continue
+                    else:
+                        print("Put 1 percent")
+                        putone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=date.today())
+                        putone.save()
+
 while True:
     create_currency()
+    create_equity()
+
+    

@@ -72,11 +72,11 @@ def logout(request):
 @login_required(login_url='login')
 def home(request):
     # Importing symbol list from nse and dropdown it for selection
-    # from nsetools import Nse
-    # nse = Nse()
-    # fnolist = nse.get_fno_lot_sizes()
+    from nsetools import Nse
+    nse = Nse()
+    fnolist = nse.get_fno_lot_sizes()
 
-    fnolist = list(LiveSegment.objects.values_list('symbol', flat=True).distinct())
+    # fnolist = list(LiveSegment.objects.values_list('symbol', flat=True).distinct())
 
     return render(request,"home.html",{'fnolist':fnolist})
 
