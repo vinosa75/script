@@ -184,8 +184,8 @@ def create_currency():
     exceptionList = ['NIFTY','BANKNIFTY','FINNIFTY']
     # if item not in sym:
 
-    LiveOITotalAllSymbol.objects.all().delete()
-    LiveEquityResult.objects.all().delete()
+    # LiveOITotalAllSymbol.objects.all().delete()
+    # LiveEquityResult.objects.all().delete()
 
     for item in fnolist:
         try:
@@ -405,6 +405,7 @@ def create_currency():
             # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
 
         sleep(5)
+
 
 while True:
     create_currency()
