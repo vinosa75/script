@@ -1,5 +1,4 @@
 import os
-from myapp import tasks
 from celery import Celery
 
 # Set the default Django settings module for the 'celery' program.
