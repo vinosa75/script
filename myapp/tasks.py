@@ -11,9 +11,7 @@ from celery import Celery
 from celery.schedules import crontab
 
 
- 
 @shared_task
-# some heavy stuff here
 def create_currency():
 
     nse = Nse()
