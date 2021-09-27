@@ -9,6 +9,10 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
+import myproject
+import os,settings
+settings.configure()
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'myproject.settings')
 import django
 django.setup()
 
@@ -28,6 +32,8 @@ SECRET_KEY = 'f(clfjc_*^5%&jx3_6d7$ac=4m&*msx^@t=9qkuv@3#dx_i+sr'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+
+
 
 
 # Application definition
@@ -82,31 +88,31 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-        
-#     }
-# }
-
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'dddlvbdt7gk2pc',                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': 'naulxttohlngyk',
-        'PASSWORD': 'f6298f3ec2c9f6a485a94cecbddff1d7c19008131863b50356aac2ae8c68073f',
-        'HOST': 'ec2-44-196-8-220.compute-1.amazonaws.com',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '5432',                      # Set to empty string for default.
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        
     }
 }
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+#         'NAME': 'dddlvbdt7gk2pc',                      # Or path to database file if using sqlite3.
+#         # The following settings are not used with sqlite3:
+#         'USER': 'naulxttohlngyk',
+#         'PASSWORD': 'f6298f3ec2c9f6a485a94cecbddff1d7c19008131863b50356aac2ae8c68073f',
+#         'HOST': 'ec2-44-196-8-220.compute-1.amazonaws.com',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+#         'PORT': '5432',                      # Set to empty string for default.
+#     }
+# }
+
+
 import dj_database_url
 # #
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 # Password validation
@@ -147,6 +153,11 @@ USE_TZ = False
 CELERY_BROKER_URL = 'redis://:p1b6b84e67facd107957e878035c0fc2ad3da5f6d4ca0c138e7bac0f4a3bfb055@ec2-54-152-181-10.compute-1.amazonaws.com:27179'
 CELERY_RESULT_BACKEND = 'redis://:p1b6b84e67facd107957e878035c0fc2ad3da5f6d4ca0c138e7bac0f4a3bfb055@ec2-54-152-181-10.compute-1.amazonaws.com:27179'
 # Static files (CSS, JavaScript, Images)
+# Celery Configuration Options
+# CELERY_TIMEZONE = "Asia/kol"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'

@@ -13,6 +13,7 @@ import time
 from nsetools import Nse
 
 
+
 @shared_task
 def create_currency():
 
