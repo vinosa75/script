@@ -124,6 +124,9 @@ DATABASES = {
     }
 }
 
+CELERY_IMPORTS = (
+    'myapp.tasks',
+)
 
 import dj_database_url
 # #
