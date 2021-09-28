@@ -409,7 +409,7 @@ def create_currency():
 
         sleep(5)
 
-@app.task
+@shared_task(name = "print_msg_main")
 def create_equity():
 
     TrueDatausername = 'tdws135'
