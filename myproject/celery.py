@@ -21,10 +21,18 @@ app.autodiscover_tasks()
 #         'schedule': 20.0,
 #     },
 # }
-# app.conf.timezone = 'UTC'
 
-# @app.task(bind=True)
-# def debug_task(self):
-#     print(f'Request: {self.request!r}')
+app.conf.beat_schedule = {
+    "see-you-in-ten-seconds-task": {
+        "task": 'tasks.create_equity',
+        "schedule": 10.0
+    }
+}
+
+app.conf.timezone = 'UTC'
+
+@app.task(bind=True)
+def debug_task(self):
+    print(f'Request: {self.request!r}')
 
 

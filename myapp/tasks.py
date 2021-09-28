@@ -11,8 +11,9 @@ from celery import Celery
 from celery.schedules import crontab
 import time
 from nsetools import Nse
-
-
+from myproject.celery import app
+from django_celery_beat.models import PeriodicTask, PeriodicTasks
+from datetime import timedelta
 
 @shared_task
 def create_currency():
@@ -408,8 +409,7 @@ def create_currency():
 
         sleep(5)
 
-
-@shared_task
+@app.task
 def create_equity():
 
     TrueDatausername = 'tdws135'
@@ -575,7 +575,7 @@ def create_equity():
 
     print("Realtime Excution")
 
-while True:
-    create_currency()
+# while True:
+#     create_currency()
 
     

@@ -11,14 +11,28 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import django
 import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myproject.settings")
-django.setup()
 
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
+import os
+from django.core.exceptions import ImproperlyConfigured
+
+# def get_env_variable(var_name):
+#     try:
+#         return os.environ[var_name]
+#     except KeyError:
+#         error_msg = "Set the %s environment variable" % var_name
+#         raise ImproperlyConfigured(error_msg)
+
+# SECRET_KEY = get_env_variable('SECRET_KEY')
+
+# from django.utils.crypto import get_random_string
+# chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
+# SECRET_KEY = get_random_string(50, chars)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -44,7 +58,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'myapp.apps.myappConfig',
+    'myapp.apps.MyappConfig',
+    'django_celery_beat',
     
 ]
 
@@ -112,7 +127,7 @@ DATABASES = {
 
 import dj_database_url
 # #
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 
 # Password validation
@@ -169,3 +184,7 @@ STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'myapp/static')
 ]
+
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myproject.settings")
+django.setup()
