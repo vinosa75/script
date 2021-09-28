@@ -8,3 +8,4 @@ nsetools
 pendulum
 redis
 celery
+django_celery_beat
