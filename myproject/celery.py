@@ -31,7 +31,7 @@ def debug_task(self):
 app.conf.beat_schedule = {
     "see-you-in-ten-seconds-task": {
         "task": 'print_msg_main',
-        "schedule": 30.0
+        "schedule": 40.0
     }
 }
 
