@@ -19,7 +19,9 @@ class HistoryOIChange(models.Model):
 
     def __str__(self):
         return self.call1+" "+self.callstrike+" "+self.symbol
+    class Meta:
 
+        app_label = 'myapp'
 class HistoryOIPercentChange(models.Model):
     time = models.DateTimeField(auto_now_add=False)
     call1 = models.CharField(max_length=20,default="")
@@ -33,7 +35,9 @@ class HistoryOIPercentChange(models.Model):
 
     def __str__(self):
         return self.call1+" "+self.callstrike+" "+self.symbol
+    class Meta:
 
+        app_label = 'myapp'
 class LiveOIChange(models.Model):
     time = models.DateTimeField(auto_now_add=False)
     call1 = models.CharField(max_length=20,default="")
@@ -47,7 +51,9 @@ class LiveOIChange(models.Model):
 
     def __str__(self):
         return self.call1+" "+self.callstrike+" "+self.symbol
+    class Meta:
 
+        app_label = 'myapp'
 class HistoryOITotal(models.Model):
     time = models.DateTimeField(auto_now_add=False)
     call1 = models.CharField(max_length=20,default="")
@@ -61,6 +67,9 @@ class HistoryOITotal(models.Model):
 
     def __str__(self):
         return self.call1+" "+self.callstrike+" "+self.symbol
+    class Meta:
+
+        app_label = 'myapp'
 class LiveOITotal(models.Model):
     time = models.DateTimeField(auto_now_add=False)
     call1 = models.CharField(max_length=20,default="")
@@ -75,7 +84,9 @@ class LiveOITotal(models.Model):
 
     def __str__(self):
         return self.call1+" "+self.callstrike+" "+self.symbol
+    class Meta:
 
+        app_label = 'myapp'
 class LiveOIPercentChange(models.Model):
     time = models.DateTimeField(auto_now_add=False)
     call1 = models.CharField(max_length=20,default="")
@@ -90,7 +101,9 @@ class LiveOIPercentChange(models.Model):
 
     def __str__(self):
         return self.call1+" "+self.callstrike+" "+self.symbol
+    class Meta:
 
+        app_label = 'myapp'
 
 class LiveOITotalAllSymbol(models.Model):
     time = models.DateTimeField(auto_now_add=False)
@@ -109,6 +122,9 @@ class LiveOITotalAllSymbol(models.Model):
 
     def __str__(self):
         return self.call1+" "+self.callstrike+" "+self.symbol
+    class Meta:
+
+        app_label = 'myapp'
 
 
 class LiveEquityResult(models.Model):
@@ -125,6 +141,9 @@ class LiveEquityResult(models.Model):
 
     def __str__(self):
         return self.symbol+" "+self.ltp+" "+self.strike
+    class Meta:
+
+        app_label = 'myapp'
 
 
 class LiveSegment(models.Model):
@@ -135,3 +154,8 @@ class LiveSegment(models.Model):
 
     def __str__(self):
         return self.symbol+" "+self.segment+" "+self.date
+
+    class Meta:
+
+        app_label = 'myapp'
+
