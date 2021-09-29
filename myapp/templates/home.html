@@ -467,7 +467,7 @@ table#manoj {
     <div class="card">
       <div class="card-body">
       {% comment %} <button onclick="executeQuery1()" class="btn btn-primary">Run Equity</button> {% endcomment %}
-        <h5 class="card-title">Equity - Realtime - <input type='button' onclick='executeQuery1()' class="btn btn-primary" value='Status Update'> </h5>
+        <h5 class="card-title">Equity - Realtime - <input type='button' onclick='executeQuery1()' class="btn btn-primary" value='Refresh'> </h5>
            <div id="EquitySpace" class="slot">
         </div>
       </div>
@@ -512,15 +512,14 @@ function executeQuery1() {
       // do something with the return value here if you like
     }
   });
-
+setTimeout(executeQuery1, 20000);
 }
-{% comment %} setTimeout(executeQuery1, 5000); {% endcomment %}
 
-{% comment %} $(document).ready(function() {
+
+$(document).ready(function() {
   // run the first time; all subsequent calls will take care of themselves
-  setTimeout(executeQuery1, 5000);
-}); {% endcomment %}
-
+  setTimeout(executeQuery1, 20000);
+});
 </script>
 
   </body>
