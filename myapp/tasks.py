@@ -390,7 +390,7 @@ def create_currency():
                 elif value[0] < losspercent:
                     top_losers[key] = value
 
-            LiveSegment.objects.all().delete()
+            # LiveSegment.objects.all().delete()
 
             for key,value in top_gainers.items():
 
