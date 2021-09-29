@@ -211,7 +211,7 @@ def create_currency():
 
     for item in fnolist:
         try:
-            result = create_equity()
+            # result = create_equity()
             print("Before exception list")
 
             if item in exceptionList:
