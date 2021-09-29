@@ -237,11 +237,7 @@ def create_currency():
                 else:
                     liveData[td_app.live_data[req_id].symbol] = [td_app.live_data[req_id].ltp,td_app.live_data[req_id].day_open,td_app.live_data[req_id].day_high,td_app.live_data[req_id].day_low,td_app.live_data[req_id].prev_day_close,dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S')]
 
-            # Graceful exit
-            td_app.stop_live_data(symbols)
-            td_app.disconnect()
-            td_app.disconnect()
-            print(liveData)
+
             # Finding out the pastdate
             from datetime import datetime, timedelta
             pastDate = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
@@ -277,6 +273,12 @@ def create_currency():
                 opencallcrossDict[i.symbol] = i.time
             for i in openputcross:
                 openputcrossDict[i.symbol] = i.time
+
+            # Graceful exit
+            td_app.stop_live_data(symbols)
+            td_app.disconnect()
+            td_app.disconnect()
+            print(liveData)
 
             for e in LiveOITotalAllSymbol.objects.all():
                 print(e.symbol)
