@@ -31,12 +31,12 @@ def debug_task(self):
 app.control.time_limit('print_msg_main',
                            soft=25, hard=30, reply=True)
 
-app.conf.beat_schedule = {
-    "see-you-in-ten-seconds-task": {
-        "task": 'print_msg_main',
-        "schedule": 40.0
-    }
-}
+# app.conf.beat_schedule = {
+#     "see-you-in-ten-seconds-task": {
+#         "task": 'print_msg_main',
+#         "schedule": 40.0
+#     }
+# }
 
 app.conf.timezone = 'UTC'
 
