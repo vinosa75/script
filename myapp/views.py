@@ -244,7 +244,6 @@ def equity(request):
     #                     putone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=date.today())
     #                     putone.save()
         
-
     OITotalValue ={}
     OIChangeValue = {}
     value1 = {}
