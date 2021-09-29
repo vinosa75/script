@@ -255,8 +255,10 @@ def equity(request):
     putHalfPercent = LiveEquityResult.objects.filter(strike="Put 1/2 percent")
     callCrossed = LiveEquityResult.objects.filter(strike="Call Crossed")
     putCrossed = LiveEquityResult.objects.filter(strike="Put Crossed")
+    gain = LiveSegment.objects.filter(segment="gain")
+    loss = LiveSegment.objects.filter(segment="loss")
 
-    return render(request,"equity.html",{'OITotalValue': OITotalValue,'OIChangeValue': OIChangeValue,'value1':value1,'value2':value2,'strikeGap':strikeGap,'callOnePercent':callOnePercent,'putOnePercent':putOnePercent,'callCrossed':callCrossed,'putCrossed':putCrossed,'putHalfPercent':putHalfPercent,'callHalfPercent':callHalfPercent})
+    return render(request,"equity.html",{'gain':gain,'loss':loss,'OITotalValue': OITotalValue,'OIChangeValue': OIChangeValue,'value1':value1,'value2':value2,'strikeGap':strikeGap,'callOnePercent':callOnePercent,'putOnePercent':putOnePercent,'callCrossed':callCrossed,'putCrossed':putCrossed,'putHalfPercent':putHalfPercent,'callHalfPercent':callHalfPercent})
 
 #5 Option chain Section - selected symbol calculation
 def optionChain(request):
