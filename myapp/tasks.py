@@ -244,6 +244,7 @@ def create_currency():
             # Graceful exit
             td_app.stop_live_data(symbols)
             td_app.disconnect()
+            td_app.disconnect()
 
             # Finding out the pastdate
             from datetime import datetime, timedelta
@@ -389,11 +390,6 @@ def create_currency():
                 elif value[0] < losspercent:
                     top_losers[key] = value
 
-            # print(top_gainers.keys())
-            # print(top_losers.keys())
-            # print(len(top_gainers))
-            # print(len(top_losers))
-
             LiveSegment.objects.all().delete()
 
             for key,value in top_gainers.items():
@@ -405,11 +401,6 @@ def create_currency():
 
                 loss = LiveSegment(symbol=key,segment="loss")
                 loss.save()
-
-
-
-
-
 
 
             if item in exceptionList:
@@ -442,6 +433,7 @@ def create_currency():
 
             nifty_chain.stop_option_chain()
             td_obj.disconnect()
+            td_app.disconnect()
             sampleDict[item] = df
 
             print(df)
