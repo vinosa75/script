@@ -238,7 +238,7 @@ def create_currency():
                 if (td_app.live_data[req_id].ltp) == None:
                     continue
                 else:
-                    liveData[td_app.live_data[req_id].symbol] = [td_app.live_data[req_id].ltp,td_app.live_data[req_id].day_open,td_app.live_data[req_id].day_high,td_app.live_data[req_id].day_low,td_app.live_data[req_id].prev_day_close,dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S')]
+                    liveData[td_app.live_data[req_id].symbol] = [td_app.live_data[req_id].ltp,td_app.live_data[req_id].day_open,td_app.live_data[req_id].day_high,td_app.live_data[req_id].day_low,td_app.live_data[req_id].prev_day_close,dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'),td_app.live_data[req_id].change_perc]
 
 
             # Finding out the pastdate
@@ -286,14 +286,14 @@ def create_currency():
             # LiveSegment.objects.filter(time__lte = pastDate).delete()
 
             for key,value in liveData.items():
-                if value[5] >= 3:
+                if float(value[6]) >= 3:
                     if LiveSegment.objects.filter(symbol=key,segment="gain").exists():
                         pass
                     else:
                         gain = LiveSegment(symbol=key,segment="gain")
                         gain.save()
 
-                elif value[5] <= -3:
+                elif float(value[6]) <= -3:
                     if LiveSegment.objects.filter(symbol=key,segment="loss").exists():
                         pass
                     else:
