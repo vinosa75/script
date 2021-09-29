@@ -429,6 +429,7 @@ def create_currency():
 
         sleep(5)
 
+@shared_task(name = "print_msg_main")
 def create_equity():
 
     TrueDatausername = 'tdws135'
@@ -441,10 +442,10 @@ def create_equity():
     # Default production port is 8082 in the library. Other ports may be given t oyou during trial.
     realtime_port = 8082
 
-    td_app = TD(TrueDatausername, TrueDatapassword, live_port=realtime_port, historical_api=False)
-
     print('Starting Real Time Feed.... ')
     print(f'Port > {realtime_port}')
+
+    td_app = TD(TrueDatausername, TrueDatapassword, live_port=realtime_port, historical_api=False)
 
     req_ids = td_app.start_live_data(symbols)
     live_data_objs = {}
