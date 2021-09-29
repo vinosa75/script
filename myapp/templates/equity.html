@@ -1,18 +1,20 @@
-<div class="fixTableHead">
-<ul class="list-group">
-  <li class="list-group-item d-flex justify-content-between align-items-center">
-    <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">Top Gainers </h2><b>- {{gain|length}}</b>
+<div class="jumbotron">
+  {% comment %} <h1 class="display-10">Top Gainers!</h1> {% endcomment %}
+  <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">Top Gainers </h2><b>- {{gain|length}}</b>
+  <p class="lead" style="font-size:13px">    
     {% for value in gain %}
-    <span class="badge badge-primary badge-pill">{{ value.symbol }}</span>
-    {% endfor %}
-  </li>
-  <li class="list-group-item d-flex justify-content-between align-items-center">
-    <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-danger text-wrap">Top Losers </h2><b>- {{loss|length}}</b>
+    <span class="badge badge-secondary badge-pill">{{ value.symbol }}</span>,
+    {% endfor %}</p>
+  <hr class="my-4">
+</div>
+
+<div class="jumbotron">
+ <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-danger text-wrap">Top Losers </h2><b>- {{loss|length}}</b>
+  <p class="lead"  style="font-size:13px">    
     {% for value in loss %}
-    <span class="badge badge-primary badge-pill">{{ value.symbol }}</span>
-    {% endfor %}
-  </li>
-</ul>
+    <span class="badge badge-secondary badge-pill">{{ value.symbol }}</span>,
+    {% endfor %}</p>
+  <hr class="my-4">
 </div>
 
 <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">Call Crossed </h2><b>- {{callCrossed|length}}</b>
