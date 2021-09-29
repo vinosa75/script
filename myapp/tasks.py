@@ -15,6 +15,7 @@ from myproject.celery import app
 from django_celery_beat.models import PeriodicTask, PeriodicTasks
 from datetime import timedelta
 from celery.exceptions import SoftTimeLimitExceeded
+from pytz import timezone
 
 @shared_task
 def create_currency():
