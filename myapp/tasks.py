@@ -229,6 +229,8 @@ def create_currency():
             req_ids = td_app.start_live_data(symbols)
             live_data_objs = {}
 
+            te.sleep(3)
+
             liveData = {}
             for req_id in req_ids:
                 print(td_app.live_data[req_id].day_open)
