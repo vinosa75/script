@@ -306,10 +306,12 @@ def create_currency():
             # # Deleting past historical data in the database
             HistoryOIChange.objects.filter(time__lte = pastDate).delete()
             HistoryOITotal.objects.filter(time__lte = pastDate).delete()
+            HistoryOIPercentChange.objects.filter(time__lte = pastDate).delete()
 
             # Deleting live data
             LiveOITotal.objects.filter(time__lte = pastDate).delete()
             LiveOIChange.objects.filter(time__lte = pastDate).delete()
+            LiveOIPercentChange.objects.filter(time__lte = pastDate).delete()
 
             print("After deletion")
             
