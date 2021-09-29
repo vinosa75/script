@@ -595,7 +595,37 @@ def create_equity():
                         putone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=date.today())
                         putone.save()
 
-    print("Realtime Excution")
+    top_gainers = {}
+    top_losers = {}
+
+    for key,value in liveData.items():
+        # print(key)
+        # print(value)
+        gainpercent = (value[4] + (value[4]*0.03))
+        losspercent = (value[4] - (value[4]*0.03))
+        if value[0] > gainpercent:
+            top_gainers[key] = value
+        elif value[0] < losspercent:
+            top_losers[key] = value
+
+    # print(top_gainers.keys())
+    # print(top_losers.keys())
+    # print(len(top_gainers))
+    # print(len(top_losers))
+
+    LiveSegment.objects.all().delete()
+
+    for key,value in top_gainers.items():
+
+        gain = LiveSegment(symbol=key,segment="gain")
+        gain.save()
+
+    for key,value in top_losers.items():
+
+        loss = LiveSegment(symbol=key,segment="loss")
+        loss.save()
+
+    return "Execution"
 
 while True:
     create_currency()
