@@ -205,10 +205,6 @@ def create_currency():
     count=1
 
     exceptionList = ['NIFTY','BANKNIFTY','FINNIFTY']
-    # if item not in sym:
-
-    # LiveOITotalAllSymbol.objects.all().delete()
-    # LiveEquityResult.objects.all().delete()
 
     for idx,item in enumerate(fnolist):
         try:
@@ -245,7 +241,7 @@ def create_currency():
             td_app.stop_live_data(symbols)
             td_app.disconnect()
             td_app.disconnect()
-
+            print(liveData)
             # Finding out the pastdate
             from datetime import datetime, timedelta
             pastDate = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d')
@@ -259,7 +255,6 @@ def create_currency():
             callonepercentset = LiveEquityResult.objects.filter(strike="Call 1 percent")
             putcrossedset = LiveEquityResult.objects.filter(strike="Put Crossed")
             putonepercentset = LiveEquityResult.objects.filter(strike="Put 1 percent")
-
             opencallcross = LiveEquityResult.objects.filter(opencrossed="call")
             openputcross = LiveEquityResult.objects.filter(opencrossed="put")
 
