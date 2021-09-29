@@ -225,13 +225,13 @@ def create_currency():
             print(f'Port > {realtime_port}')
 
             td_app = TD(TrueDatausernamereal, TrueDatapasswordreal, live_port=realtime_port, historical_api=False)
-
+            print(symbols)
             req_ids = td_app.start_live_data(symbols)
             live_data_objs = {}
 
             liveData = {}
             for req_id in req_ids:
-                # print(td_app.live_data[req_id])
+                print(td_app.live_data[req_id].day_open)
                 if (td_app.live_data[req_id].ltp) == None:
                     continue
                 else:
