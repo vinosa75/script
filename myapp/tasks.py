@@ -41,6 +41,7 @@ def create_currency():
                 fnolist.append(sym)
 
 
+
     # Removing 3 symbols from the list as they are not required for equity comparision
     # remove_list = ['HEROMOTOCO','PFC','BEL','MANAPPURAM','EXIDEIND','PETRONET', 'TATAPOWER', 'ONGC', 'VEDL', 'LALPATHLAB', 'ITC', 'INDHOTEL', 'IDEA','POWERGRID', 'COALINDIA', 'CANBK','HINDPETRO','BANKBARODA','RECLTD','CUB']
     # remove_list = []
@@ -213,6 +214,7 @@ def create_currency():
         try:
             # result = create_equity()
             print("Before exception list")
+            print(fnolist)
 
             if item in exceptionList:
                     if calendar.day_name[date.today().weekday()] == "Thrusday":
