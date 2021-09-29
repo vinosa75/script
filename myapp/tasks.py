@@ -283,11 +283,31 @@ def create_currency():
             td_app.disconnect()
             print(liveData)
 
+            LiveSegment.objects.filter(time__lte = pastDate).delete()
+
+            for key,value in liveData.items():
+                if value[5] >= 3:
+                    if LiveSegment.objects.filter(symbol=key,segment="gain").exists():
+                        pass
+                    else:
+                        gain = LiveSegment(symbol=key,segment="gain")
+                        gain.save()
+
+                elif value[5] <= -3:
+                    if LiveSegment.objects.filter(symbol=key,segment="loss").exists():
+                        pass
+                    else:
+                        loss = LiveSegment(symbol=key,segment="loss")
+                        loss.save()
+
+
+            gainlossList = list(LiveSegment.objects.values_list('symbol', flat=True))
+
             for e in LiveOITotalAllSymbol.objects.all():
                 print(e.symbol)
                 
-                if e.symbol in liveData and e.symbol not in removeList:
-
+                if e.symbol in liveData and e.symbol not in removeList and e.symbol in gainlossList:
+                    
                     # Call
                     if liveData[e.symbol][1] > float(e.callstrike):
                         if e.symbol in opencallcrossDict:
@@ -306,8 +326,6 @@ def create_currency():
                         else:
                             putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=liveData[e.symbol][5],date=date.today())
                             putcross.save()
-
-
 
                     if liveData[e.symbol][0] > float(e.callstrike) or liveData[e.symbol][1] > float(e.callstrike):
                         if e.symbol in callcrossedsetDict:
@@ -376,31 +394,6 @@ def create_currency():
                                 print("Put 1 percent")
                                 putone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=date.today())
                                 putone.save()
-
-            top_gainers = {}
-            top_losers = {}
-
-            for key,value in liveData.items():
-                # print(key)
-                # print(value)
-                gainpercent = (value[4] + (value[4]*0.03))
-                losspercent = (value[4] - (value[4]*0.03))
-                if value[0] > gainpercent:
-                    top_gainers[key] = value
-                elif value[0] < losspercent:
-                    top_losers[key] = value
-
-            # LiveSegment.objects.all().delete()
-
-            for key,value in top_gainers.items():
-
-                gain = LiveSegment(symbol=key,segment="gain")
-                gain.save()
-
-            for key,value in top_losers.items():
-
-                loss = LiveSegment(symbol=key,segment="loss")
-                loss.save()
 
 
             if item in exceptionList:

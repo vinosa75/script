@@ -159,3 +159,17 @@ class LiveSegment(models.Model):
 
         app_label = 'myapp'
 
+
+class gainloss(models.Model):
+    symbol = models.CharField(max_length=20)
+    segment = models.CharField(max_length=20)
+    time = models.DateTimeField(auto_now_add=False)
+
+    def __str__(self):
+        return self.symbol+" "+self.segment+" "+self.time
+
+    class Meta:
+
+        app_label = 'myapp'
+
+
