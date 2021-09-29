@@ -14,18 +14,37 @@ from nsetools import Nse
 from myproject.celery import app
 from django_celery_beat.models import PeriodicTask, PeriodicTasks
 from datetime import timedelta
+from celery.exceptions import SoftTimeLimitExceeded
 
 @shared_task
 def create_currency():
 
+    from datetime import datetime, time
+    pastDate = datetime.combine(datetime.today(), time.min)
+
+    # LiveEquityResult.objects.all().delete()
+    LiveSegment.objects.filter(time__lte = pastDate).delete()
+
     nse = Nse()
-    fnolist = nse.get_fno_lot_sizes()
-    print(len(fnolist))
+    nsefnolist = nse.get_fno_lot_sizes()
+    print(len(nsefnolist))
+
+    fnolist = ['NIFTY','BANKNIFTY','FINNIFTY']
+
+    segments = list(LiveSegment.objects.values_list('symbol', flat=True))
+
+    fnolist.extend(segments)
+
+    if len(segments) > 0:
+        for sym in nsefnolist:
+            if sym not in fnolist:
+                fnolist.append(sym)
+
 
     # Removing 3 symbols from the list as they are not required for equity comparision
-    remove_list = ['HEROMOTOCO','PFC','BEL','MANAPPURAM','EXIDEIND','PETRONET', 'TATAPOWER', 'ONGC', 'VEDL', 'LALPATHLAB', 'ITC', 'INDHOTEL', 'IDEA','POWERGRID', 'COALINDIA', 'CANBK','HINDPETRO','BANKBARODA','RECLTD','CUB']
+    # remove_list = ['HEROMOTOCO','PFC','BEL','MANAPPURAM','EXIDEIND','PETRONET', 'TATAPOWER', 'ONGC', 'VEDL', 'LALPATHLAB', 'ITC', 'INDHOTEL', 'IDEA','POWERGRID', 'COALINDIA', 'CANBK','HINDPETRO','BANKBARODA','RECLTD','CUB']
     # remove_list = []
-    fnolist = [i for i in fnolist if i not in remove_list]
+    # fnolist = [i for i in fnolist if i not in remove_list]
 
     # fnolist = fnolist[0:3]
     print(fnolist)
@@ -192,6 +211,7 @@ def create_currency():
 
     for item in fnolist:
         try:
+            result = create_equity()
             print("Before exception list")
 
             if item in exceptionList:
