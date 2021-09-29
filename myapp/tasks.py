@@ -31,7 +31,7 @@ def create_currency():
 
     fnolist = ['NIFTY','BANKNIFTY','FINNIFTY']
 
-    segments = list(LiveSegment.objects.values_list('symbol', flat=True))
+    segments = list(LiveSegment.objects.values_list('symbol', flat=True).distinct())
 
     fnolist.extend(segments)
 
@@ -210,11 +210,10 @@ def create_currency():
     # LiveOITotalAllSymbol.objects.all().delete()
     # LiveEquityResult.objects.all().delete()
 
-    for item in fnolist:
+    for idx,item in enumerate(fnolist):
         try:
             # result = create_equity()
             print("Before exception list")
-            print(fnolist)
 
             if item in exceptionList:
                     if calendar.day_name[date.today().weekday()] == "Thrusday":
