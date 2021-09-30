@@ -152,8 +152,8 @@ class LiveSegment(models.Model):
     time = models.TimeField(auto_now_add=True)
     date = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.symbol+" "+self.segment+" "+self.date
+    # def __str__(self):
+    #     return self.symbol+" "+self.segment+" "+self.date
 
     class Meta:
 
