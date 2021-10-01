@@ -1,100 +1,113 @@
-  <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">Top Gainers </h2><b>- {{gain|length}}</b>
+  <div class="row">
+
+  <div class="col-md-6">
+    <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">Top Gainers </h2><b>- {{gain|length}}</b>
         {% if gain|length == 0 %}
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>No data!</strong> No symbols more than 3%.
         </div>
         {% else %}
 
-        <div class="fixTableHead">
-              {% for value in gain %}
+                    <nav aria-label="breadcrumb">
 
-            <nav aria-label="breadcrumb">
-
-              <ol class="breadcrumb">
+              <ol style="padding:0px" class="breadcrumb">
 
                 <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b class="badge badge-warning">Symbol</b></span>
-                  <span class="bottom"><b class="badge badge-success">{{ value.symbol }}</b></span>
+                  {% comment %} <span class="bottom"><b class="badge badge-success">{{ value.symbol }}</b></span> {% endcomment %}
                 </div>
                 </li>
 
                 <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b class="badge badge-info">% Change</b></span>
-                  <span class="bottom"><b>{{ value.change_perc }}</b></span>
+                  {% comment %} <span class="bottom"><b>{{ value.change_perc|floatformat:"2" }}</b></span> {% endcomment %}
                 </div>
                 </li>
 
 
               </ol>
+
             </nav>
 
-              {% endfor %} 
+        <div class="fixTableHead" style="min-width:110%">
+
+            <nav aria-label="breadcrumb">
+
+              <ul class="list-group">
+              {% for value in gain %}
+              <li style="font-size:13px;padding:0px" class="list-group-item"><b class="badge badge-success">{{ value.symbol }}</b> | <b>{{ value.change_perc|floatformat:"2" }}</b></li>
+              {% endfor %}
+              </ul>
+
+            </nav>
+
       
         </div>
 
         {% endif %}
-
-
-  <h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-danger text-wrap">Top Losers</h2><b>- {{loss|length}}</b>
+  </div>
+  <div class="col-md-6">
+    <h2 style="text-align:center;color:white;font-size:medium;" class="badge bg-danger text-wrap">Top Losers</h2><b>- {{loss|length}}</b>
         {% if loss|length == 0 %}
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>No data!</strong> No symbols less than 3%.
         </div>
         {% else %}
 
-        <div class="fixTableHead">
-              {% for value in loss %}
-
             <nav aria-label="breadcrumb">
 
-              <ol class="breadcrumb">
+              <ol style="padding:0px" class="breadcrumb">
 
                 <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b class="badge badge-warning">Symbol</b></span>
-                  <span class="bottom"><b class="badge badge-danger">{{ value.symbol }}</b></span>
+                  {% comment %} <span class="bottom"><b class="badge badge-success">{{ value.symbol }}</b></span> {% endcomment %}
                 </div>
                 </li>
-                
 
                 <li class="breadcrumb-item">
                 <div class="div-container">
                   <span class="top" style="text-align:center"><b class="badge badge-info">% Change</b></span>
-                  <span class="bottom"><b>{{ value.change_perc }}</b></span>
+                  {% comment %} <span class="bottom"><b>{{ value.change_perc|floatformat:"2" }}</b></span> {% endcomment %}
                 </div>
                 </li>
 
 
               </ol>
+
             </nav>
 
-              {% endfor %} 
+
+        <div class="fixTableHead">
+          
+
+            <nav aria-label="breadcrumb">
+
+              {% comment %} <ol class="breadcrumb"> {% endcomment %}
+
+              <ul class="list-group">
+              {% for value in loss %}
+              <li style="font-size:13px;padding:0px" class="list-group-item"><b class="badge badge-danger">{{ value.symbol }}</b> | <b>{{ value.change_perc|floatformat:"2" }}</b></li>
+              {% endfor %}
+              </ul>
+               
+              {% comment %} </ol> {% endcomment %}
+            </nav>
+
+          
       
         </div>
 
         {% endif %}
+  </div>
 
+  </div>
+  
 
-{% comment %} <div class="jumbotron">
-  <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">Top Gainers </h2><b>- {{gain|length}}</b>
-  <p class="lead" style="font-size:13px">    
-    {% for value in gain %}
-    <span class="badge badge-secondary badge-pill">{{ value.symbol }}</span>,
-    {% endfor %}</p>
-  <hr class="my-4">
-</div>
-
-<div class="jumbotron">
- <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-danger text-wrap">Top Losers </h2><b>- {{loss|length}}</b>
-  <p class="lead"  style="font-size:13px">    
-    {% for value in loss %}
-    <span class="badge badge-secondary badge-pill">{{ value.symbol }}</span>,
-    {% endfor %}</p>
-  <hr class="my-4">
-</div> {% endcomment %}
-
+<div class="row">
+<div class="col-md-12">
 <h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-success text-wrap">Call Crossed </h2><b>- {{callCrossed|length}}</b>
 
 
@@ -417,6 +430,34 @@
         </div>
 
         {% endif %}
+</div>
+
+
+  </div>
+
+
+
+
+
+
+
+{% comment %} <div class="jumbotron">
+  <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">Top Gainers </h2><b>- {{gain|length}}</b>
+  <p class="lead" style="font-size:13px">    
+    {% for value in gain %}
+    <span class="badge badge-secondary badge-pill">{{ value.symbol }}</span>,
+    {% endfor %}</p>
+  <hr class="my-4">
+</div>
+
+<div class="jumbotron">
+ <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-danger text-wrap">Top Losers </h2><b>- {{loss|length}}</b>
+  <p class="lead"  style="font-size:13px">    
+    {% for value in loss %}
+    <span class="badge badge-secondary badge-pill">{{ value.symbol }}</span>,
+    {% endfor %}</p>
+  <hr class="my-4">
+</div> {% endcomment %}
 
 <script>
 
