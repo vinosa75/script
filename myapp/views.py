@@ -249,14 +249,14 @@ def equity(request):
     value1 = {}
     value2 = {}
     strikeGap = {}
-    callOnePercent = LiveEquityResult.objects.filter(strike="Call 1 percent")
-    putOnePercent = LiveEquityResult.objects.filter(strike="Put 1 percent")
-    callHalfPercent = LiveEquityResult.objects.filter(strike="Call 1/2 percent")
-    putHalfPercent = LiveEquityResult.objects.filter(strike="Put 1/2 percent")
-    callCrossed = LiveEquityResult.objects.filter(strike="Call Crossed")
-    putCrossed = LiveEquityResult.objects.filter(strike="Put Crossed")
-    gain = LiveSegment.objects.filter(segment="gain")
-    loss = LiveSegment.objects.filter(segment="loss")
+    callOnePercent = LiveEquityResult.objects.filter(strike="Call 1 percent").order_by('-time')
+    putOnePercent = LiveEquityResult.objects.filter(strike="Put 1 percent").order_by('-time')
+    callHalfPercent = LiveEquityResult.objects.filter(strike="Call 1/2 percent").order_by('-time')
+    putHalfPercent = LiveEquityResult.objects.filter(strike="Put 1/2 percent").order_by('-time')
+    callCrossed = LiveEquityResult.objects.filter(strike="Call Crossed").order_by('-time')
+    putCrossed = LiveEquityResult.objects.filter(strike="Put Crossed").order_by('-time')
+    gain = LiveSegment.objects.filter(segment="gain").order_by('-change_perc')
+    loss = LiveSegment.objects.filter(segment="loss").order_by('-change_perc')
 
     return render(request,"equity.html",{'gain':gain,'loss':loss,'OITotalValue': OITotalValue,'OIChangeValue': OIChangeValue,'value1':value1,'value2':value2,'strikeGap':strikeGap,'callOnePercent':callOnePercent,'putOnePercent':putOnePercent,'callCrossed':callCrossed,'putCrossed':putCrossed,'putHalfPercent':putHalfPercent,'callHalfPercent':callHalfPercent})
 

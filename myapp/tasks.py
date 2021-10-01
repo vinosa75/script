@@ -288,16 +288,21 @@ def create_currency():
             for key,value in liveData.items():
                 if float(value[6]) >= 3:
                     if LiveSegment.objects.filter(symbol=key,segment="gain").exists():
-                        pass
+                        LiveSegment.objects.filter(symbol=key,segment="gain").delete()
+                        gain = LiveSegment(symbol=key,segment="gain",change_perc=value[6])
+                        gain.save()
+
                     else:
-                        gain = LiveSegment(symbol=key,segment="gain")
+                        gain = LiveSegment(symbol=key,segment="gain",change_perc=value[6])
                         gain.save()
 
                 elif float(value[6]) <= -3:
                     if LiveSegment.objects.filter(symbol=key,segment="loss").exists():
-                        pass
+                        LiveSegment.objects.filter(symbol=key,segment="loss").delete()
+                        loss = LiveSegment(symbol=key,segment="loss",change_perc=value[6])
+                        loss.save()
                     else:
-                        loss = LiveSegment(symbol=key,segment="loss")
+                        loss = LiveSegment(symbol=key,segment="loss",change_perc=value[6])
                         loss.save()
 
 
