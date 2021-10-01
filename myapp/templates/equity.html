@@ -13,10 +13,11 @@
               <ol class="breadcrumb">
 
                 <li class="breadcrumb-item">
-                {% comment %} <button type="submit" class="btn btn-warning"><b>{{ key }}</b></button> {% endcomment %}
-                <button id="1" name="1" class="btn btn-warning" value="{{ value.symbol }}">{{ value.symbol }}</button>
-                {% comment %} <span class="badge badge-warning"></span> {% endcomment %}
-                
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-warning">Symbol</b></span>
+                  <span class="bottom">{{ value.symbol }}</span>
+                </div>
+                </li>
 
                 <li class="breadcrumb-item">
                 <div class="div-container">
@@ -36,7 +37,7 @@
         {% endif %}
 
 
-  <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">Top Losers</h2><b>- {{loss|length}}</b>
+  <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-danger text-wrap">Top Losers</h2><b>- {{loss|length}}</b>
         {% if loss|length == 0 %}
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>No data!</strong> No symbols less than 3%.
@@ -51,9 +52,11 @@
               <ol class="breadcrumb">
 
                 <li class="breadcrumb-item">
-                {% comment %} <button type="submit" class="btn btn-warning"><b>{{ key }}</b></button> {% endcomment %}
-                <button id="1" name="1" class="btn btn-warning" value="{{ value.symbol }}">{{ value.symbol }}</button>
-                {% comment %} <span class="badge badge-warning"></span> {% endcomment %}
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-warning">Symbol</b></span>
+                  <span class="bottom">{{ value.symbol }}</span>
+                </div>
+                </li>
                 
 
                 <li class="breadcrumb-item">
