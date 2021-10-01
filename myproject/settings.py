@@ -157,13 +157,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata' 
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
 
 # CELERY_BROKER_URL = 'amqp://localhost'
 # CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
