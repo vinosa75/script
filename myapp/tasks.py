@@ -314,6 +314,7 @@ def create_currency():
                             LiveEquityResult.objects.filter(symbol = e.symbol).delete()
                             callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="call",time=opencallcrossDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                             callcross.save()
+                            continue
                         else:
                             callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="call",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                             callcross.save()
@@ -323,6 +324,7 @@ def create_currency():
                             LiveEquityResult.objects.filter(symbol = e.symbol).delete()
                             putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=openputcrossDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                             putcross.save()
+                            continue
                         else:
                             putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                             putcross.save()
@@ -399,16 +401,16 @@ def create_currency():
             if item in exceptionList:
                     if calendar.day_name[date.today().weekday()] == "Thrusday":
                         expiry = date.today()
-                        expiry = "30-Sep-2021"
+                        expiry = "7-Oct-2021"
                         dte = dt.strptime(expiry, '%d-%b-%Y')
                         print("inside thursday")
                     else:
                         expiry = pendulum.now().next(pendulum.THURSDAY).strftime('%d-%b-%Y')
-                        expiry = "30-Sep-2021"
+                        expiry = "7-Oct-2021"
                         dte = dt.strptime(expiry, '%d-%b-%Y')
             else:
                 print("inside monthend")
-                expiry = "30-Sep-2021"
+                expiry = "28-Oct-2021"
                 dte = dt.strptime(expiry, '%d-%b-%Y')
 
             print("After exception")
