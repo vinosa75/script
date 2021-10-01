@@ -129,7 +129,7 @@ class LiveOITotalAllSymbol(models.Model):
 
 class LiveEquityResult(models.Model):
     time = models.TimeField(auto_now_add=False)
-    date = models.DateField()
+    date = models.DateTimeField(auto_now_add=False)
     symbol = models.CharField(max_length=20,default="")
     open = models.CharField(max_length=20,default="")
     high = models.CharField(max_length=20,default="")
