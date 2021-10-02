@@ -149,8 +149,8 @@ class LiveEquityResult(models.Model):
 class LiveSegment(models.Model):
     symbol = models.CharField(max_length=20)
     segment = models.CharField(max_length=20)
-    time = models.TimeField(auto_now_add=True)
-    date = models.DateTimeField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=False)
+    date = models.DateTimeField(auto_now_add=False)
     change_perc = models.FloatField(default=0)
 
     # def __str__(self):
