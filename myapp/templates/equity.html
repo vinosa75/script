@@ -1,4 +1,35 @@
-  <div class="row">
+<div class="row">
+
+    <div class="col-md-6">
+    <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">Call Crossed </h2><b>- {{callCrossed|length}}</b>
+        {% if callCrossed|length == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols crossed call.
+        </div>
+        {% else %}
+
+        <div class="fixTableHead" style="min-width:110%">
+
+            <nav aria-label="breadcrumb">
+
+              <ul class="list-group">
+              {% for value in callCrossed %}
+              <li style="font-size:13px;padding:0px" class="list-group-item"><button id="1" name="1" style="font-size: 1.1em;padding:0px" class="btn btn-warning btn-sm" value="{{ value.symbol }}">{{ value.symbol }}</button> |                 {%if value.opencrossed == "call" %}
+                <span class="top" style="text-align:center"><b class="badge badge-success">{{ value.open }}</b></span>
+                {% else %}
+                  <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
+                {% endif %} | 
+                
+                <b>{{ value.time }}</b></li>
+              {% endfor %}
+              </ul>
+
+            </nav>
+
+        </div>
+
+        {% endif %}
+  </div>
 
   <div class="col-md-6">
     <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">Top Gainers </h2><b>- {{gain|length}}</b>
@@ -7,29 +38,6 @@
         <strong>No data!</strong> No symbols more than 3%.
         </div>
         {% else %}
-
-                    <nav aria-label="breadcrumb">
-
-              <ol style="padding:0px" class="breadcrumb">
-
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b class="badge badge-warning">Symbol</b></span>
-                  {% comment %} <span class="bottom"><b class="badge badge-success">{{ value.symbol }}</b></span> {% endcomment %}
-                </div>
-                </li>
-
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b class="badge badge-info">% Change</b></span>
-                  {% comment %} <span class="bottom"><b>{{ value.change_perc|floatformat:"2" }}</b></span> {% endcomment %}
-                </div>
-                </li>
-
-
-              </ol>
-
-            </nav>
 
         <div class="fixTableHead" style="min-width:110%">
 
@@ -43,42 +51,65 @@
 
             </nav>
 
+        </div>
+
+        {% endif %}
+  </div>
+
+</div>
+  
+
+
+
+<div class="row">
+
+
+<div class="col-md-6">
+<h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-danger text-wrap">Put Crossed </h2><b>- {{putCrossed|length}}</b>
+
+        {% if putCrossed|length == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols crossed put.
+        </div>
+        {% else %}
+
+
+        <div class="fixTableHead">
+          
+
+
+            <nav aria-label="breadcrumb">
+
+              <ul class="list-group">
+              {% for value in putCrossed %}
+              <li style="font-size:13px;padding:0px" class="list-group-item"><button id="1" name="1" style="font-size: 1.1em;padding:0px" class="btn btn-warning btn-sm" value="{{ value.symbol }}">{{ value.symbol }}</button> |                 {%if value.opencrossed == "call" %}
+                  <span class="top" style="text-align:center"><b class="badge badge-success">{{ value.open }}</b></span>
+                {% else %}
+                  <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
+                {% endif %} | 
+                
+                <b>{{ value.time }}</b></li>
+              {% endfor %}
+              </ul>
+
+            </nav>
+
+
+          
       
         </div>
 
         {% endif %}
   </div>
+
+  
   <div class="col-md-6">
-    <h2 style="text-align:center;color:white;font-size:medium;" class="badge bg-danger text-wrap">Top Losers</h2><b>- {{loss|length}}</b>
+    <h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-danger text-wrap">Top Losers</h2><b>- {{loss|length}}</b>
         {% if loss|length == 0 %}
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>No data!</strong> No symbols less than 3%.
         </div>
         {% else %}
-
-            <nav aria-label="breadcrumb">
-
-              <ol style="padding:0px" class="breadcrumb">
-
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b class="badge badge-warning">Symbol</b></span>
-                  {% comment %} <span class="bottom"><b class="badge badge-success">{{ value.symbol }}</b></span> {% endcomment %}
-                </div>
-                </li>
-
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b class="badge badge-info">% Change</b></span>
-                  {% comment %} <span class="bottom"><b>{{ value.change_perc|floatformat:"2" }}</b></span> {% endcomment %}
-                </div>
-                </li>
-
-
-              </ol>
-
-            </nav>
-
 
         <div class="fixTableHead">
           
@@ -103,184 +134,98 @@
         {% endif %}
   </div>
 
-  </div>
-  
+
+</div>
+
+
 
 <div class="row">
-<div class="col-md-12">
-<h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-success text-wrap">Call Crossed </h2><b>- {{callCrossed|length}}</b>
 
 
-  
-        {% if callCrossed|length == 0 %}
-          <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>No data!</strong> No symbols crossed call.
-        </div>
-        {% else %}
+<div class="col-md-6">
 
-        <div class="fixTableHead">
-              {% for value in callCrossed %}
+<h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-success text-wrap">Call (1%) </h2><b>- {{callOnePercent|length}}</b>
 
-            <nav aria-label="breadcrumb">
-
-              <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-                {% comment %} <button type="submit" class="btn btn-warning"><b>{{ key }}</b></button> {% endcomment %}
-                {% comment %} <button type="submit" id="button_1" class="btn btn-warning" value="Manoj"><b>{{ key }}</b></button> {% endcomment %}
-                <button id="1" name="1" class="btn btn-warning" value="{{ value.symbol }}">{{ value.symbol }}</button>
-                {% comment %} <span class="badge badge-warning"></span> {% endcomment %}
-                
-                </li>
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                {%if value.opencrossed == "call" %}
-                <span class="top" style="text-align:center"><b class="badge badge-success">Open</b></span>
-                  <span class="bottom">{{ value.open }}</span>
-                {% else %}
-                  <span class="top" style="text-align:center"><b>Open</b></span>
-                  <span class="bottom">{{ value.open }}</span>
-                {% endif %}
-
-                </div>
-                </li>
-                {% comment %} 
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b class="badge badge-info">High</b></span>
-                  <span class="bottom">{{ value.high }}</span>
-                </div>
-                </li>
-
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b class="badge badge-info">low</b></span>
-                  <span class="bottom">{{ value.low }}</span>
-                </div>
-                </li>
-
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b class="badge badge-info">Pr_close</b></span>
-                  <span class="bottom">{{ value.prev_day_close }}</span>
-                </div>
-                </li>
-
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b class="badge badge-info">Ltp</b></span>
-                  <span class="bottom">{{ value.ltp }}</span>
-                </div>
-                </li> {% endcomment %}
-
-
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b class="badge badge-info">Time</b></span>
-                  <span class="bottom">{{ value.time }}</span>
-                </div>
-                </li> 
-
-              </ol>
-            </nav>
-
-              {% endfor %} 
-      
-        </div>
-
-        {% endif %}
-
-
-
-
-<h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-danger text-wrap">Put Crossed </h2><b>- {{putCrossed|length}}</b>
-
-
-        {% if putCrossed|length == 0 %}
+        {% if callOnePercent|length == 0 %}
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>No data!</strong> No symbols crossed put.
         </div>
         {% else %}
 
+
         <div class="fixTableHead">
-              {% for value in putCrossed %}
+          
+
 
             <nav aria-label="breadcrumb">
 
-              <ol class="breadcrumb">
-
-                <li class="breadcrumb-item">
-                <button id="1" name="1" class="btn btn-warning" value="{{ value.symbol }}">{{ value.symbol }}</button>
-                {% comment %} <button  type="submit" class="btn btn-warning"><b>{{ key }}</b></button> {% endcomment %}
-                {% comment %} <span class="badge badge-warning"></span> {% endcomment %}
-                
-                </li>
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                
-                {%if value.opencrossed == "put" %}
-                  <span class="top" style="text-align:center"><b class="badge badge-danger">Open</b></span>
-                  <span class="bottom">{{ value.open }}</span>
+              <ul class="list-group">
+              {% for value in callOnePercent %}
+              <li style="font-size:13px;padding:0px" class="list-group-item"><button id="1" name="1" style="font-size: 1.1em;padding:0px" class="btn btn-warning btn-sm" value="{{ value.symbol }}">{{ value.symbol }}</button> |                 {%if value.opencrossed == "call" %}
+                  <span class="top" style="text-align:center"><b class="badge badge-success">{{ value.open }}</b></span>
                 {% else %}
-                  <span class="top" style="text-align:center"><b>Open</b></span>
-                  <span class="bottom">{{ value.open }}</span>
-                {% endif %}
+                  <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
+                {% endif %} | 
+                
+                <b>{{ value.time }}</b></li>
+              {% endfor %}
+              </ul>
 
-                  {% comment %} <span class="top" style="text-align:center"><b class="badge badge-danger">Open</b></span>
-                  <span class="bottom">{{ value.opencrossed }}</span> {% endcomment %}
-
-                </div>
-                </li>
-
-           
-{% comment %} 
-
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b class="badge badge-info">High</b></span>
-                  <span class="bottom">{{ value.high }}</span>
-                </div>
-                </li>
-
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b class="badge badge-info">low</b></span>
-                  <span class="bottom">{{ value.low }}</span>
-                </div>
-                </li>
-
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b class="badge badge-info">Pr_close</b></span>
-                  <span class="bottom">{{ value.prev_day_close }}</span>
-                </div>
-                </li>
-
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b class="badge badge-info">Ltp</b></span>
-                  <span class="bottom">{{ value.ltp }}</span>
-                </div>
-                </li> {% endcomment %}
-
-
-                <li class="breadcrumb-item">
-                <div class="div-container">
-                  <span class="top" style="text-align:center"><b class="badge badge-info">Time</b></span>
-                  <span class="bottom">{{ value.time }}</span>
-                </div>
-                </li>
-
-
-              </ol>
             </nav>
 
-              {% endfor %} 
+
+          
+      
+        </div>
+
+        {% endif %}
+  </div>
+
+  
+  <div class="col-md-6">
+  
+<h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-danger text-wrap">Put (1%) </h2><b>- {{putOnePercent|length}}</b>
+
+        {% if putOnePercent|length == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols crossed put.
+        </div>
+        {% else %}
+
+
+        <div class="fixTableHead">
+          
+
+
+            <nav aria-label="breadcrumb">
+
+              <ul class="list-group">
+              {% for value in putOnePercent %}
+              <li style="font-size:13px;padding:0px" class="list-group-item"><button id="1" name="1" style="font-size: 1.1em;padding:0px" class="btn btn-warning btn-sm" value="{{ value.symbol }}">{{ value.symbol }}</button> |                 {%if value.opencrossed == "call" %}
+                  <span class="top" style="text-align:center"><b class="badge badge-success">{{ value.open }}</b></span>
+                {% else %}
+                  <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
+                {% endif %} | 
+                
+                <b>{{ value.time }}</b></li>
+              {% endfor %}
+              </ul>
+
+            </nav>
+
+
+          
       
         </div>
 
         {% endif %}
 
+  </div>
+
+
+</div>
+
+{% comment %}
 
 <h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-success text-wrap">Call (1%) </h2><b>- {{callOnePercent|length}}</b>
 
@@ -298,9 +243,9 @@
               <ol class="breadcrumb">
 
                 <li class="breadcrumb-item">
-                {% comment %} <button type="submit" class="btn btn-warning"><b>{{ key }}</b></button> {% endcomment %}
+                <button type="submit" class="btn btn-warning"><b>{{ key }}</b></button>
                 <button id="1" name="1" class="btn btn-warning" value="{{ value.symbol }}">{{ value.symbol }}</button>
-                {% comment %} <span class="badge badge-warning"></span> {% endcomment %}
+                <span class="badge badge-warning"></span> 
                 
                 </li>
                 <li class="breadcrumb-item">
@@ -337,7 +282,7 @@
                   <span class="top" style="text-align:center"><b class="badge badge-info">Ltp</b></span>
                   <span class="bottom">{{ value.ltp }}</span>
                 </div>
-                </li> {% endcomment %}
+                </li> 
 
 
                 <li class="breadcrumb-item">
@@ -374,9 +319,9 @@
               <ol class="breadcrumb">
 
                 <li class="breadcrumb-item">
-                {% comment %} <button type="submit" id="button_1" class="btn btn-warning"><b>{{ key }}</b></button> {% endcomment %}
+                <button type="submit" id="button_1" class="btn btn-warning"><b>{{ key }}</b></button>
                 <button id="1" name="1" class="btn btn-warning" value="{{ value.symbol }}">{{ value.symbol }}</button>
-                {% comment %} <span class="badge badge-warning"></span> {% endcomment %}
+                <span class="badge badge-warning"></span>
                 
                  </li>
                 <li class="breadcrumb-item">
@@ -385,7 +330,7 @@
                   <span class="bottom">{{ value.open }}</span>
                 </div>
                 </li> 
-                {% comment %}
+                
 
                 <li class="breadcrumb-item">
                 <div class="div-container">
@@ -413,7 +358,7 @@
                   <span class="top" style="text-align:center"><b class="badge badge-info">Ltp</b></span>
                   <span class="bottom">{{ value.ltp }}</span>
                 </div>
-                </li> {% endcomment %}
+                </li> 
 
 
                 <li class="breadcrumb-item">
@@ -434,7 +379,6 @@
 
 
   </div>
-
 
 
 

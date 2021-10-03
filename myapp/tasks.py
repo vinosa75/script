@@ -36,10 +36,10 @@ def create_currency():
 
     fnolist.extend(segments)
 
-    if len(segments) > 0:
-        for sym in nsefnolist:
-            if sym not in fnolist:
-                fnolist.append(sym)
+    # if len(segments) > 0:
+    #     for sym in nsefnolist:
+    #         if sym not in fnolist:
+    #             fnolist.append(sym)
 
 
 
@@ -305,13 +305,31 @@ def create_currency():
                         loss = LiveSegment(symbol=key,segment="loss",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                         loss.save()
 
+                elif float(value[6]) <= -0.80:
+                    if LiveSegment.objects.filter(symbol=key,segment="below").exists():
+                        LiveSegment.objects.filter(symbol=key,segment="below").delete()
+                        loss = LiveSegment(symbol=key,segment="below",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
+                        loss.save()
+                    else:
+                        loss = LiveSegment(symbol=key,segment="below",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
+                        loss.save()
 
-            gainlossList = list(LiveSegment.objects.values_list('symbol', flat=True))
+                elif float(value[6]) >= 0.80:
+                    if LiveSegment.objects.filter(symbol=key,segment="above").exists():
+                        LiveSegment.objects.filter(symbol=key,segment="above").delete()
+                        loss = LiveSegment(symbol=key,segment="above",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
+                        loss.save()
+                    else:
+                        loss = LiveSegment(symbol=key,segment="above",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
+                        loss.save()
+
+            gainList = list(LiveSegment.objects.filter(segment="gain").values_list('symbol', flat=True))
+            lossList = list(LiveSegment.objects.filter(segment="loss").values_list('symbol', flat=True))
 
             for e in LiveOITotalAllSymbol.objects.all():
                 print(e.symbol)
                 
-                if e.symbol in liveData and e.symbol not in removeList and e.symbol in gainlossList:
+                if e.symbol in liveData and e.symbol not in removeList and e.symbol in gainList:
                     
                     # Call
                     if liveData[e.symbol][1] > float(e.callstrike):
@@ -325,16 +343,6 @@ def create_currency():
                             callcross.save()
                             continue
                     
-                    if liveData[e.symbol][1] < float(e.putstrike):
-                        if e.symbol in openputcrossDict:
-                            LiveEquityResult.objects.filter(symbol = e.symbol).delete()
-                            putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=openputcrossDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
-                            putcross.save()
-                            continue
-                        else:
-                            putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
-                            putcross.save()
-                            continue
 
                     if liveData[e.symbol][0] > float(e.callstrike) or liveData[e.symbol][1] > float(e.callstrike):
                         if e.symbol in callcrossedsetDict:
@@ -371,38 +379,54 @@ def create_currency():
                                 callone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                 callone.save()
 
+
+
+
                     # Put
-                    elif liveData[e.symbol][0] < float(e.putstrike) or liveData[e.symbol][2] < float(e.putstrike):
-                        if e.symbol in putcrossedsetDict:
-                            # Deleting the older
-                            LiveEquityResult.objects.filter(symbol =e.symbol).delete()
-                            # updating latest data
-                            putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=putcrossedsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
-                            putcross.save()
-                            print("put crossed updating only the data")
-                            continue
-                        else:
-                            print("Put crossed")
-                            putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
-                            putcross.save()
+                    if e.symbol in liveData and e.symbol not in removeList and e.symbol in lossList:
 
-
-                    elif liveData[e.symbol][0] <= float(e.putone) and liveData[e.symbol][0] >= float(e.putstrike):
-                        if e.symbol in putcrossedsetDict:
-                            print("Already crossed put")
-                            continue
-                        else:
-                            if e.symbol in putonepercentsetDict:
-                                print("Already crossed 1 percent")
-                                LiveEquityResult.objects.filter(symbol =e.symbol).delete()
-                                # updating latest data
-                                putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=putonepercentsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                        if liveData[e.symbol][1] < float(e.putstrike):
+                            if e.symbol in openputcrossDict:
+                                LiveEquityResult.objects.filter(symbol = e.symbol).delete()
+                                putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=openputcrossDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                 putcross.save()
                                 continue
                             else:
-                                print("Put 1 percent")
-                                putone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
-                                putone.save()
+                                putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                                putcross.save()
+                                continue
+
+                        if liveData[e.symbol][0] < float(e.putstrike) or liveData[e.symbol][2] < float(e.putstrike):
+                            if e.symbol in putcrossedsetDict:
+                                # Deleting the older
+                                LiveEquityResult.objects.filter(symbol =e.symbol).delete()
+                                # updating latest data
+                                putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=putcrossedsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                                putcross.save()
+                                print("put crossed updating only the data")
+                                continue
+                            else:
+                                print("Put crossed")
+                                putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                                putcross.save()
+
+
+                        elif liveData[e.symbol][0] <= float(e.putone) and liveData[e.symbol][0] >= float(e.putstrike):
+                            if e.symbol in putcrossedsetDict:
+                                print("Already crossed put")
+                                continue
+                            else:
+                                if e.symbol in putonepercentsetDict:
+                                    print("Already crossed 1 percent")
+                                    LiveEquityResult.objects.filter(symbol =e.symbol).delete()
+                                    # updating latest data
+                                    putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=putonepercentsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                                    putcross.save()
+                                    continue
+                                else:
+                                    print("Put 1 percent")
+                                    putone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                                    putone.save()
 
 
             if item in exceptionList:
