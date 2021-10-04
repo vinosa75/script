@@ -17,11 +17,12 @@ from datetime import timedelta
 from celery.exceptions import SoftTimeLimitExceeded
 from pytz import timezone
 
+
 @shared_task
 def create_currency():
 
     from datetime import datetime, time
-    pastDate = datetime.combine(datetime.today(), time(9,15))
+    pastDate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15))
 
     # LiveEquityResult.objects.all().delete()
     LiveSegment.objects.filter(date__lte = pastDate).delete()
@@ -243,7 +244,7 @@ def create_currency():
 
             # Finding out the pastdate
             from datetime import datetime, timedelta
-            pastDate = datetime.combine(datetime.today(), time(9,15))
+            pastDate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15))
         
             # LiveEquityResult.objects.all().delete()
             LiveEquityResult.objects.filter(date__lte = pastDate).delete()
@@ -514,7 +515,7 @@ def create_currency():
             print("before deletiong")
 
             from datetime import datetime, time
-            pastDate = datetime.combine(datetime.today(), time(9,15))
+            pastDate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15))
     
             # LiveEquityResult.objects.all().delete()
             LiveOITotalAllSymbol.objects.filter(time__lte = pastDate).delete()
