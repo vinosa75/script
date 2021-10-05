@@ -19,6 +19,7 @@ from myapp import views
 
 urlpatterns = [
     path("login", views.login, name="login"),
+    path("sample", views.sample, name="sample"),
     path("logout", views.logout, name="logout"),
     path('', views.home, name='home'),
     path('equity/', views.equity, name='equity'),

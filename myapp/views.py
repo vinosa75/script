@@ -786,3 +786,7 @@ def gainer(request):
     putCrossed = LiveEquityResult.objects.filter(strike="Put Crossed")
 
     return render(request,"equity.html",{'OITotalValue': OITotalValue,'OIChangeValue': OIChangeValue,'value1':value1,'value2':value2,'strikeGap':strikeGap,'callOnePercent':callOnePercent,'putOnePercent':putOnePercent,'callCrossed':callCrossed,'putCrossed':putCrossed,'putHalfPercent':putHalfPercent,'callHalfPercent':callHalfPercent})
+
+
+def sample(request):
+    return render(request,"sample.html")

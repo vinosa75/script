@@ -29,7 +29,6 @@ def create_currency():
 
     nse = Nse()
     nsefnolist = nse.get_fno_lot_sizes()
-    print(len(nsefnolist))
 
     fnolist = ['NIFTY','BANKNIFTY','FINNIFTY']
 
@@ -50,7 +49,7 @@ def create_currency():
     # fnolist = [i for i in fnolist if i not in remove_list]
 
     # fnolist = fnolist[0:3]
-    print(fnolist)
+    # print(fnolist)
 
     def OIPercentChange(df):
         ce = df.loc[df['type'] == "CE"]
@@ -59,7 +58,7 @@ def create_currency():
         # ce_oipercent_df = ce.sort_values(by=['oi_change_perc'], ascending=False)
         ce_oipercent_df = ce.where(ce['oi_change_perc'] !=0 ).sort_values(by=['oi_change_perc'], ascending=False)
 
-        print(ce_oipercent_df)
+        # print(ce_oipercent_df)
         
         minvalue = ce.loc[ce['strike'] != 0].sort_values('strike', ascending=True)
         ceindex = minvalue.iloc[0].name
@@ -70,9 +69,9 @@ def create_currency():
         cestrike = ce_oipercent_df.iloc[0]['strike']
         peoi1 = pe.loc[pe['strike']==ce_oipercent_df.iloc[0]['strike']].iloc[0]['oi_change_perc']
 
-        print(ceoi1)
-        print(cestrike)
-        print(peoi1)
+        # print(ceoi1)
+        # print(cestrike)
+        # print(peoi1)
 
         pe_oipercent_df = pe.where(pe['oi_change_perc'] !=0 ).sort_values(by=['oi_change_perc'], ascending=False)
 
@@ -80,9 +79,9 @@ def create_currency():
         pestrike = pe_oipercent_df.iloc[0]['strike']
         peoi2 = ce.loc[ce['strike']==pe_oipercent_df.iloc[0]['strike']].iloc[0]['oi_change_perc']
 
-        print(ceoi2)
-        print(pestrike)
-        print(peoi2)
+        # print(ceoi2)
+        # print(pestrike)
+        # print(peoi2)
 
         celtt = ce_oipercent_df.iloc[0]['ltt']
         peltt = pe_oipercent_df.iloc[0]['ltt']
@@ -97,7 +96,7 @@ def create_currency():
         ce = df.loc[df['type'] == "CE"]
         pe = df.loc[df['type'] == "PE"]
 
-        print("before final df")
+        # print("before final df")
 
         final_df = ce.loc[ce['oi'] != 0].sort_values('oi', ascending=False)
 
@@ -118,9 +117,9 @@ def create_currency():
         ceoi1 = final_df.iloc[count]['oi']
         celtt = final_df.iloc[count]['ltt']
 
-        print(ceoi1)
-        print(cestrike)
-        print(peoi1)
+        # print(ceoi1)
+        # print(cestrike)
+        # print(peoi1)
 
         final_df = pe.loc[pe['oi'] != 0].sort_values('oi', ascending=False)
 
@@ -135,9 +134,9 @@ def create_currency():
         peoi2 = final_df.iloc[count]['oi']
         peltt = final_df.iloc[count]['ltt']
 
-        print(ceoi2)
-        print(pestrike)
-        print(peoi2)   
+        # print(ceoi2)
+        # print(pestrike)
+        # print(peoi2)   
 
         OITot = {"celtt":celtt,"ceoi1":ceoi1,"cestrike":cestrike,"peoi1":peoi1,"peltt":peltt,"peoi2":peoi2,"pestrike":pestrike,"ceoi2":ceoi2}
         
@@ -148,7 +147,7 @@ def create_currency():
         ce = df.loc[df['type'] == "CE"]
         pe = df.loc[df['type'] == "PE"]
 
-        print("before final df")
+        # print("before final df")
 
         final_df = ce.loc[ce['oi_change'] != 0].sort_values('oi_change', ascending=False)
 
@@ -169,9 +168,9 @@ def create_currency():
         ceoi1 = final_df.iloc[count]['oi_change']
         celtt = final_df.iloc[count]['ltt']
 
-        print(ceoi1)
-        print(cestrike)
-        print(peoi1)
+        # print(ceoi1)
+        # print(cestrike)
+        # print(peoi1)
 
         final_df = pe.loc[pe['oi_change'] != 0].sort_values('oi_change', ascending=False)
 
@@ -186,9 +185,9 @@ def create_currency():
         peoi2 = final_df.iloc[count]['oi_change']
         peltt = final_df.iloc[count]['ltt']
 
-        print(ceoi2)
-        print(pestrike)
-        print(peoi2)      
+        # print(ceoi2)
+        # print(pestrike)
+        # print(peoi2)      
 
         OIChan = {"celtt":celtt,"ceoi1":ceoi1,"cestrike":cestrike,"peoi1":peoi1,"peltt":peltt,"peoi2":peoi2,"pestrike":pestrike,"ceoi2":ceoi2}
         
@@ -211,7 +210,7 @@ def create_currency():
     for idx,item in enumerate(fnolist):
         try:
             # result = create_equity()
-            print("Before exception list")
+            # print("Before exception list")
 
             TrueDatausernamereal = 'tdws135'
             TrueDatapasswordreal = 'saaral@135'
@@ -227,7 +226,7 @@ def create_currency():
             print(f'Port > {realtime_port}')
 
             td_app = TD(TrueDatausernamereal, TrueDatapasswordreal, live_port=realtime_port, historical_api=False)
-            print(symbols)
+            # print(symbols)
             req_ids = td_app.start_live_data(symbols)
             live_data_objs = {}
 
@@ -235,7 +234,7 @@ def create_currency():
 
             liveData = {}
             for req_id in req_ids:
-                print(td_app.live_data[req_id].day_open)
+                # print(td_app.live_data[req_id].day_open)
                 if (td_app.live_data[req_id].ltp) == None:
                     continue
                 else:
@@ -282,7 +281,7 @@ def create_currency():
             td_app.stop_live_data(symbols)
             td_app.disconnect()
             td_app.disconnect()
-            print(liveData)
+            # print(liveData)
 
             # LiveSegment.objects.filter(time__lte = pastDate).delete()
 
@@ -347,35 +346,35 @@ def create_currency():
 
                     if liveData[e.symbol][0] > float(e.callstrike) or liveData[e.symbol][1] > float(e.callstrike):
                         if e.symbol in callcrossedsetDict:
-                            print("Yes")
+                            # print("Yes")
                             # Deleting the older
                             LiveEquityResult.objects.filter(symbol = e.symbol).delete()
                             # updating latest data
-                            print("Yes")
+                            # print("Yes")
                             callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="Nil",time=callcrossedsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                             callcross.save()
                             continue
 
                         else:
-                            print("Call crossed")
+                            # print("Call crossed")
                             callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                             callcross.save()
                         
                     elif liveData[e.symbol][0] >= float(e.callone) and liveData[e.symbol][0] <= float(e.callstrike):
 
                         if e.symbol in callcrossedsetDict:
-                            print("Already crossed")
+                            # print("Already crossed")
                             continue
                         else:
                             if e.symbol in callonepercentsetDict:
-                                print("Already crossed 1 percent")
+                                # print("Already crossed 1 percent")
                                 LiveEquityResult.objects.filter(symbol = e.symbol).delete()
                                 # updating latest data
                                 callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",opencrossed="Nil",time=callonepercentsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                 callcross.save()
                                 continue
                             else:
-                                print("Call 1 percent")
+                                # print("Call 1 percent")
 
                                 callone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                 callone.save()
@@ -404,28 +403,28 @@ def create_currency():
                                 # updating latest data
                                 putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=putcrossedsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                 putcross.save()
-                                print("put crossed updating only the data")
+                                # print("put crossed updating only the data")
                                 continue
                             else:
-                                print("Put crossed")
+                                # print("Put crossed")
                                 putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                 putcross.save()
 
 
                         elif liveData[e.symbol][0] <= float(e.putone) and liveData[e.symbol][0] >= float(e.putstrike):
                             if e.symbol in putcrossedsetDict:
-                                print("Already crossed put")
+                                # print("Already crossed put")
                                 continue
                             else:
                                 if e.symbol in putonepercentsetDict:
-                                    print("Already crossed 1 percent")
+                                    # print("Already crossed 1 percent")
                                     LiveEquityResult.objects.filter(symbol =e.symbol).delete()
                                     # updating latest data
                                     putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=putonepercentsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                     putcross.save()
                                     continue
                                 else:
-                                    print("Put 1 percent")
+                                    # print("Put 1 percent")
                                     putone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                     putone.save()
 
@@ -435,17 +434,17 @@ def create_currency():
                         expiry = date.today()
                         expiry = "7-Oct-2021"
                         dte = dt.strptime(expiry, '%d-%b-%Y')
-                        print("inside thursday")
+                        # print("inside thursday")
                     else:
                         expiry = pendulum.now().next(pendulum.THURSDAY).strftime('%d-%b-%Y')
                         expiry = "7-Oct-2021"
                         dte = dt.strptime(expiry, '%d-%b-%Y')
             else:
-                print("inside monthend")
+                # print("inside monthend")
                 expiry = "28-Oct-2021"
                 dte = dt.strptime(expiry, '%d-%b-%Y')
 
-            print("After exception")
+            # print("After exception")
 
             print(dte)
             print(dte.year)
@@ -463,7 +462,7 @@ def create_currency():
             td_app.disconnect()
             sampleDict[item] = df
 
-            print(df)
+            # print(df)
             print(count)
             print(item)
             count = count + 1
@@ -473,9 +472,9 @@ def create_currency():
 
             # value1 = LiveOIChange.objects.all()
             # value2 = LiveOITotal.objects.all()
-            print("Before changev")
+            # print("Before changev")
             OIChangeValue = OIChange(df,item,dte)
-            print("after change")
+            # print("after change")
             
             if OIChangeValue == False:
                 print("returning false")
@@ -493,7 +492,7 @@ def create_currency():
 
             FutureData[item] = [OITotalValue['cestrike'],OITotalValue['pestrike'],strikeGap]
 
-            print(FutureData)
+            # print(FutureData)
 
             # Percentage calculation from equity data
             newDict = {}
@@ -512,7 +511,7 @@ def create_currency():
             # # Fetching today's date
             dat = dt.today()
 
-            print("before deletiong")
+            # print("before deletiong")
 
             from datetime import datetime, time
             pastDate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15))
@@ -530,7 +529,7 @@ def create_currency():
             LiveOIChange.objects.filter(time__lte = pastDate).delete()
             LiveOIPercentChange.objects.filter(time__lte = pastDate).delete()
 
-            print("After deletion")
+            # print("After deletion")
             
             value1 = LiveOIChange.objects.filter(symbol=item)
 
@@ -560,7 +559,7 @@ def create_currency():
                 ChangeOICreation.save()
 
 
-            print("value1 crossed")
+            # print("value1 crossed")
 
             value2 = LiveOITotal.objects.filter(symbol=item)
 
