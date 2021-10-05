@@ -310,7 +310,7 @@ def create_currency():
                         loss = LiveSegment(symbol=key,segment="loss",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                         loss.save()
 
-                elif float(value[6]) <= -0.80:
+                elif float(value[6]) <= -1:
                     if LiveSegment.objects.filter(symbol=key,segment="below").exists():
                         LiveSegment.objects.filter(symbol=key,segment="below").delete()
                         loss = LiveSegment(symbol=key,segment="below",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
@@ -319,7 +319,7 @@ def create_currency():
                         loss = LiveSegment(symbol=key,segment="below",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                         loss.save()
 
-                elif float(value[6]) >= 0.80:
+                elif float(value[6]) >= 1:
                     if LiveSegment.objects.filter(symbol=key,segment="above").exists():
                         LiveSegment.objects.filter(symbol=key,segment="above").delete()
                         loss = LiveSegment(symbol=key,segment="above",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
