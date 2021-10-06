@@ -56,6 +56,111 @@
           font-size: 3.5rem;
         }
       }
+
+      .container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: 23px;
+    margin-left: 22px;
+}
+@media (min-width: 1200px)
+.container, .container-lg, .container-md, .container-sm, .container-xl {
+    max-width: 1327px;
+}
+
+
+    .fixTableHead {
+      overflow-y: auto;
+      height: 213px;
+      width: 103%;
+      font-size: 15px;
+      border:solid;
+    }
+    .fixTableHead thead th {
+      position: sticky;
+      top: 0;
+    }
+
+    .fixTableHeadHistory {
+      overflow-y: auto;
+      height: 260px;
+      width: 103%;
+      font-size: 12px;
+    }
+    .fixTableHeadHistory thead th {
+      position: sticky;
+      top: 0;
+    }
+
+
+    .fixTableHeadOnly {
+      height: 50px;
+      width: 103%;
+      font-size: 12px;
+    }
+    .fixTableHeadOnly thead th {
+      top: 0;
+    }
+
+
+
+    table {
+      border-collapse: collapse;        
+      width: 99%;
+      color: black;
+    }
+    th,
+    td {
+      padding: 2px 4px;
+      border: 2px solid white;
+      font-size:medium
+    }
+    th {
+      background: #ABDD93;
+    }
+
+table#manoj {
+    width: 105%;
+}
+
+#header-fixed {
+    position: fixed;
+    top: 0px; display:none;
+    background-color:black;
+}
+
+.p-5 {
+    padding: 2rem!important;
+}
+
+strong:hover {
+  color: red;
+}
+
+.text-white {
+    color: black;
+}
+
+.bg-dark {
+    background-color: grey;
+}
+
+.h-100 p-5 bg-light border rounded-3{
+    background-color: gray;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: left;
+    background-color: darkgreen;
+}
+
     </style>
 
     
@@ -63,35 +168,66 @@
   <body data-new-gr-c-s-check-loaded="14.994.0" data-gr-ext-installed="">
     
 <main>
-  <div class="container py-4">
+  <div class="container py-4" style="max-width: 1327px;">
     <header class="pb-3 mb-4 border-bottom">
-      <a href="https://getbootstrap.com/" class="d-flex align-items-center text-dark text-decoration-none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" class="me-2" viewBox="0 0 118 94" role="img"><title>Bootstrap</title><path fill-rule="evenodd" clip-rule="evenodd" d="M24.509 0c-6.733 0-11.715 5.893-11.492 12.284.214 6.14-.064 14.092-2.066 20.577C8.943 39.365 5.547 43.485 0 44.014v5.972c5.547.529 8.943 4.649 10.951 11.153 2.002 6.485 2.28 14.437 2.066 20.577C12.794 88.106 17.776 94 24.51 94H93.5c6.733 0 11.714-5.893 11.491-12.284-.214-6.14.064-14.092 2.066-20.577 2.009-6.504 5.396-10.624 10.943-11.153v-5.972c-5.547-.529-8.934-4.649-10.943-11.153-2.002-6.484-2.28-14.437-2.066-20.577C105.214 5.894 100.233 0 93.5 0H24.508zM80 57.863C80 66.663 73.436 72 62.543 72H44a2 2 0 01-2-2V24a2 2 0 012-2h18.437c9.083 0 15.044 4.92 15.044 12.474 0 5.302-4.01 10.049-9.119 10.88v.277C75.317 46.394 80 51.21 80 57.863zM60.521 28.34H49.948v14.934h8.905c6.884 0 10.68-2.772 10.68-7.727 0-4.643-3.264-7.207-9.012-7.207zM49.948 49.2v16.458H60.91c7.167 0 10.964-2.876 10.964-8.281 0-5.406-3.903-8.178-11.425-8.178H49.948z" fill="currentColor"></path></svg>
-        <span class="fs-4">Jumbotron example</span>
-      </a>
     </header>
 
-    <div class="p-5 mb-4 bg-light rounded-3">
+    <nav class="navbar fixed-top navbar-light bg-light">
+  <a class="navbar-brand fs-4" href="#">Script Data</a>
+        <form class="form-inline" >
+          <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
+          {% if user.is_authenticated %}
+          <div style="color: grey;"> Welcome <b>{{user.username}}</b></div><br>
+          <div>
+            <a href="{% url 'logout' %}" class="navbar-brand pull-right" style="text-align:right"><strong>Logout</strong></a>  
+          </div>
+          <br>
+              {% endif %}
+        </form>
+</nav>
+
+    {% comment %} <div class="p-5 mb-4 bg-light rounded-3">
       <div class="container-fluid py-5">
         <h1 class="display-5 fw-bold">Custom jumbotron</h1>
         <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it to your liking.</p>
         <button class="btn btn-primary btn-lg" type="button">Example button</button>
       </div>
-    </div>
+    </div> {% endcomment %}
 
     <div class="row align-items-md-stretch">
       <div class="col-md-8">
-        <div class="h-100 p-5 text-white bg-dark rounded-3">
-          <h2>Change the background</h2>
-          <p>Swap the background-color utility and add a `.text-*` color utility to mix up the jumbotron look. Then, mix and match with additional component themes and more.</p>
-          <button class="btn btn-outline-light" type="button">Example button</button>
-        </div>
+        <div class="h-100 p-5 text-white rounded-3" style="background-color: grey">
+                                <h5 class="card-title" style="width:700px">Option Chain - Realtime<span id ="optionClick" class="badge badge-light"></span><span id ="optionCli" class="badge badge-light"></span></h5>
+                        <form class="form-inline" method="POST" id="optionchainform" fno-optionchain-url="{% url 'optionChain' %}" >
+                            {% csrf_token %}
+
+                                <div class="form-group mx-sm-3 mb-2"></div>
+                              
+                                <div class="form-group mx-sm-3 mb-2">
+
+                                  <label for="EntryPrice" style="color: white;">Symbol: </label>
+
+                                    <select class="form-control" id="EntryPrice" name="symbol" required>
+                                          <option value="">---------</option>
+                                          {% for post in fnolist %}
+                                              <option value="{{ post }}">{{ post }}</option>
+                                          {% endfor %} 
+                                    </select>
+                                      <input style="margin-left:10px" class="btn btn-secondary" type="submit" value="Get data">
+                                    {% comment %} <button style="margin-left:10px" type="submit" class="btn btn-primary">Get data</button> {% endcomment %}
+                                    <br>
+
+                                </div>
+                        </form>  
+
+                        <div id="OptionChainSingleSymbol" class="slot"> </div>
+
+       </div>
       </div>
-      <div class="col-md-4">
-        <div class="h-100 p-5 bg-light border rounded-3">
-          <h2>Add borders</h2>
-          <p>Or, keep it light and add a border for some added definition to the boundaries of your content. Be sure to look under the hood at the source HTML here as we've adjusted the alignment and sizing of both column's content for equal-height.</p>
-          <button class="btn btn-outline-secondary" type="button">Example button</button>
+      <div class="col-md-4" style="background-color: grey">
+        <div class="h-100 p-5 border rounded-3" style="background-color: grey">
+          <h5 class="card-title" style="color:white">Equity - Realtime - <input type='button' onclick='executeQuery1()' class="btn btn-primary" value='Refresh'> </h5>
+           <div id="EquitySpace" class="slot"></div>
         </div>
       </div>
     </div>
@@ -106,4 +242,47 @@
     
   
 
-</body><grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>
+</body>
+
+<script>
+
+
+$("#optionchainform").submit(function() {
+            var url = $("#optionchainform").attr("fno-optionchain-url")
+            var mydata = $("form#optionchainform").serialize();
+            // console.log(mydata); // it's only for test
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: mydata,
+                success: function(response, textStatus, xhr) {
+                    console.log(url);
+                    $("#OptionChainSingleSymbol").html(response); 
+
+                },
+                  error: function(result) {
+                      alert('error');
+                     $('.cssload-squeeze').hide(); 
+                     $("#overlay").hide()
+                  }
+            });
+            return false;
+        });
+
+
+
+function executeQuery1() {
+    var url = '{% url 'equity' %}';
+    $.ajax({
+    url: url,
+    async: false, 
+    success: function(response) {
+        console.log(url);
+        $("#EquitySpace").html(response);
+      // do something with the return value here if you like
+    }
+  });
+setTimeout(executeQuery1, 20000);
+}
+</script>
+<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>

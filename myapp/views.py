@@ -787,6 +787,13 @@ def gainer(request):
 
     return render(request,"equity.html",{'OITotalValue': OITotalValue,'OIChangeValue': OIChangeValue,'value1':value1,'value2':value2,'strikeGap':strikeGap,'callOnePercent':callOnePercent,'putOnePercent':putOnePercent,'callCrossed':callCrossed,'putCrossed':putCrossed,'putHalfPercent':putHalfPercent,'callHalfPercent':callHalfPercent})
 
-
+@login_required(login_url='login')
 def sample(request):
-    return render(request,"sample.html")
+    from nsetools import Nse
+    nse = Nse()
+    fnolist = nse.get_fno_lot_sizes()
+
+    # fnolist = list(LiveSegment.objects.values_list('symbol', flat=True).distinct())
+
+    return render(request,"sample.html",{'fnolist':fnolist})
+    # return render(request,"sample.html")
