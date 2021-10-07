@@ -30,7 +30,8 @@ def create_currency():
     nse = Nse()
     nsefnolist = nse.get_fno_lot_sizes()
 
-    fnolist = ['NIFTY','BANKNIFTY','FINNIFTY']
+    # fnolist = ['NIFTY','BANKNIFTY','FINNIFTY']
+    fnolist = []
 
     gainList = list(LiveSegment.objects.filter(segment="gain").values_list('symbol', flat=True))
     lossList = list(LiveSegment.objects.filter(segment="loss").values_list('symbol', flat=True))
