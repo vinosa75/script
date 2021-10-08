@@ -339,10 +339,10 @@ def create_currency():
 
                 # History Check
                 historyLen = HistoryOITotal.objects.filter(symbol=e.symbol)
-                historyStrike = HistoryOITotal.objects.filter(symbol=e.symbol).earliest('time')
-                strikegp = LiveOITotal.objects.filter(symbol=e.symbol)
 
                 if len(historyLen) > 0:
+                    historyStrike = HistoryOITotal.objects.filter(symbol=e.symbol).earliest('time')
+                    strikegp = LiveOITotal.objects.filter(symbol=e.symbol)
                     callstrike = historyStrike.callstrike
                     putstrike = historyStrike.putstrike
                     # Call 1 percent 
