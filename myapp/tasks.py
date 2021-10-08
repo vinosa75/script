@@ -332,13 +332,34 @@ def create_currency():
             gainList = list(LiveSegment.objects.filter(segment="gain").values_list('symbol', flat=True))
             lossList = list(LiveSegment.objects.filter(segment="loss").values_list('symbol', flat=True))
 
+
+            # History Check
             for e in LiveOITotalAllSymbol.objects.all():
                 print(e.symbol)
+
+                # History Check
+                historyLen = HistoryOITotal.objects.filter(symbol=e.symbol)
+                historyStrike = HistoryOITotal.objects.filter(symbol=e.symbol).earliest('time')
+                strikegp = LiveOITotal.objects.filter(symbol=e.symbol)
+
+                if len(historyLen) > 0:
+                    callstrike = historyStrike.callstrike
+                    putstrike = historyStrike.putstrike
+                    # Call 1 percent 
+                    callone = float(callstrike) - (float(strikegp[0].strikegap))*0.1
+                    # Put 1 percent
+                    putone = float(putstrike) + (float(strikegp[0].strikegap))*0.1
+
+                else:
+                    callstrike = e.callstrike
+                    putstrike = e.putstrike
+                    callone = e.callone
+                    putone = e.putone
                 
                 if e.symbol in liveData and e.symbol not in removeList and e.symbol in gainList:
                     
                     # Call
-                    if liveData[e.symbol][1] > float(e.callstrike):
+                    if liveData[e.symbol][1] > float(callstrike):
                         if e.symbol in opencallcrossDict:
                             LiveEquityResult.objects.filter(symbol = e.symbol).delete()
                             callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="call",time=opencallcrossDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
@@ -350,7 +371,7 @@ def create_currency():
                             continue
                     
 
-                    if liveData[e.symbol][0] > float(e.callstrike) or liveData[e.symbol][1] > float(e.callstrike):
+                    if liveData[e.symbol][0] > float(callstrike) or liveData[e.symbol][1] > float(callstrike):
                         if e.symbol in callcrossedsetDict:
                             # print("Yes")
                             # Deleting the older
@@ -366,7 +387,7 @@ def create_currency():
                             callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                             callcross.save()
                         
-                    elif liveData[e.symbol][0] >= float(e.callone) and liveData[e.symbol][0] <= float(e.callstrike):
+                    elif liveData[e.symbol][0] >= float(callone) and liveData[e.symbol][0] <= float(callstrike):
 
                         if e.symbol in callcrossedsetDict:
                             # print("Already crossed")
@@ -391,7 +412,7 @@ def create_currency():
                     # Put
                     if e.symbol in liveData and e.symbol not in removeList and e.symbol in lossList:
 
-                        if liveData[e.symbol][1] < float(e.putstrike):
+                        if liveData[e.symbol][1] < float(putstrike):
                             if e.symbol in openputcrossDict:
                                 LiveEquityResult.objects.filter(symbol = e.symbol).delete()
                                 putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=openputcrossDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
@@ -402,7 +423,7 @@ def create_currency():
                                 putcross.save()
                                 continue
 
-                        if liveData[e.symbol][0] < float(e.putstrike) or liveData[e.symbol][2] < float(e.putstrike):
+                        if liveData[e.symbol][0] < float(putstrike) or liveData[e.symbol][2] < float(putstrike):
                             if e.symbol in putcrossedsetDict:
                                 # Deleting the older
                                 LiveEquityResult.objects.filter(symbol =e.symbol).delete()
@@ -417,7 +438,7 @@ def create_currency():
                                 putcross.save()
 
 
-                        elif liveData[e.symbol][0] <= float(e.putone) and liveData[e.symbol][0] >= float(e.putstrike):
+                        elif liveData[e.symbol][0] <= float(putone) and liveData[e.symbol][0] >= float(putstrike):
                             if e.symbol in putcrossedsetDict:
                                 # print("Already crossed put")
                                 continue
