@@ -25,7 +25,7 @@ def create_currency():
     pastDate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15)).time()
 
     # LiveEquityResult.objects.all().delete()
-    LiveSegment.objects.filter(time__lte = pastDate).delete()
+    # LiveSegment.objects.filter(time__lte = pastDate).delete()
 
     nse = Nse()
     nsefnolist = nse.get_fno_lot_sizes()
