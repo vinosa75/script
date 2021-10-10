@@ -54,10 +54,10 @@ def create_currency():
     remove_list = ['BANKNIFTY', 'FINNIFTY', 'NIFTY', 'APOLLOTYRE', 'ASHOKLEY', 'ASIANPAINT', 'BEL', 'BHARTIARTL', 'BHEL', 'BPCL', 'CANBK', 'DEEPAKNTR', 'EXIDEIND', 'FEDERALBNK', 'GAIL', 'HDFC', 'HINDPETRO', 'INDHOTEL', 'IOC', 'IRCTC', 'IPCALAB', 'NATIONALUM', 'NMDC', 'NTPC', 'PETRONET', 'PFC', 'PNB', 'POWERGRID', 'RBLBANK', 'RECLTD', 'TATAPOWER', 'VEDL', 'ASTRAL', 'BOSCHLTD', 'COALINDIA', 'CUB', 'GMRINFRA', 'HEROMOTOCO', 'ITC', 'L&TFH', 'LT', 'MANAPPURAM', 'ONGC', 'M&MFIN', 'NAM-INDIA', 'BANKBARODA', 'IDFCFIRSTB', 'SAIL', 'IDEA']
     cutomfnolist = [i for i in symbols if i not in remove_list]
 
-    if len(fnolist) > 0:
-        for sym in cutomfnolist:
-            if sym not in fnolist:
-                fnolist.append(sym)
+    # if len(fnolist) > 0:
+    for sym in cutomfnolist:
+        if sym not in fnolist:
+            fnolist.append(sym)
 
     # fnolist = fnolist[0:3]
     print(fnolist)
