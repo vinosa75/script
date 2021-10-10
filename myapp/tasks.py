@@ -26,7 +26,8 @@ def create_currency():
     nsepadDate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15)).date()
 
     # LiveEquityResult.objects.all().delete()
-    LiveSegment.objects.filter(date__lte = nsepadDate,time__lte = pastDate).delete()
+    LiveSegment.objects.filter(time__lte = pastDate).delete()
+    LiveSegment.objects.filter(date__lt = nsepadDate).delete()
 
     nse = Nse()
     nsefnolist = nse.get_fno_lot_sizes()
@@ -295,7 +296,9 @@ def create_currency():
             td_app.disconnect()
             # print(liveData)
 
-            LiveSegment.objects.filter(time__lte = pastDate,date__lte = nsepadDate).delete()
+            # LiveSegment.objects.filter(time__lte = pastDate,date__lte = nsepadDate).delete()
+            LiveSegment.objects.filter(time__lte = pastDate).delete()
+            LiveSegment.objects.filter(date__lt = nsepadDate).delete()
 
             for key,value in liveData.items():
                 if float(value[6]) >= 3:
