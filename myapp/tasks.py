@@ -29,6 +29,7 @@ def create_currency():
 
     nse = Nse()
     nsefnolist = nse.get_fno_lot_sizes()
+    symbols = list(nsefnolist.keys())
 
     # fnolist = ['NIFTY','BANKNIFTY','FINNIFTY']
     fnolist = []
@@ -51,11 +52,15 @@ def create_currency():
 
     # Removing 3 symbols from the list as they are not required for equity comparision
     # remove_list = ['HEROMOTOCO','PFC','BEL','MANAPPURAM','EXIDEIND','PETRONET', 'TATAPOWER', 'ONGC', 'VEDL', 'LALPATHLAB', 'ITC', 'INDHOTEL', 'IDEA','POWERGRID', 'COALINDIA', 'CANBK','HINDPETRO','BANKBARODA','RECLTD','CUB']
-    # remove_list = []
-    # fnolist = [i for i in fnolist if i not in remove_list]
+    remove_list = ['BANKNIFTY', 'FINNIFTY', 'NIFTY', 'APOLLOTYRE', 'ASHOKLEY', 'ASIANPAINT', 'BEL', 'BHARTIARTL', 'BHEL', 'BPCL', 'CANBK', 'DEEPAKNTR', 'EXIDEIND', 'FEDERALBNK', 'GAIL', 'HDFC', 'HINDPETRO', 'INDHOTEL', 'IOC', 'IRCTC', 'IPCALAB', 'NATIONALUM', 'NMDC', 'NTPC', 'PETRONET', 'PFC', 'PNB', 'POWERGRID', 'RBLBANK', 'RECLTD', 'TATAPOWER', 'VEDL', 'ASTRAL', 'BOSCHLTD', 'COALINDIA', 'CUB', 'GMRINFRA', 'HEROMOTOCO', 'ITC', 'L&TFH', 'LT', 'MANAPPURAM', 'ONGC', 'M&MFIN', 'NAM-INDIA', 'BANKBARODA', 'IDFCFIRSTB', 'SAIL', 'IDEA']
+    cutomfnolist = [i for i in symbols if i not in remove_list]
+
+    for sym in cutomfnolist:
+        if sym not in fnolist:
+            fnolist.append(sym)
 
     # fnolist = fnolist[0:3]
-    print(fnolist)
+    # print(fnolist)
 
     def OIPercentChange(df):
         ce = df.loc[df['type'] == "CE"]
@@ -289,7 +294,7 @@ def create_currency():
             td_app.disconnect()
             # print(liveData)
 
-            # LiveSegment.objects.filter(time__lte = pastDate).delete()
+            LiveSegment.objects.filter(time__lte = pastDate).delete()
 
             for key,value in liveData.items():
                 if float(value[6]) >= 3:
@@ -311,7 +316,7 @@ def create_currency():
                         loss = LiveSegment(symbol=key,segment="loss",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                         loss.save()
 
-                elif float(value[6]) <= -1:
+                elif float(value[6]) <= -0.70:
                     if LiveSegment.objects.filter(symbol=key,segment="below").exists():
                         LiveSegment.objects.filter(symbol=key,segment="below").delete()
                         loss = LiveSegment(symbol=key,segment="below",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
@@ -320,7 +325,7 @@ def create_currency():
                         loss = LiveSegment(symbol=key,segment="below",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                         loss.save()
 
-                elif float(value[6]) >= 1:
+                elif float(value[6]) >= 0.70:
                     if LiveSegment.objects.filter(symbol=key,segment="above").exists():
                         LiveSegment.objects.filter(symbol=key,segment="above").delete()
                         loss = LiveSegment(symbol=key,segment="above",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
@@ -481,7 +486,7 @@ def create_currency():
             # td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
             td_obj = TD('tdws127', 'saaral@127')
             nifty_chain = td_obj.start_option_chain( item , dt(dte.year , dte.month , dte.day) ,chain_length = 100)
-            te.sleep(4)
+            te.sleep(3)
             df = nifty_chain.get_option_chain()
 
             nifty_chain.stop_option_chain()
@@ -515,7 +520,9 @@ def create_currency():
 
             percentChange = OIPercentChange(df)
 
-            strikeGap =float(df['strike'].unique()[1]) - float(df['strike'].unique()[0])
+            # strikeGap =float(df['strike'].unique()[1]) - float(df['strike'].unique()[0])
+            midvalue = round(len(df['strike'].unique())/2)
+            strikeGap =float(df['strike'].unique()[midvalue]) - float(df['strike'].unique()[midvalue-1])
 
             FutureData[item] = [OITotalValue['cestrike'],OITotalValue['pestrike'],strikeGap]
 
@@ -543,7 +550,7 @@ def create_currency():
             from datetime import datetime, time
             pastDate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15))
     
-            # LiveEquityResult.objects.all().delete()
+            LiveEquityResult.objects.all().delete()
             LiveOITotalAllSymbol.objects.filter(time__lte = pastDate).delete()
 
             # # Deleting past historical data in the database
