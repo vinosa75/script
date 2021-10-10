@@ -23,9 +23,10 @@ def create_currency():
 
     from datetime import datetime, time
     pastDate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15)).time()
+    nsepadDate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15)).date()
 
     # LiveEquityResult.objects.all().delete()
-    # LiveSegment.objects.filter(time__lte = pastDate).delete()
+    LiveSegment.objects.filter(date__lte = nsepadDate,time__lte = pastDate).delete()
 
     nse = Nse()
     nsefnolist = nse.get_fno_lot_sizes()
