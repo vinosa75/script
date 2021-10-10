@@ -36,7 +36,6 @@ def create_currency():
 
     gainList = list(LiveSegment.objects.filter(segment="gain").values_list('symbol', flat=True))
     lossList = list(LiveSegment.objects.filter(segment="loss").values_list('symbol', flat=True))
-
     segments = list(LiveSegment.objects.values_list('symbol', flat=True).distinct())
     
     fnolist.extend(gainList)
@@ -60,7 +59,7 @@ def create_currency():
             fnolist.append(sym)
 
     # fnolist = fnolist[0:3]
-    # print(fnolist)
+    print(fnolist)
 
     def OIPercentChange(df):
         ce = df.loc[df['type'] == "CE"]
