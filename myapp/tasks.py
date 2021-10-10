@@ -257,6 +257,7 @@ def create_currency():
             # Finding out the pastdate
             from datetime import datetime, timedelta
             pastDate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15))
+            segpastDate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15)).time()
             nsepadDate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15)).date()
             # LiveEquityResult.objects.all().delete()
             LiveEquityResult.objects.filter(date__lte = pastDate).delete()
@@ -297,7 +298,7 @@ def create_currency():
             # print(liveData)
 
             # LiveSegment.objects.filter(time__lte = pastDate,date__lte = nsepadDate).delete()
-            LiveSegment.objects.filter(time__lte = pastDate).delete()
+            LiveSegment.objects.filter(time__lte = segpastDate).delete()
             LiveSegment.objects.filter(date__lt = nsepadDate).delete()
 
             for key,value in liveData.items():
