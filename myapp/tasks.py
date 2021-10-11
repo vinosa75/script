@@ -352,10 +352,20 @@ def create_currency():
 
         # print(ceoi2)
         # print(pestrike)
-        # print(peoi2)
 
-        celtt = ce_oipercent_df.iloc[0]['ltt']
-        peltt = pe_oipercent_df.iloc[0]['ltt']
+        # print(peoi2)
+        import datetime as det
+        celtt = pe_oipercent_df.iloc[count]['ltt'].time()
+
+        my_time_string = "15:30:00"
+        my_datetime = det.datetime.strptime(my_time_string, "%H:%M:%S").time()
+
+        if celtt > my_datetime:
+            celtt = det.datetime.now().replace(hour=15,minute=30,second=00).strftime("%Y-%m-%d %H:%M:%S")
+            peltt = det.datetime.now().replace(hour=15,minute=30,second=00).strftime("%Y-%m-%d %H:%M:%S")
+        else:
+            celtt = pe_oipercent_df.iloc[0]['ltt']
+            peltt = pe_oipercent_df.iloc[0]['ltt']
 
 
         OIPercentChange = {"celtt":celtt,"ceoi1":ceoi1,"cestrike":cestrike,"peoi1":peoi1,"peltt":peltt,"peoi2":peoi2,"pestrike":pestrike,"ceoi2":ceoi2}
@@ -386,7 +396,19 @@ def create_currency():
 
         cestrike = final_df.iloc[count]['strike']
         ceoi1 = final_df.iloc[count]['oi']
-        celtt = final_df.iloc[count]['ltt']
+        
+        import datetime as det
+        celtt = final_df.iloc[count]['ltt'].time()
+
+        my_time_string = "15:30:00"
+        my_datetime = det.datetime.strptime(my_time_string, "%H:%M:%S").time()
+
+        if celtt > my_datetime:
+            celtt = det.datetime.now().replace(hour=15,minute=30,second=00).strftime("%Y-%m-%d %H:%M:%S")
+            peltt = det.datetime.now().replace(hour=15,minute=30,second=00).strftime("%Y-%m-%d %H:%M:%S")
+        else:
+            celtt = final_df.iloc[0]['ltt']
+            peltt = final_df.iloc[0]['ltt']
 
         # print(ceoi1)
         # print(cestrike)
@@ -403,7 +425,6 @@ def create_currency():
 
         pestrike = final_df.iloc[count]['strike']
         peoi2 = final_df.iloc[count]['oi']
-        peltt = final_df.iloc[count]['ltt']
 
         # print(ceoi2)
         # print(pestrike)
@@ -437,7 +458,19 @@ def create_currency():
 
         cestrike = final_df.iloc[count]['strike']
         ceoi1 = final_df.iloc[count]['oi_change']
-        celtt = final_df.iloc[count]['ltt']
+        import datetime as det
+        
+        celtt = final_df.iloc[count]['ltt'].time()
+
+        my_time_string = "15:30:00"
+        my_datetime = det.datetime.strptime(my_time_string, "%H:%M:%S").time()
+
+        if celtt > my_datetime:
+            celtt = det.datetime.now().replace(hour=15,minute=30,second=00).strftime("%Y-%m-%d %H:%M:%S")
+            peltt = det.datetime.now().replace(hour=15,minute=30,second=00).strftime("%Y-%m-%d %H:%M:%S")
+        else:
+            celtt = final_df.iloc[0]['ltt']
+            peltt = final_df.iloc[0]['ltt']
 
         # print(ceoi1)
         # print(cestrike)
