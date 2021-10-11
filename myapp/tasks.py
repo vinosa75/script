@@ -555,7 +555,7 @@ def create_currency():
             from datetime import datetime, time
             pastDate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15))
     
-            LiveEquityResult.objects.all().delete()
+            # LiveEquityResult.objects.all().delete()
             LiveOITotalAllSymbol.objects.filter(time__lte = pastDate).delete()
 
             # # Deleting past historical data in the database
