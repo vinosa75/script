@@ -54,12 +54,12 @@ def create_currency():
     # Removing 3 symbols from the list as they are not required for equity comparision
     # remove_list = ['HEROMOTOCO','PFC','BEL','MANAPPURAM','EXIDEIND','PETRONET', 'TATAPOWER', 'ONGC', 'VEDL', 'LALPATHLAB', 'ITC', 'INDHOTEL', 'IDEA','POWERGRID', 'COALINDIA', 'CANBK','HINDPETRO','BANKBARODA','RECLTD','CUB']
     remove_list = ['BANKNIFTY', 'FINNIFTY', 'NIFTY', 'APOLLOTYRE', 'ASHOKLEY', 'ASIANPAINT', 'BEL', 'BHARTIARTL', 'BHEL', 'BPCL', 'CANBK', 'DEEPAKNTR', 'EXIDEIND', 'FEDERALBNK', 'GAIL', 'HDFC', 'HINDPETRO', 'INDHOTEL', 'IOC', 'IRCTC', 'IPCALAB', 'NATIONALUM', 'NMDC', 'NTPC', 'PETRONET', 'PFC', 'PNB', 'POWERGRID', 'RBLBANK', 'RECLTD', 'TATAPOWER', 'VEDL', 'ASTRAL', 'BOSCHLTD', 'COALINDIA', 'CUB', 'GMRINFRA', 'HEROMOTOCO', 'ITC', 'L&TFH', 'LT', 'MANAPPURAM', 'ONGC', 'M&MFIN', 'NAM-INDIA', 'BANKBARODA', 'IDFCFIRSTB', 'SAIL', 'IDEA']
-    cutomfnolist = [i for i in symbols if i not in remove_list]
+    fnolist = [i for i in fnolist if i not in remove_list]
 
     # if len(fnolist) > 0:
-    for sym in cutomfnolist:
-        if sym not in fnolist:
-            fnolist.append(sym)
+    # for sym in cutomfnolist:
+    #     if sym not in fnolist:
+    #         fnolist.append(sym)
 
     # fnolist = fnolist[0:3]
     print(fnolist)
@@ -321,7 +321,7 @@ def create_currency():
                         loss = LiveSegment(symbol=key,segment="loss",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                         loss.save()
 
-                elif float(value[6]) <= -0.70:
+                elif float(value[6]) <= -0.50:
                     if LiveSegment.objects.filter(symbol=key,segment="below").exists():
                         LiveSegment.objects.filter(symbol=key,segment="below").delete()
                         loss = LiveSegment(symbol=key,segment="below",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
@@ -330,7 +330,7 @@ def create_currency():
                         loss = LiveSegment(symbol=key,segment="below",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                         loss.save()
 
-                elif float(value[6]) >= 0.70:
+                elif float(value[6]) >= 0.50:
                     if LiveSegment.objects.filter(symbol=key,segment="above").exists():
                         LiveSegment.objects.filter(symbol=key,segment="above").delete()
                         loss = LiveSegment(symbol=key,segment="above",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
