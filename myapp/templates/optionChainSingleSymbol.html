@@ -1,9 +1,19 @@
+{% comment %} <div style="text-align:center">
+<h2 style="text-align:center;color:black;font-size:medium;background-color:#e3f2fd;border-color:black" class="btn btn-warning"><b>{{symbol}}</b></h2>
+</div>    {% endcomment %}
+
 <div style="text-align:center">
+Date:
 {% for record in OITotalValue %}
-<h2 style="text-align:center;color:black;font-size:medium;" class="btn btn-warning"><span class="badge badge-secondary">{{record.expiry}}</span> - {{symbol}}</h2> - <b>Strikegap ({{record.strikegap}})</b>
+<h2 style="text-align:center;color:white;font-size:medium;" class="btn btn-success"> <b>{{dateToday}}</b> </h2>
+Expiry:
+<h2 style="text-align:center;color:black;font-size:medium;" class="btn btn-warning"> <b>{{record.expiry}}</b> </h2>
+Symbol:
+<h2 style="text-align:center;color:black;font-size:medium;background-color:#e3f2fd;border-color:black" class="btn btn-warning"><b>{{symbol}}</b></h2>
+Gap: 
+<h2 style="text-align:center;color:black;b-color:pink;font-size:medium;" class="btn alert-warning"><b>({{record.strikegap}})</b>
 {% endfor %}
-</div>  
-            
+</div>              
             {% for value in liveEqui %}
             <nav aria-label="breadcrumb">
 
@@ -82,15 +92,23 @@
                         <tr>
                         {% comment %} colspan=2 {% endcomment %}
                           <td rowspan=2 style="width:2%"><b>{{ record.time|time }}</b></td>
-                          <td style="width:2%" class="bg-success"><b>{{ record.call1 }}<b></td>
-                          <td style="width:2%;text-align:center"><b>{{ record.callstrike }}</b></td>
+                          <td style="width:2%;background-color:#218543;color:white"><b>{{ record.call1 }}<b></td>
+                          {% if record.call1 > record.put2 %}
+                          <td style="width:4%;text-align:center"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
+                          {% else %}
+                          <td style="width:4%;text-align:center"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
+                          {% endif %}
                           <td style="width:2%">{{ record.put1 }}</td>
                         </tr>
                         <tr>
                           {% comment %} <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> {% endcomment %}
                           <td style="width:2%">{{ record.call2 }}</td>
-                          <td style="width:2%;text-align:center"><b>{{ record.putstrike }}</b></td>
-                          <td style="width:2%;background-color:red"><b>{{ record.put2 }}</b></td>
+                          {% if record.call1 < record.put2 %}
+                          <td style="width:4%;text-align:center"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.putstrike }}</b><span style="color:red">  <b>putt</b></span> </td>
+                          {% else %}
+                          <td style="width:4%;text-align:center"><b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span></td>
+                          {% endif %}
+                          <td style="width:2%;background-color:#973834;color:white"><b>{{ record.put2 }}</b></td>
                         </tr>
 
                       {% endfor %}
@@ -121,15 +139,24 @@
                         <tr>
                         {% comment %} colspan=2 {% endcomment %}
                           <td rowspan=2 style="width:2%"><b>{{ record.time|time }}</b></td>
-                          <td style="width:2%" class="bg-success"><b>{{ record.call1 }}<b></td>
-                          <td style="width:2%;text-align:center"><b>{{ record.callstrike }}</b></td>
+                          <td style="width:2%;background-color:#218543;color:white"><b>{{ record.call1 }}<b></td>
+                          {% if record.call1 > record.put2 %}
+                          <td style="width:4%;text-align:center"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
+                          {% else %}
+                          <td style="width:4%;text-align:center"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
+                          {% endif %}
+
                           <td style="width:2%">{{ record.put1 }}</td>
                         </tr>
                         <tr>
                           {% comment %} <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> {% endcomment %}
                           <td style="width:2%">{{ record.call2 }}</td>
-                          <td style="width:2%;text-align:center"><b>{{ record.putstrike }}</b></td>
-                          <td style="width:2%;background-color:red"><b>{{ record.put2 }}</b></td>
+                          {% if record.call1 < record.put2 %}
+                          <td style="width:4%;text-align:center"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span> </td>
+                          {% else %}
+                          <td style="width:4%;text-align:center"><b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span></td>
+                          {% endif %}
+                          <td style="width:2%;background-color:#973834;color:white"><b>{{ record.put2 }}</b></td>
                         </tr>
 
                       {% endfor %}
@@ -160,15 +187,25 @@
                         <tr>
                         {% comment %} colspan=2 {% endcomment %}
                           <td rowspan=2 style="width:2%"><b>{{ record.time|time }}<b></td>
-                          <td style="width:2%" class="bg-success"><b>{{ record.call1 }}<b></td>
-                          <td style="width:2%;text-align:center"><b>{{ record.callstrike }}</b></td>
+                          <td style="width:2%;background-color:#218543;color:white"><b>{{ record.call1 }}<b></td>
+                          {% comment %} <td style="width:2%;text-align:center"> <i class="fas fa-dot-circle xxx-small;color:blue"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td> {% endcomment %}
+                          {% if record.call1 > record.put2 %}
+                          <td style="width:4%"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
+                          {% else %}
+                          <td style="width:4%;text-align:center"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
+                          {% endif %}
                           <td style="width:2%">{{ record.put1 }}</td>
                         </tr>
                         <tr>
                           {% comment %} <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> {% endcomment %}
                           <td style="width:2%">{{ record.call2 }}</td>
-                          <td style="width:2%;text-align:center"><b>{{ record.putstrike }}</b></td>
-                          <td style="width:2%;background-color:red"><b>{{ record.put2 }}</b></td>
+                          {% if record.call1 < record.put2 %}
+                          <td style="width:4%"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span> </td>
+                          {% else %}
+                          <td style="width:4%;text-align:center"><b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span></td>
+                          {% endif %}
+                          
+                          <td style="width:2%;background-color:#973834;color:white"><b>{{ record.put2 }}</b></td>
                         </tr>
 
                       {% endfor %}

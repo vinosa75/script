@@ -33,9 +33,16 @@ def create_currency():
     LiveSegment.objects.filter(time__lte = pastDate).delete()
     LiveSegment.objects.filter(date__lt = nsepadDate).delete()
 
-    nse = Nse()
-    nsefnolist = nse.get_fno_lot_sizes()
-    symbols = list(nsefnolist.keys())
+    # nse = Nse()
+    # nsefnolist = nse.get_fno_lot_sizes()
+    # symbols = list(nsefnolist.keys())
+
+    import requests
+    url = 'https://www.truedata.in/downloads/symbol_lists/13.NSE_ALL_OPTIONS.txt'
+    s = requests.get(url).content
+    stringlist=[x.decode('utf-8').split('2')[0] for x in s.splitlines()]
+
+    symbols = list(set(stringlist))
 
     try:
         # result = create_equity()
@@ -43,11 +50,11 @@ def create_currency():
         TrueDatausernamereal = 'tdws135'
         TrueDatapasswordreal = 'saaral@135'
 
-        nse = Nse()
-        fnolistreal = nse.get_fno_lot_sizes()
-        symbols = list(fnolistreal.keys())
+        # nse = Nse()
+        # fnolistreal = nse.get_fno_lot_sizes()
+        # symbols = list(fnolistreal.keys())
 
-        remove_list = ['BANKNIFTY', 'FINNIFTY', 'NIFTY', 'ASIANPAINT', 'BAJAJFINSV', 'BHARTIARTL', 'BHEL', 'BPCL', 'DEEPAKNTR', 'FEDERALBNK', 'HDFC', 'IOC', 'IRCTC', 'IPCALAB', 'MRF', 'NATIONALUM', 'NTPC', 'PNB', 'SHREECEM', 'VEDL', 'ASTRAL', 'BOSCHLTD', 'EICHERMOT', 'GMRINFRA', 'HDFCLIFE', 'IBULHSGFIN', 'ITC', 'L&TFH', 'PAGEIND', 'BANKBARODA', 'IDFCFIRSTB', 'SAIL', 'IDEA']
+        remove_list = ['BANKNIFTY', 'FINNIFTY', 'NIFTY', 'ASIANPAINT', 'BAJAJFINSV', 'BHARTIARTL', 'BHEL', 'BPCL', 'DEEPAKNTR', 'FEDERALBNK', 'HDFC', 'IOC', 'IRCTC', 'IPCALAB', 'NATIONALUM', 'NTPC', 'PNB', 'SHREECEM', 'VEDL', 'ASTRAL', 'BOSCHLTD', 'EICHERMOT', 'GMRINFRA', 'HDFCLIFE', 'IBULHSGFIN', 'ITC', 'L&TFH', 'BANKBARODA', 'IDFCFIRSTB', 'SAIL', 'IDEA']
         fnolist = [i for i in symbols if i not in remove_list]
 
         # Default production port is 8082 in the library. Other ports may be given t oyou during trial.
@@ -287,11 +294,12 @@ def create_currency():
         
     except websocket.WebSocketConnectionClosedException as e:
         print('This caught the websocket exception ')
-        td_obj.disconnect()
+        # td_obj.disconnect()
         # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
     except IndexError as e:
         print('This caught the exception')
-        td_obj.disconnect()
+        print(e)
+        # td_obj.disconnect()
         # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
     except Exception as e:
         print(e)
@@ -318,11 +326,12 @@ def create_currency():
     # for sym in cutomfnolist:
     #     if sym not in fnolist:
     #         fnolist.append(sym)
-
     # fnolist = fnolist[0:3]
+
     print(fnolist)
 
     def OIPercentChange(df):
+        print("Enter OIper")
         ce = df.loc[df['type'] == "CE"]
         pe = df.loc[df['type'] == "PE"]
 
@@ -355,7 +364,9 @@ def create_currency():
 
         # print(peoi2)
         import datetime as det
-        celtt = pe_oipercent_df.iloc[count]['ltt'].time()
+        # celtt = pe_oipercent_df.iloc[count]['ltt']
+        celtt = dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S')
+        celtt = dt.strptime(str(celtt), "%Y-%m-%d %H:%M:%S").time()
 
         my_time_string = "15:30:00"
         my_datetime = det.datetime.strptime(my_time_string, "%H:%M:%S").time()
@@ -369,10 +380,11 @@ def create_currency():
 
 
         OIPercentChange = {"celtt":celtt,"ceoi1":ceoi1,"cestrike":cestrike,"peoi1":peoi1,"peltt":peltt,"peoi2":peoi2,"pestrike":pestrike,"ceoi2":ceoi2}
-        
+        print("Exit OIper")
         return OIPercentChange
 
     def OITotal(df,item,dte):
+        print("Enter OITotl")
 
         ce = df.loc[df['type'] == "CE"]
         pe = df.loc[df['type'] == "PE"]
@@ -398,7 +410,9 @@ def create_currency():
         ceoi1 = final_df.iloc[count]['oi']
         
         import datetime as det
-        celtt = final_df.iloc[count]['ltt'].time()
+        celtt = final_df.iloc[count]['ltt']
+        celtt = dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S')
+        celtt = dt.strptime(str(celtt), "%Y-%m-%d %H:%M:%S").time()
 
         my_time_string = "15:30:00"
         my_datetime = det.datetime.strptime(my_time_string, "%H:%M:%S").time()
@@ -431,36 +445,42 @@ def create_currency():
         # print(peoi2)   
 
         OITot = {"celtt":celtt,"ceoi1":ceoi1,"cestrike":cestrike,"peoi1":peoi1,"peltt":peltt,"peoi2":peoi2,"pestrike":pestrike,"ceoi2":ceoi2}
-        
+        print("Exit OITotl")
         return OITot
 
     def OIChange(df,item,dte):
-
         ce = df.loc[df['type'] == "CE"]
         pe = df.loc[df['type'] == "PE"]
 
-        # print("before final df")
+        # print("1")
 
         final_df = ce.loc[ce['oi_change'] != 0].sort_values('oi_change', ascending=False)
-
         minvalue = ce.loc[ce['strike'] != 0].sort_values('strike', ascending=True)
 
-        ceindex = minvalue.iloc[0].name
-        peindex = ceindex.replace("CE", "PE")
-        pe = pe[peindex:]
-
-        peoi1 = pe.loc[pe['strike']==final_df.iloc[0]['strike']].iloc[0]['oi_change']
+        # print("2")
+        ceindex = minvalue.iloc[0].strike
+        # peindex = ceindex.replace("CE", "PE")
+        inde = pe[pe['strike']==ceindex].index.values
+        pe = pe[inde[0]:]
+        print(pe)
+        # ce.to_excel("ce.xlsx")
+        # print("3")
+        print(final_df.iloc[0]['strike'])
+        print(pe.loc[pe['strike']==str(final_df.iloc[0]['strike'])])   
+        peoi1 = pe.loc[pe['strike']==str(final_df.iloc[0]['strike'])].iloc[0]['oi_change']
         count = 0
-
+        # print("4")
         while peoi1 == 0:
             count = count + 1
             peoi1 = pe.loc[pe['strike']==final_df.iloc[count]['strike']].iloc[0]['oi_change']
-
+        # print("5")
         cestrike = final_df.iloc[count]['strike']
         ceoi1 = final_df.iloc[count]['oi_change']
         import datetime as det
-        
-        celtt = final_df.iloc[count]['ltt'].time()
+        # print("6")
+        celtt = final_df.iloc[count]['ltt']
+        celtt = dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S')
+        celtt = dt.strptime(str(celtt), "%Y-%m-%d %H:%M:%S").time()
 
         my_time_string = "15:30:00"
         my_datetime = det.datetime.strptime(my_time_string, "%H:%M:%S").time()
@@ -472,14 +492,16 @@ def create_currency():
             celtt = final_df.iloc[0]['ltt']
             peltt = final_df.iloc[0]['ltt']
 
-        # print(ceoi1)
-        # print(cestrike)
-        # print(peoi1)
+        print(ceoi1)
+        print(cestrike)
+        print(peoi1)
+        # print("7")
 
         final_df = pe.loc[pe['oi_change'] != 0].sort_values('oi_change', ascending=False)
 
         ceoi2 = ce.loc[ce['strike']==final_df.iloc[0]['strike']].iloc[0]['oi_change']
         count = 0
+        # print("8")
 
         while ceoi2 == 0:
             count = count + 1
@@ -491,13 +513,14 @@ def create_currency():
 
         # print(ceoi2)
         # print(pestrike)
-        # print(peoi2)      
+        # print(peoi2)
 
         OIChan = {"celtt":celtt,"ceoi1":ceoi1,"cestrike":cestrike,"peoi1":peoi1,"peltt":peltt,"peoi2":peoi2,"pestrike":pestrike,"ceoi2":ceoi2}
-        
+        print("Exit OiChnge")
         return OIChan
 
     def optionChainprocess(df,item,dte):
+       
         
 
         # Total OI Calculation from Option chain
@@ -676,25 +699,43 @@ def create_currency():
 
     # exceptionList = ['NIFTY','BANKNIFTY','FINNIFTY']
 
-    # fnolist = ["TECHM","TITAN","TCS","TORNTPHARM","TORNTPOWER","TRENT"]
+    # fnolist = ["DALBHARAT","JKCEMENT","RAMCOCEM","RELIANCE","SIEMENS","ULTRACEMCO"]
+    # fnolist = ["DALBHARAT","JKCEMENT"]
 
-    fnolist = iter(fnolist)
+    # import requests
+    # url = 'https://www.truedata.in/downloads/symbol_lists/13.NSE_ALL_OPTIONS.txt'
+    # s = requests.get(url).content
+    # stringlist=[x.decode('utf-8').split('2')[0] for x in s.splitlines()]
+
+    # fnolist = list(set(stringlist))
+
+    # fnolist = iter(fnolist)
+    # print(fnolist)
+
     # for x in it:
     #     print (x, next(it, None))
-
+    lenthree = (len(fnolist))%3
     # for idx,item in enumerate(fnolist):
-    for item in fnolist:
+    for r,g,b in zip(*[iter(fnolist)]*3):
+    # for item in fnolist:
         try:
             # result = create_equity()
             # print("Before exception list")
             TrueDatausernamereal = 'tdws135'
             TrueDatapasswordreal = 'saaral@135'
 
-            nse = Nse()
-            fnolistreal = nse.get_fno_lot_sizes()
-            symbols = list(fnolistreal.keys())
+            # nse = Nse()
+            # fnolistreal = nse.get_fno_lot_sizes()
+            # symbols = list(fnolistreal.keys())
 
-            remove_list = ['BANKNIFTY', 'FINNIFTY', 'NIFTY', 'ASIANPAINT', 'BAJAJFINSV', 'BHARTIARTL', 'BHEL', 'BPCL', 'DEEPAKNTR', 'FEDERALBNK', 'HDFC', 'IOC', 'IRCTC', 'IPCALAB', 'MRF', 'NATIONALUM', 'NTPC', 'PNB', 'SHREECEM', 'VEDL', 'ASTRAL', 'BOSCHLTD', 'EICHERMOT', 'GMRINFRA', 'HDFCLIFE', 'IBULHSGFIN', 'ITC', 'L&TFH', 'PAGEIND', 'BANKBARODA', 'IDFCFIRSTB', 'SAIL', 'IDEA']
+            import requests
+            url = 'https://www.truedata.in/downloads/symbol_lists/13.NSE_ALL_OPTIONS.txt'
+            s = requests.get(url).content
+            stringlist=[x.decode('utf-8').split('2')[0] for x in s.splitlines()]
+
+            symbols = list(set(stringlist))
+
+            remove_list = ['BANKNIFTY', 'FINNIFTY', 'NIFTY', 'ASIANPAINT','BHARTIARTL', 'BHEL', 'BPCL', 'DEEPAKNTR', 'FEDERALBNK', 'HDFC', 'IOC', 'IRCTC', 'IPCALAB', 'MRF', 'NATIONALUM', 'NTPC', 'PNB','VEDL', 'ASTRAL', 'BOSCHLTD', 'EICHERMOT', 'GMRINFRA', 'HDFCLIFE', 'IBULHSGFIN', 'ITC', 'L&TFH', 'PAGEIND', 'BANKBARODA', 'IDFCFIRSTB','IDEA']
             fnolistreal = [i for i in symbols if i not in remove_list]
 
             # Default production port is 8082 in the library. Other ports may be given t oyou during trial.
@@ -769,7 +810,7 @@ def create_currency():
             for key,value in liveData.items():
                 if key in fnolistreal:
                     if float(value[6]) >= 3:
-                        if LiveSegment.objects.filter(symbol=key,segment="gain").exists():
+                        if len(LiveSegment.objects.filter(symbol=key,segment="gain")) > 0:
                             LiveSegment.objects.filter(symbol=key,segment="gain").delete()
                             gain = LiveSegment(symbol=key,segment="gain",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                             gain.save()
@@ -779,7 +820,7 @@ def create_currency():
                             gain.save()
 
                     elif float(value[6]) <= -3:
-                        if LiveSegment.objects.filter(symbol=key,segment="loss").exists():
+                        if len(LiveSegment.objects.filter(symbol=key,segment="loss")) > 0:
                             LiveSegment.objects.filter(symbol=key,segment="loss").delete()
                             loss = LiveSegment(symbol=key,segment="loss",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                             loss.save()
@@ -787,8 +828,8 @@ def create_currency():
                             loss = LiveSegment(symbol=key,segment="loss",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                             loss.save()
 
-                    elif float(value[6]) <= -0.50:
-                        if LiveSegment.objects.filter(symbol=key,segment="below").exists():
+                    elif float(value[6]) <= -0.30:
+                        if len(LiveSegment.objects.filter(symbol=key,segment="below")) > 0:
                             LiveSegment.objects.filter(symbol=key,segment="below").delete()
                             loss = LiveSegment(symbol=key,segment="below",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                             loss.save()
@@ -796,8 +837,8 @@ def create_currency():
                             loss = LiveSegment(symbol=key,segment="below",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                             loss.save()
 
-                    elif float(value[6]) >= 0.50:
-                        if LiveSegment.objects.filter(symbol=key,segment="above").exists():
+                    elif float(value[6]) >= 0.30:
+                        if len(LiveSegment.objects.filter(symbol=key,segment="above")) > 0:
                             LiveSegment.objects.filter(symbol=key,segment="above").delete()
                             loss = LiveSegment(symbol=key,segment="above",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                             loss.save()
@@ -840,9 +881,13 @@ def create_currency():
                             LiveEquityResult.objects.filter(symbol = e.symbol).delete()
                             callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="call",time=opencallcrossDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                             callcross.save()
+                            callcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="call",time=opencallcrossDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                            callcross.save()
                             continue
                         else:
                             callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="call",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                            callcross.save()
+                            callcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="call",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                             callcross.save()
                             continue
                     
@@ -856,11 +901,15 @@ def create_currency():
                             # print("Yes")
                             callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="Nil",time=callcrossedsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                             callcross.save()
+                            callcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="Nil",time=callcrossedsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                            callcross.save()
                             continue
 
                         else:
                             # print("Call crossed")
                             callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                            callcross.save()
+                            callcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                             callcross.save()
                         
                     elif liveData[e.symbol][0] >= float(callone) and liveData[e.symbol][0] <= float(callstrike):
@@ -875,11 +924,15 @@ def create_currency():
                                 # updating latest data
                                 callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",opencrossed="Nil",time=callonepercentsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                 callcross.save()
+                                callcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",opencrossed="Nil",time=callonepercentsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                                callcross.save()
                                 continue
                             else:
                                 # print("Call 1 percent")
 
                                 callone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                                callone.save()
+                                callone = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                 callone.save()
 
 
@@ -893,9 +946,13 @@ def create_currency():
                                 LiveEquityResult.objects.filter(symbol = e.symbol).delete()
                                 putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=openputcrossDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                 putcross.save()
+                                putcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=openputcrossDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                                putcross.save()
                                 continue
                             else:
                                 putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                                putcross.save()
+                                putcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="put",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                 putcross.save()
                                 continue
 
@@ -906,11 +963,15 @@ def create_currency():
                                 # updating latest data
                                 putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=putcrossedsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                 putcross.save()
+                                putcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=putcrossedsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                                putcross.save()
                                 # print("put crossed updating only the data")
                                 continue
                             else:
                                 # print("Put crossed")
                                 putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                                putcross.save()
+                                putcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                 putcross.save()
 
 
@@ -925,14 +986,18 @@ def create_currency():
                                     # updating latest data
                                     putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=putonepercentsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                     putcross.save()
+                                    putcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=putonepercentsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                                    putcross.save()
                                     continue
                                 else:
                                     # print("Put 1 percent")
                                     putone = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                                     putone.save()
+                                    putone = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                                    putone.save()
 
             exceptionList = ['NIFTY','BANKNIFTY','FINNIFTY']
-            if item in exceptionList:
+            if r in exceptionList:
                     if calendar.day_name[date.today().weekday()] == "Thrusday":
                         expiry = date.today()
                         expiry = "7-Oct-2021"
@@ -950,11 +1015,83 @@ def create_currency():
             # print("After exception")
 
             # td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
-            item1 = item
-            item2 = next(fnolist, "TCS")
+            symbol1 = r
+            symbol2 = g
+            symbol3 = b
             td_obj = TD('tdws127', 'saaral@127')
-            first_chain = td_obj.start_option_chain( item1 , dt(dte.year , dte.month , dte.day) ,chain_length = 75)
-            second_chain = td_obj.start_option_chain( item2 , dt(dte.year , dte.month , dte.day) ,chain_length = 75)
+            first_chain = td_obj.start_option_chain( symbol1 , dt(dte.year , dte.month , dte.day) ,chain_length = 75)
+            second_chain = td_obj.start_option_chain( symbol2 , dt(dte.year , dte.month , dte.day) ,chain_length = 75)
+            third_chain = td_obj.start_option_chain( symbol3 , dt(dte.year , dte.month , dte.day) ,chain_length = 75)
+
+            te.sleep(3)
+
+            df1 = first_chain.get_option_chain()
+            df2 = second_chain.get_option_chain()
+            df3 = third_chain.get_option_chain()
+
+            first_chain.stop_option_chain()
+            second_chain.stop_option_chain()
+            third_chain.stop_option_chain()
+
+            td_obj.disconnect()
+            td_app.disconnect()
+            sampleDict[symbol1] = df1
+
+            print(df1)
+            print(df2)
+            print(df3)
+            # print(count)
+            # print(item)
+            count = count + 1
+
+            optionChainprocess(df1,symbol1,dte)
+            optionChainprocess(df2,symbol2,dte)
+            optionChainprocess(df3,symbol3,dte)
+
+            
+        except websocket.WebSocketConnectionClosedException as e:
+            print('This caught the websocket exception ')
+            td_obj.disconnect()
+            # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
+        except IndexError as e:
+            print('This caught the exception')
+            print(e)
+            td_obj.disconnect()
+            # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
+        except Exception as e:
+            print(e)
+            td_obj.disconnect()
+            # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
+
+        sleep(2)
+
+    if lenthree == 2:
+
+        try:
+            exceptionList = ['NIFTY','BANKNIFTY','FINNIFTY']
+            if fnolist[-1] in exceptionList:
+                    if calendar.day_name[date.today().weekday()] == "Thrusday":
+                        expiry = date.today()
+                        expiry = "7-Oct-2021"
+                        dte = dt.strptime(expiry, '%d-%b-%Y')
+                        # print("inside thursday")
+                    else:
+                        expiry = pendulum.now().next(pendulum.THURSDAY).strftime('%d-%b-%Y')
+                        expiry = "7-Oct-2021"
+                        dte = dt.strptime(expiry, '%d-%b-%Y')
+            else:
+                # print("inside monthend")
+                expiry = "28-Oct-2021"
+                dte = dt.strptime(expiry, '%d-%b-%Y')
+
+            # print("After exception")
+
+            # td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
+            symbol1 = fnolist[-1]
+            symbol2 = fnolist[-2]
+            td_obj = TD('tdws127', 'saaral@127')
+            first_chain = td_obj.start_option_chain( symbol1 , dt(dte.year , dte.month , dte.day) ,chain_length = 75)
+            second_chain = td_obj.start_option_chain( symbol2 , dt(dte.year , dte.month , dte.day) ,chain_length = 75)
 
             te.sleep(3)
 
@@ -966,7 +1103,7 @@ def create_currency():
 
             td_obj.disconnect()
             td_app.disconnect()
-            sampleDict[item] = df1
+            sampleDict[symbol1] = df1
 
             print(df1)
             print(df2)
@@ -974,8 +1111,8 @@ def create_currency():
             # print(item)
             count = count + 1
 
-            optionChainprocess(df1,item1,dte)
-            optionChainprocess(df2,item2,dte)
+            optionChainprocess(df1,symbol1,dte)
+            optionChainprocess(df2,symbol2,dte)
 
             
         except websocket.WebSocketConnectionClosedException as e:
@@ -984,6 +1121,7 @@ def create_currency():
             # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
         except IndexError as e:
             print('This caught the exception')
+            print(e)
             td_obj.disconnect()
             # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
         except Exception as e:
@@ -991,7 +1129,65 @@ def create_currency():
             td_obj.disconnect()
             # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
 
-        sleep(2)
+        sleep(1)
+
+    elif lenthree == 1:
+        try:
+            exceptionList = ['NIFTY','BANKNIFTY','FINNIFTY']
+            if fnolist[-1] in exceptionList:
+                    if calendar.day_name[date.today().weekday()] == "Thrusday":
+                        expiry = date.today()
+                        expiry = "7-Oct-2021"
+                        dte = dt.strptime(expiry, '%d-%b-%Y')
+                        # print("inside thursday")
+                    else:
+                        expiry = pendulum.now().next(pendulum.THURSDAY).strftime('%d-%b-%Y')
+                        expiry = "7-Oct-2021"
+                        dte = dt.strptime(expiry, '%d-%b-%Y')
+            else:
+                # print("inside monthend")
+                expiry = "28-Oct-2021"
+                dte = dt.strptime(expiry, '%d-%b-%Y')
+
+            # print("After exception")
+
+            # td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
+            symbol1 = fnolist[-1]
+            td_obj = TD('tdws127', 'saaral@127')
+            first_chain = td_obj.start_option_chain( symbol1 , dt(dte.year , dte.month , dte.day) ,chain_length = 75)
+
+            te.sleep(3)
+
+            df1 = first_chain.get_option_chain()
+            first_chain.stop_option_chain()
+
+            td_obj.disconnect()
+            td_app.disconnect()
+            sampleDict[symbol1] = df1
+
+            print(df1)
+            # print(count)
+            # print(item)
+            count = count + 1
+
+            optionChainprocess(df1,symbol1,dte)
+
+            
+        except websocket.WebSocketConnectionClosedException as e:
+            print('This caught the websocket exception ')
+            td_obj.disconnect()
+            # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
+        except IndexError as e:
+            print('This caught the exception')
+            print(e)
+            td_obj.disconnect()
+            # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
+        except Exception as e:
+            print(e)
+            td_obj.disconnect()
+            # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
+
+        sleep(1)
 
 # @shared_task(name = "print_msg_main")
 # def create_equity():

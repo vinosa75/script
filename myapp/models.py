@@ -145,6 +145,24 @@ class LiveEquityResult(models.Model):
 
         app_label = 'myapp'
 
+class TestEquityResult(models.Model):
+    time = models.TimeField(auto_now_add=False)
+    date = models.DateTimeField(auto_now_add=False)
+    symbol = models.CharField(max_length=20,default="")
+    open = models.CharField(max_length=20,default="")
+    high = models.CharField(max_length=20,default="")
+    low = models.CharField(max_length=20,default="")
+    prev_day_close = models.CharField(max_length=20,default="")
+    ltp = models.CharField(max_length=20)
+    strike = models.CharField(max_length=20)
+    opencrossed = models.CharField(max_length=20,default="")
+
+    def __str__(self):
+        return self.symbol+" "+self.ltp+" "+self.strike
+    class Meta:
+
+        app_label = 'myapp'
+
 
 class LiveSegment(models.Model):
     symbol = models.CharField(max_length=20)
