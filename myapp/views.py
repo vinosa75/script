@@ -291,7 +291,9 @@ def optionChain(request):
     HistoryOIPercentChg = HistoryOIPercentChange.objects.filter(symbol=symbol).order_by('-time')
 
     from datetime import datetime
-    dateToday = datetime.today().strftime('%d-%m-%Y')
+    import pytz
+    # dateToday = datetime.today().strftime('%d-%m-%Y')
+    dateToday = datetime.now(pytz.timezone('Asia/Kolkata')).strftime('%d-%m-%Y')
     print(dateToday)
 
     if len(LiveOI) > 0:
