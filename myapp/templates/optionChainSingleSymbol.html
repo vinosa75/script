@@ -190,7 +190,7 @@ Gap:
                           <td style="width:2%;background-color:#218543;color:white"><b>{{ record.call1 }}<b></td>
                           {% comment %} <td style="width:2%;text-align:center"> <i class="fas fa-dot-circle xxx-small;color:blue"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td> {% endcomment %}
                           {% if record.call1 > record.put2 %}
-                          <td style="width:4%"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
+                          <td style="width:4%;text-align:center"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
                           {% else %}
                           <td style="width:4%;text-align:center"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
                           {% endif %}
@@ -200,7 +200,7 @@ Gap:
                           {% comment %} <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> {% endcomment %}
                           <td style="width:2%">{{ record.call2 }}</td>
                           {% if record.call1 < record.put2 %}
-                          <td style="width:4%"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span> </td>
+                          <td style="width:4%;text-align:center"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span> </td>
                           {% else %}
                           <td style="width:4%;text-align:center"><b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span></td>
                           {% endif %}
@@ -257,7 +257,7 @@ Gap:
                           <td rowspan=2 style="width:5%"><b>{{ record.time|time }}<b></td>
                           <td style="width:2%" class="bg-success"><b>{{ record.call1 }}<b></td>
                           {% if record.call1 > record.put2 %}
-                          <td style="width:4%"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
+                          <td style="width:4%;text-align:center"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
                           {% else %}
                           <td style="width:4%;text-align:center"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
                           {% endif %}
@@ -267,7 +267,7 @@ Gap:
                           {% comment %} <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> {% endcomment %}
                           <td style="width:2%">{{ record.call2 }}</td>
                           {% if record.call1 < record.put2 %}
-                          <td style="width:4%"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span> </td>
+                          <td style="width:4%;text-align:center"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span> </td>
                           {% else %}
                           <td style="width:4%;text-align:center"><b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span></td>
                           {% endif %}
@@ -326,7 +326,7 @@ Gap:
                           <td rowspan=2 style="width:5%"><b>{{ record.time|time }}<b></td>
                           <td style="width:2%" class="bg-success"><b>{{ record.call1 }}<b></td>
                           {% if record.call1 > record.put2 %}
-                          <td style="width:4%"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
+                          <td style="width:4%;text-align:center"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
                           {% else %}
                           <td style="width:4%;text-align:center"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
                           {% endif %}
@@ -336,7 +336,7 @@ Gap:
                           {% comment %} <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> {% endcomment %}
                           <td style="width:2%">{{ record.call2 }}</td>
                           {% if record.call1 < record.put2 %}
-                          <td style="width:4%"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span> </td>
+                          <td style="width:4%;text-align:center"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span> </td>
                           {% else %}
                           <td style="width:4%;text-align:center"><b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span></td>
                           {% endif %}
@@ -390,7 +390,7 @@ Gap:
                           <td rowspan=2 style="width:2%"><b>{{ record.time|time }}<b></td>
                           <td style="width:2%" class="bg-success"><b>{{ record.call1 }}<b></td>
                           {% if record.call1 > record.put2 %}
-                          <td style="width:4%"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
+                          <td style="width:4%;text-align:center"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
                           {% else %}
                           <td style="width:4%;text-align:center"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>call</b></span> </td>
                           {% endif %}
@@ -400,7 +400,7 @@ Gap:
                           {% comment %} <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> {% endcomment %}
                           <td style="width:2%">{{ record.call2 }}</td>
                           {% if record.call1 < record.put2 %}
-                          <td style="width:4%"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span> </td>
+                          <td style="width:4%;text-align:center"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> <b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span> </td>
                           {% else %}
                           <td style="width:4%;text-align:center"><b>{{ record.putstrike }}</b><span style="color:red">  <b>put</b></span></td>
                           {% endif %}
