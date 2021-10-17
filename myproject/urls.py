@@ -21,7 +21,7 @@ urlpatterns = [
     path("login", views.login, name="login"),
     path("sample", views.sample, name="sample"),
     path("logout", views.logout, name="logout"),
-    path('', views.home, name='home'),
+    path('', views.home, name='sample'),
     path('equity/', views.equity, name='equity'),
     path('OptionChainSingle/', views.optionChain, name='optionChain'),
     path('admin/', admin.site.urls),
