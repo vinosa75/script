@@ -44,13 +44,13 @@ def login(request):
                 auth.login(request,user)
                 # messages.info(request, f"You are now logged in as {username}")
                 # Directing to home page
-                return redirect('home')
+                return redirect('sample')
             else:
                 messages.info(request,'incorrect password')
-                return redirect('login')
+                return redirect('sample')
         else:
             messages.error(request,"user doesn't exists")
-            return redirect('login')
+            return redirect('sample')
 
     else:
         
