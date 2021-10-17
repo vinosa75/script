@@ -33,9 +33,6 @@ def create_currency():
     LiveSegment.objects.filter(time__lte = pastDate).delete()
     LiveSegment.objects.filter(date__lt = nsepadDate).delete()
 
-    # nse = Nse()
-    # nsefnolist = nse.get_fno_lot_sizes()
-    # symbols = list(nsefnolist.keys())
 
     import requests
     url = 'https://www.truedata.in/downloads/symbol_lists/13.NSE_ALL_OPTIONS.txt'
@@ -49,10 +46,6 @@ def create_currency():
         # print("Before exception list")
         TrueDatausernamereal = 'tdws135'
         TrueDatapasswordreal = 'saaral@135'
-
-        # nse = Nse()
-        # fnolistreal = nse.get_fno_lot_sizes()
-        # symbols = list(fnolistreal.keys())
 
         remove_list = ['BANKNIFTY', 'FINNIFTY', 'NIFTY', 'ASIANPAINT', 'BAJAJFINSV', 'BHARTIARTL', 'BHEL', 'BPCL', 'DEEPAKNTR', 'FEDERALBNK', 'HDFC', 'IOC', 'IRCTC', 'IPCALAB', 'NATIONALUM', 'NTPC', 'PNB', 'SHREECEM', 'VEDL', 'ASTRAL', 'BOSCHLTD', 'EICHERMOT', 'GMRINFRA', 'HDFCLIFE', 'IBULHSGFIN', 'ITC', 'L&TFH', 'BANKBARODA', 'IDFCFIRSTB', 'SAIL', 'IDEA']
         fnolist = [i for i in symbols if i not in remove_list]
@@ -727,9 +720,6 @@ def create_currency():
             TrueDatausernamereal = 'tdws135'
             TrueDatapasswordreal = 'saaral@135'
 
-            # nse = Nse()
-            # fnolistreal = nse.get_fno_lot_sizes()
-            # symbols = list(fnolistreal.keys())
 
             import requests
             url = 'https://www.truedata.in/downloads/symbol_lists/13.NSE_ALL_OPTIONS.txt'
@@ -1198,9 +1188,7 @@ def create_currency():
 #     TrueDatausername = 'tdws135'
 #     TrueDatapassword = 'saaral@135'
 
-#     nse = Nse()
-#     fnolist = nse.get_fno_lot_sizes()
-#     symbols = list(fnolist.keys())
+
 
 #     # Default production port is 8082 in the library. Other ports may be given t oyou during trial.
 #     realtime_port = 8082
