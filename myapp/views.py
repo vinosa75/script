@@ -808,6 +808,7 @@ def sample(request):
     stringlist=[x.decode('utf-8').split('2')[0] for x in s.splitlines()]
 
     fnolist = list(set(stringlist))
+    fnolist.sort()
 
     # fnolist = list(LiveSegment.objects.values_list('symbol', flat=True).distinct())
 
