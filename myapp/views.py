@@ -272,9 +272,11 @@ def optionChain(request):
     else:
         symbol = request.POST['symbol']
         print("POST")
+        print(symbol)
     # expiry = request.POST['expiry_selected']
 
     # Equity data
+    symbol = symbol.strip()
     liveEqui = LiveEquityResult.objects.filter(symbol=symbol)
 
     # Optionchain data
@@ -803,3 +805,13 @@ def sample(request):
 
     return render(request,"sample.html",{'fnolist':fnolist})
     # return render(request,"sample.html")
+
+@login_required(login_url='login')
+def bootsample(request):
+    from nsetools import Nse
+    nse = Nse()
+    fnolist = nse.get_fno_lot_sizes()
+
+    # fnolist = list(LiveSegment.objects.values_list('symbol', flat=True).distinct())
+
+    return render(request,"bootsample.html",{'fnolist':fnolist})

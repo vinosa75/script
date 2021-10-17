@@ -1,0 +1,79 @@
+    /* <nav class="navbar fixed-top navbar-light bg-light">
+  <a class="navbar-brand fs-4" href="#">Script Data</a>
+        <form class="form-inline" >
+          <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
+          {% if user.is_authenticated %}
+          <div style="color: grey;"> Welcome <b>{{user.username}}</b></div><br>
+          <div>
+            <a href="{% url 'logout' %}" class="navbar-brand pull-right" style="text-align:right"><strong>Logout</strong></a>  
+          </div>
+          <br>
+              {% endif %}
+        </form>
+</nav> */
+
+
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">TrulyExpenses</a>
+
+      <ul
+        class="navbar-nav px-3"
+        style="display: flex; flex-direction: row; align-items: center;"
+      >
+        <li class="nav-item text-nowrap">
+          <span class="nav-link" href="">
+            ({{request.user.username}})
+          </span>
+        </li>
+
+        <li class="nav-item text-nowrap mt-3 ml-2">
+          <form action="{% url  'logout' %}" method="POST">
+            {% csrf_token %}
+            <input
+              class="text text-capitalize"
+              type="submit"
+              value="Sign out"
+            />
+          </form>
+        </li>
+      </ul>
+    </nav>
+
+    <a class="py-2" href="#" aria-label="Product">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="d-block mx-auto" role="img" viewBox="0 0 24 24" focusable="false"><title>Product</title><circle cx="12" cy="12" r="10"></circle><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83m13.79-4l-5.74 9.94"></path></svg>
+    </a>
+    <a class="btn navbar-btn btn-danger navbar-right pull-right" role="button" href="#">Logout</a>
+    <form class="form-inline" >
+          <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
+          {% if user.is_authenticated %}
+          <div style="color: grey;"> Welcome <b>{{user.username}}</b></div><br>
+          <div>
+            <a href="{% url 'logout' %}" class="navbar-brand pull-right" style="text-align:right"><strong>Logout</strong></a>  
+          </div>
+          <br>
+              {% endif %}
+        </form>
+
+<div class="container d-flex flex-column flex-md-row navbar-right">
+
+    /* <div class="pull-right">
+    <span class="navbar-brand">@Model.User.UserName's profile</span>
+    <a class="btn navbar-btn btn-danger navbar-right pull-right" role="button" href="#">Logout</a>
+    </div> */
+
+
+<nav class="site-header sticky-top py-1 bg-dark">
+  
+
+
+
+    <div class="topnav-right">
+    <a href="#search">Search</a>
+    <a href="#about">About</a>
+    </div>
+
+</nav>
+
+    <a href="#" type="button" class="btn second-button btn-default navbar-btn">
+      <span class="glyphicon glyphicon-shopping-cart"></span>Cart
+    </a>	

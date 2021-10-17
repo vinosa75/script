@@ -78,7 +78,7 @@ def create_currency():
             else:
                 liveData[td_app.live_data[req_id].symbol] = [td_app.live_data[req_id].ltp,td_app.live_data[req_id].day_open,td_app.live_data[req_id].day_high,td_app.live_data[req_id].day_low,td_app.live_data[req_id].prev_day_close,dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'),td_app.live_data[req_id].change_perc]
 
-
+        # print(liveData)
         # Finding out the pastdate
         from datetime import datetime, timedelta
         pastDate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15))
@@ -128,7 +128,9 @@ def create_currency():
 
         for key,value in liveData.items():
             if key in fnolist:
-                if float(value[6]) >= 3:
+                
+                if float(value[6]) >= 0:
+                    # print(key)
                     if LiveSegment.objects.filter(symbol=key,segment="gain").exists():
                         LiveSegment.objects.filter(symbol=key,segment="gain").delete()
                         gain = LiveSegment(symbol=key,segment="gain",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
@@ -138,7 +140,7 @@ def create_currency():
                         gain = LiveSegment(symbol=key,segment="gain",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                         gain.save()
 
-                elif float(value[6]) <= -3:
+                elif float(value[6]) <= 0:
                     if LiveSegment.objects.filter(symbol=key,segment="loss").exists():
                         LiveSegment.objects.filter(symbol=key,segment="loss").delete()
                         loss = LiveSegment(symbol=key,segment="loss",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
@@ -168,7 +170,8 @@ def create_currency():
         gainList = list(LiveSegment.objects.filter(segment="gain").values_list('symbol', flat=True))
         lossList = list(LiveSegment.objects.filter(segment="loss").values_list('symbol', flat=True))
 
-
+        # print(gainList)
+        # print(lossList)
         # History Check
         for e in LiveOITotalAllSymbol.objects.all():
             # print(e.symbol)
@@ -529,11 +532,11 @@ def create_currency():
         # value1 = LiveOIChange.objects.all()
         # value2 = LiveOITotal.objects.all()
         # print("Before changev")
-        OIChangeValue = OIChange(df,item,dte)
+        # OIChangeValue = OIChange(df,item,dte)
         # print("after change")
         
-        if OIChangeValue == False:
-            print("returning false")
+        # if OIChangeValue == False:
+            # print("returning false")
             # return render(request,"testhtml.html",{'symbol':item,'counter':1})
 
         OITotalValue = OITotal(df,item,dte)
@@ -542,7 +545,7 @@ def create_currency():
             print("returning false")
             # return render(request,"testhtml.html",{'symbol':item,'counter':1})
 
-        percentChange = OIPercentChange(df)
+        # percentChange = OIPercentChange(df)
 
         # strikeGap =float(df['strike'].unique()[1]) - float(df['strike'].unique()[0])
         midvalue = round(len(df['strike'].unique())/2)
@@ -591,30 +594,30 @@ def create_currency():
         
         value1 = LiveOIChange.objects.filter(symbol=item)
 
-        if len(value1) > 0:
+        # if len(value1) > 0:
 
-            if (value1[0].callstrike != OIChangeValue['cestrike']) or (value1[0].putstrike != OIChangeValue['pestrike']):
-                # Adding to history table
-                ChangeOIHistory = HistoryOIChange(time=value1[0].time,call1=value1[0].call1,call2=value1[0].call2,put1=value1[0].put1,put2=value1[0].put2,callstrike=value1[0].callstrike,putstrike=value1[0].putstrike,symbol=value1[0].symbol,expiry=value1[0].expiry)
-                ChangeOIHistory.save()
+        #     if (value1[0].callstrike != OIChangeValue['cestrike']) or (value1[0].putstrike != OIChangeValue['pestrike']):
+        #         # Adding to history table
+        #         ChangeOIHistory = HistoryOIChange(time=value1[0].time,call1=value1[0].call1,call2=value1[0].call2,put1=value1[0].put1,put2=value1[0].put2,callstrike=value1[0].callstrike,putstrike=value1[0].putstrike,symbol=value1[0].symbol,expiry=value1[0].expiry)
+        #         ChangeOIHistory.save()
 
-                # deleting live table data
-                LiveOIChange.objects.filter(symbol=item).delete()
+        #         # deleting live table data
+        #         LiveOIChange.objects.filter(symbol=item).delete()
 
-                # Creating in live data
-                ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
-                ChangeOICreation.save() 
+        #         # Creating in live data
+        #         ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
+        #         ChangeOICreation.save() 
 
-            else:
-                # deleting live table data
-                LiveOIChange.objects.filter(symbol=item).delete()
+        #     else:
+        #         # deleting live table data
+        #         LiveOIChange.objects.filter(symbol=item).delete()
 
-                # Creating in live data
-                ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
-                ChangeOICreation.save() 
-        else:
-            ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
-            ChangeOICreation.save()
+        #         # Creating in live data
+        #         ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
+        #         ChangeOICreation.save() 
+        # else:
+        #     ChangeOICreation = LiveOIChange(time=OIChangeValue['celtt'],call1=OIChangeValue['ceoi1'],call2=OIChangeValue['ceoi2'],put1=OIChangeValue['peoi1'],put2=OIChangeValue['peoi2'],callstrike=OIChangeValue['cestrike'],putstrike=OIChangeValue['pestrike'],symbol=item,expiry=dte)
+        #     ChangeOICreation.save()
 
 
         # print("value1 crossed")
@@ -665,30 +668,30 @@ def create_currency():
 
         value3 = LiveOIPercentChange.objects.filter(symbol=item)
 
-        if len(value3) > 0:
+        # if len(value3) > 0:
 
-            if (value3[0].callstrike != percentChange['cestrike']) or (value3[0].putstrike != percentChange['pestrike']):
-                # Adding to history table
-                ChangeOIPercentHistory = HistoryOIPercentChange(time=value3[0].time,call1=value3[0].call1,call2=value3[0].call2,put1=value3[0].put1,put2=value3[0].put2,callstrike=value3[0].callstrike,putstrike=value3[0].putstrike,symbol=value3[0].symbol,expiry=value3[0].expiry)
-                ChangeOIPercentHistory.save()
+        #     if (value3[0].callstrike != percentChange['cestrike']) or (value3[0].putstrike != percentChange['pestrike']):
+        #         # Adding to history table
+        #         ChangeOIPercentHistory = HistoryOIPercentChange(time=value3[0].time,call1=value3[0].call1,call2=value3[0].call2,put1=value3[0].put1,put2=value3[0].put2,callstrike=value3[0].callstrike,putstrike=value3[0].putstrike,symbol=value3[0].symbol,expiry=value3[0].expiry)
+        #         ChangeOIPercentHistory.save()
 
-                # deleting live table data
-                LiveOIPercentChange.objects.filter(symbol=item).delete()
+        #         # deleting live table data
+        #         LiveOIPercentChange.objects.filter(symbol=item).delete()
 
-                # Creating in live data
-                ChangeOIPercentCreation = LiveOIPercentChange(time=percentChange['celtt'],call1=percentChange['ceoi1'],call2=percentChange['ceoi2'],put1=percentChange['peoi1'],put2=percentChange['peoi2'],callstrike=percentChange['cestrike'],putstrike=percentChange['pestrike'],symbol=item,expiry=dte)
-                ChangeOIPercentCreation.save() 
+        #         # Creating in live data
+        #         ChangeOIPercentCreation = LiveOIPercentChange(time=percentChange['celtt'],call1=percentChange['ceoi1'],call2=percentChange['ceoi2'],put1=percentChange['peoi1'],put2=percentChange['peoi2'],callstrike=percentChange['cestrike'],putstrike=percentChange['pestrike'],symbol=item,expiry=dte)
+        #         ChangeOIPercentCreation.save() 
 
-            else:
-                # deleting live table data
-                LiveOIPercentChange.objects.filter(symbol=item).delete()
+        #     else:
+        #         # deleting live table data
+        #         LiveOIPercentChange.objects.filter(symbol=item).delete()
 
-                # Creating in live data
-                ChangeOIPercentCreation = LiveOIPercentChange(time=percentChange['celtt'],call1=percentChange['ceoi1'],call2=percentChange['ceoi2'],put1=percentChange['peoi1'],put2=percentChange['peoi2'],callstrike=percentChange['cestrike'],putstrike=percentChange['pestrike'],symbol=item,expiry=dte)
-                ChangeOIPercentCreation.save() 
-        else:
-            ChangeOIPercentCreation = LiveOIPercentChange(time=percentChange['celtt'],call1=percentChange['ceoi1'],call2=percentChange['ceoi2'],put1=percentChange['peoi1'],put2=percentChange['peoi2'],callstrike=percentChange['cestrike'],putstrike=percentChange['pestrike'],symbol=item,expiry=dte)
-            ChangeOIPercentCreation.save()
+        #         # Creating in live data
+        #         ChangeOIPercentCreation = LiveOIPercentChange(time=percentChange['celtt'],call1=percentChange['ceoi1'],call2=percentChange['ceoi2'],put1=percentChange['peoi1'],put2=percentChange['peoi2'],callstrike=percentChange['cestrike'],putstrike=percentChange['pestrike'],symbol=item,expiry=dte)
+        #         ChangeOIPercentCreation.save() 
+        # else:
+        #     ChangeOIPercentCreation = LiveOIPercentChange(time=percentChange['celtt'],call1=percentChange['ceoi1'],call2=percentChange['ceoi2'],put1=percentChange['peoi1'],put2=percentChange['peoi2'],callstrike=percentChange['cestrike'],putstrike=percentChange['pestrike'],symbol=item,expiry=dte)
+        #     ChangeOIPercentCreation.save()
 
     # Fetching the F&NO symbol list
     TrueDatausername = 'tdws127'
@@ -809,7 +812,7 @@ def create_currency():
 
             for key,value in liveData.items():
                 if key in fnolistreal:
-                    if float(value[6]) >= 3:
+                    if float(value[6]) >= 0:
                         if len(LiveSegment.objects.filter(symbol=key,segment="gain")) > 0:
                             LiveSegment.objects.filter(symbol=key,segment="gain").delete()
                             gain = LiveSegment(symbol=key,segment="gain",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
@@ -819,7 +822,7 @@ def create_currency():
                             gain = LiveSegment(symbol=key,segment="gain",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                             gain.save()
 
-                    elif float(value[6]) <= -3:
+                    elif float(value[6]) <= 3:
                         if len(LiveSegment.objects.filter(symbol=key,segment="loss")) > 0:
                             LiveSegment.objects.filter(symbol=key,segment="loss").delete()
                             loss = LiveSegment(symbol=key,segment="loss",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
@@ -1019,9 +1022,9 @@ def create_currency():
             symbol2 = g
             symbol3 = b
             td_obj = TD('tdws127', 'saaral@127')
-            first_chain = td_obj.start_option_chain( symbol1 , dt(dte.year , dte.month , dte.day) ,chain_length = 75)
-            second_chain = td_obj.start_option_chain( symbol2 , dt(dte.year , dte.month , dte.day) ,chain_length = 75)
-            third_chain = td_obj.start_option_chain( symbol3 , dt(dte.year , dte.month , dte.day) ,chain_length = 75)
+            first_chain = td_obj.start_option_chain( symbol1 , dt(dte.year , dte.month , dte.day) ,chain_length = 74)
+            second_chain = td_obj.start_option_chain( symbol2 , dt(dte.year , dte.month , dte.day) ,chain_length = 74)
+            third_chain = td_obj.start_option_chain( symbol3 , dt(dte.year , dte.month , dte.day) ,chain_length = 74)
 
             te.sleep(3)
 

@@ -26,6 +26,9 @@ urlpatterns = [
     path('OptionChainSingle/', views.optionChain, name='optionChain'),
     path('admin/', admin.site.urls),
     path('load-expiry/', views.ajax_load_expiry, name='ajax_load_expiry'),
+    path("bootsample", views.bootsample, name="bootsample"),
+    
+
 
 
 ]
