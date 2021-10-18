@@ -289,7 +289,7 @@ Gap:
 
 <div class="col-sm-4">
 
-  {% if HistoryOIChg|length == 0 %}
+  {% if HistoryOIPercentChg|length == 0 %}
 
   <div class="alert alert-warning alert-dismissible fade show" role="alert">
   <strong>No data!</strong> No History found for this symbol, Try other symbols.
@@ -321,35 +321,31 @@ Gap:
                         <td rowspan=2 style="width:2%"><b>{{ record.time|time }}<b></td>
                           <td style="width:2%;background-color:green;color:white;text-align:center;">{{ record.call1 }}</td>
                           {% comment %} <td style="width:2%;text-align:center"> <i class="fas fa-dot-circle xxx-small;color:blue"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td> {% endcomment %}
-                          {% if record.call1 > record.put2 %}
-                          <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i></td>
-                          {% else %}
+
                           <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"></td>
-                          {% endif %}
+
                           <td style="width:4%;text-align:center;background-color:#C8EFD5"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td>
                           <td style="width:2%;text-align:center;">{{ record.put1 }}</td>
                         </tr>
                         <tr>
                           <!-- <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> -->
                           <td style="width:2%;text-align:center;">{{ record.call2 }}</td>
-                          {% if record.call1 < record.put2 %}
-                          <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> </td>
-                          {% else %}
+
                           <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"></td>
-                          {% endif %}
+
 
                           <td style="width:4%;text-align:center;background-color:#F9DDDC"><b>{{ record.putstrike }}</b><span style="color:red">  <b>PE</b></span></td>
                           
                           <td style="width:2%;text-align:center;background-color:darkred;color: white;">{{ record.put1 }}</td>
                         </tr>
 
-                        {% comment %} <tr style="background-color: black;">
+                        <tr style="background-color: white;">
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        </tr> {% endcomment %}
-
+                        <td></td>
+                        </tr>
 
                       {% endfor %}
       </tbody>
@@ -416,12 +412,13 @@ Gap:
                           <td style="width:2%;text-align:center;background-color:darkred;color: white;">{{ record.put1 }}</td>
                         </tr>
 
-                        {% comment %} <tr style="background-color: black;">
+                        <tr style="background-color: black;">
                         <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
-                        </tr> {% endcomment %}
+                        <td></td>
+                        </tr> 
 
 
                       {% endfor %}
@@ -484,6 +481,7 @@ Gap:
                           <td style="width:2%;text-align:center;background-color:darkred;color: white;">{{ record.put1 }}</td>
                         </tr>
                         <tr>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
