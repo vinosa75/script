@@ -390,22 +390,16 @@ Gap:
                         <td rowspan=2 style="width:2%"><b>{{ record.time|time }}<b></td>
                           <td style="width:2%;background-color:green;color:white;text-align:center;">{{ record.call1 }}</td>
                           {% comment %} <td style="width:2%;text-align:center"> <i class="fas fa-dot-circle xxx-small;color:blue"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td> {% endcomment %}
-                          {% if record.call1 > record.put2 %}
-                          <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i></td>
-                          {% else %}
                           <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"></td>
-                          {% endif %}
+
                           <td style="width:4%;text-align:center;background-color:#C8EFD5"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td>
                           <td style="width:2%;text-align:center;">{{ record.put1 }}</td>
                         </tr>
                         <tr>
                           <!-- <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> -->
                           <td style="width:2%;text-align:center;">{{ record.call2 }}</td>
-                          {% if record.call1 < record.put2 %}
-                          <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> </td>
-                          {% else %}
+
                           <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"></td>
-                          {% endif %}
 
                           <td style="width:4%;text-align:center;background-color:#F9DDDC"><b>{{ record.putstrike }}</b><span style="color:red">  <b>PE</b></span></td>
                           
@@ -459,22 +453,18 @@ Gap:
                         <td rowspan=2 style="width:2%"><b>{{ record.time|time }}<b></td>
                           <td style="width:2%;background-color:green;color:white;text-align:center;">{{ record.call1 }}</td>
                           {% comment %} <td style="width:2%;text-align:center"> <i class="fas fa-dot-circle xxx-small;color:blue"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td> {% endcomment %}
-                          {% if record.call1 > record.put2 %}
-                          <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i></td>
-                          {% else %}
+
                           <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"></td>
-                          {% endif %}
+
                           <td style="width:4%;text-align:center;background-color:#C8EFD5"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td>
                           <td style="width:2%;text-align:center;">{{ record.put1 }}</td>
                         </tr>
                         <tr>
                           <!-- <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> -->
                           <td style="width:2%;text-align:center;">{{ record.call2 }}</td>
-                          {% if record.call1 < record.put2 %}
-                          <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> </td>
-                          {% else %}
+
                           <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"></td>
-                          {% endif %}
+
 
                           <td style="width:4%;text-align:center;background-color:#F9DDDC"><b>{{ record.putstrike }}</b><span style="color:red">  <b>PE</b></span></td>
                           
