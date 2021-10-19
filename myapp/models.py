@@ -170,6 +170,7 @@ class LiveSegment(models.Model):
     time = models.TimeField(auto_now_add=False)
     date = models.DateField(auto_now_add=False)
     change_perc = models.FloatField(default=0)
+    doneToday = models.CharField(max_length=10,default="")
 
     # def __str__(self):
     #     return self.symbol+" "+self.segment+" "+self.date
