@@ -833,16 +833,18 @@ def create_currency():
                                         putone.save()
 
             except websocket.WebSocketConnectionClosedException as e:
-                print('This caught the websocket exception ')
+                print('This caught the websocket exception in equity realtime')
                 td_app.disconnect()
                 # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
             except IndexError as e:
-                print('This caught the exception')
+                print('This caught the exception in equity realtime')
                 print(e)
+                td_app.disconnect()
                 td_app.disconnect()
                 # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
             except Exception as e:
                 print(e)
+                td_app.disconnect()
                 td_app.disconnect()
                 # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
             
@@ -902,10 +904,10 @@ def create_currency():
 
             
             except websocket.WebSocketConnectionClosedException as e:
-                print('This caught the websocket exception ')
+                print('This caught the websocket exception in optionchain realtime')
                 td_obj.disconnect()
             except IndexError as e:
-                print('This caught the exception')
+                print('This caught the exception in option chain realtime')
                 print(e)
                 td_obj.disconnect()
             except Exception as e:
@@ -964,10 +966,10 @@ def create_currency():
 
             
         except websocket.WebSocketConnectionClosedException as e:
-            print('This caught the websocket exception ')
+            print('This caught the websocket exception in optionchain realtime ')
             td_obj.disconnect()
         except IndexError as e:
-            print('This caught the exception')
+            print('This caught the exception in optionchain realtime')
             print(e)
             td_obj.disconnect()
         except Exception as e:
@@ -1017,11 +1019,11 @@ def create_currency():
             optionChainprocess(df1,symbol1,dte)
    
         except websocket.WebSocketConnectionClosedException as e:
-            print('This caught the websocket exception ')
+            print('This caught the websocket exception in optionchain realtime')
             td_obj.disconnect()
 
         except IndexError as e:
-            print('This caught the exception')
+            print('This caught the exception in optionchain realtime')
             print(e)
             td_obj.disconnect() 
         except Exception as e:
