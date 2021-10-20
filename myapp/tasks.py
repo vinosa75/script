@@ -700,6 +700,8 @@ def create_currency():
                 # History Check
                 for e in LiveOITotalAllSymbol.objects.all():
                     # print(e.symbol)
+                    callcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="common",opencrossed="common",time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'),date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
+                    callcross.save()
 
                     # History Check
                     historyLen = HistoryOITotal.objects.filter(symbol=e.symbol)
@@ -721,9 +723,6 @@ def create_currency():
                         putone = e.putone
                     
                     if e.symbol in liveData and e.symbol not in removeList and e.symbol in gainList:
-                        
-                        callcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="gain",opencrossed="call",time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'),date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
-                        callcross.save()
                         
                         # Call
                         if liveData[e.symbol][1] > float(callstrike):
@@ -782,9 +781,6 @@ def create_currency():
 
                         # Put
                         if e.symbol in liveData and e.symbol not in removeList and e.symbol in lossList:
-
-                            putcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="loss",opencrossed="put",time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'),date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
-                            putcross.save()
 
                             if liveData[e.symbol][1] < float(putstrike):
                                 if e.symbol in openputcrossDict:
