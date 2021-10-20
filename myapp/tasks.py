@@ -831,6 +831,7 @@ def create_currency():
             except websocket.WebSocketConnectionClosedException as e:
                 print('This caught the websocket exception in equity realtime')
                 td_app.disconnect()
+                td_app.disconnect()
                 # return render(request,"testhtml.html",{'symbol':item,'counter':1}) 
             except IndexError as e:
                 print('This caught the exception in equity realtime')
@@ -884,7 +885,8 @@ def create_currency():
                 third_chain.stop_option_chain()
 
                 td_obj.disconnect()
-                td_app.disconnect()
+                td_obj.disconnect()
+                # td_app.disconnect()
                 sampleDict[symbol1] = df1
 
                 print(df1)
@@ -902,12 +904,15 @@ def create_currency():
             except websocket.WebSocketConnectionClosedException as e:
                 print('This caught the websocket exception in optionchain realtime')
                 td_obj.disconnect()
+                td_obj.disconnect()
             except IndexError as e:
                 print('This caught the exception in option chain realtime')
                 print(e)
                 td_obj.disconnect()
+                td_obj.disconnect()
             except Exception as e:
                 print(e)
+                td_obj.disconnect()
                 td_obj.disconnect()
 
 
@@ -948,7 +953,7 @@ def create_currency():
             second_chain.stop_option_chain()
 
             td_obj.disconnect()
-            td_app.disconnect()
+            td_obj.disconnect()
             sampleDict[symbol1] = df1
 
             print(df1)
@@ -964,12 +969,15 @@ def create_currency():
         except websocket.WebSocketConnectionClosedException as e:
             print('This caught the websocket exception in optionchain realtime ')
             td_obj.disconnect()
+            td_obj.disconnect()
         except IndexError as e:
             print('This caught the exception in optionchain realtime')
             print(e)
             td_obj.disconnect()
+            td_obj.disconnect()
         except Exception as e:
             print(e)
+            td_obj.disconnect()
             td_obj.disconnect()
         sleep(1)
 
@@ -1004,7 +1012,7 @@ def create_currency():
             first_chain.stop_option_chain()
 
             td_obj.disconnect()
-            td_app.disconnect()
+            td_obj.disconnect()
             sampleDict[symbol1] = df1
 
             print(df1)
@@ -1017,13 +1025,16 @@ def create_currency():
         except websocket.WebSocketConnectionClosedException as e:
             print('This caught the websocket exception in optionchain realtime')
             td_obj.disconnect()
+            td_obj.disconnect()
 
         except IndexError as e:
             print('This caught the exception in optionchain realtime')
             print(e)
             td_obj.disconnect() 
+            td_obj.disconnect()
         except Exception as e:
             print(e)
+            td_obj.disconnect()
             td_obj.disconnect()
         sleep(1)
 
