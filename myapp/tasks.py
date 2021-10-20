@@ -654,26 +654,26 @@ def create_currency():
                 LiveSegment.objects.filter(time__lte = segpastDate).delete()
                 LiveSegment.objects.filter(date__lt = nsepadDate).delete()
 
-                # for key,value in liveData.items():
-                    # if key in fnolistreal:
-                    #     if float(value[6]) >= 3:
-                    #         if len(LiveSegment.objects.filter(symbol=key,segment="gain")) > 0:
-                    #             LiveSegment.objects.filter(symbol=key,segment="gain").delete()
-                    #             gain = LiveSegment(symbol=key,segment="gain",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
-                    #             gain.save()
+                for key,value in liveData.items():
+                    if key in fnolistreal:
+                        if float(value[6]) >= 3:
+                            if len(LiveSegment.objects.filter(symbol=key,segment="gain")) > 0:
+                                LiveSegment.objects.filter(symbol=key,segment="gain").delete()
+                                gain = LiveSegment(symbol=key,segment="gain",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
+                                gain.save()
 
-                    #         else:
-                    #             gain = LiveSegment(symbol=key,segment="gain",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
-                    #             gain.save()
+                            else:
+                                gain = LiveSegment(symbol=key,segment="gain",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
+                                gain.save()
 
-                    #     elif float(value[6]) <= -3:
-                    #         if len(LiveSegment.objects.filter(symbol=key,segment="loss")) > 0:
-                    #             LiveSegment.objects.filter(symbol=key,segment="loss").delete()
-                    #             loss = LiveSegment(symbol=key,segment="loss",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
-                    #             loss.save()
-                    #         else:
-                    #             loss = LiveSegment(symbol=key,segment="loss",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
-                    #             loss.save()
+                        elif float(value[6]) <= -3:
+                            if len(LiveSegment.objects.filter(symbol=key,segment="loss")) > 0:
+                                LiveSegment.objects.filter(symbol=key,segment="loss").delete()
+                                loss = LiveSegment(symbol=key,segment="loss",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
+                                loss.save()
+                            else:
+                                loss = LiveSegment(symbol=key,segment="loss",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
+                                loss.save()
 
                     #     elif float(value[6]) <= -0.30:
                     #         if len(LiveSegment.objects.filter(symbol=key,segment="below")) > 0:
