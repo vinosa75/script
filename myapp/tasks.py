@@ -174,7 +174,12 @@ def create_currency():
     equitypastdate = datetime.combine(datetime.now(timezone('Asia/Kolkata')), time(9,15)).strftime('%Y-%m-%d %H:%M:%S')
     timenow = datetime.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S')
 
-    doneToday = LiveSegment.objects.values_list('doneToday', flat=True).distinct()[0]
+    doneToday = LiveSegment.objects.values_list('doneToday', flat=True).distinct()
+
+    if len(doneToday) > 0:
+        doneToday = doneToday[0]
+    else:
+        doneToday = ""
 
     if timenow > equitypastdate and doneToday != "Yes":
         initialEquity()
