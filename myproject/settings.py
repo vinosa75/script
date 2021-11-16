@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-qzk7$4(bs4vz@o_s0*21s77^n73uq1)wz+-@y@y#ycxh81k&!+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['scriptdata.herokuapp.com']
+ALLOWED_HOSTS = ['scriptdata.herokuapp.com','127.0.0.1']
 
 
 # Application definition
@@ -78,17 +78,17 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'dddlvbdt7gk2pc',                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
-        'USER': 'naulxttohlngyk',
-        'PASSWORD': 'f6298f3ec2c9f6a485a94cecbddff1d7c19008131863b50356aac2ae8c68073f',
-        'HOST': 'ec2-44-196-8-220.compute-1.amazonaws.com',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '5432',                      # Set to empty string for default.
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+#         'NAME': 'dddlvbdt7gk2pc',                      # Or path to database file if using sqlite3.
+#         # The following settings are not used with sqlite3:
+#         'USER': 'naulxttohlngyk',
+#         'PASSWORD': 'f6298f3ec2c9f6a485a94cecbddff1d7c19008131863b50356aac2ae8c68073f',
+#         'HOST': 'ec2-44-196-8-220.compute-1.amazonaws.com',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+#         'PORT': '5432',                      # Set to empty string for default.
+#     }
+# }
 
 CELERY_IMPORTS = (
     'myapp.tasks',
@@ -96,14 +96,14 @@ CELERY_IMPORTS = (
 
 import dj_database_url
 # #
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
+# DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # Password validation
