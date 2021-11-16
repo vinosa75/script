@@ -1,0 +1,506 @@
+{% comment %} <div style="text-align:center">
+<h2 style="text-align:center;color:black;font-size:medium;background-color:#e3f2fd;border-color:black" class="btn btn-warning"><b>{{symbol}}</b></h2>
+</div>    {% endcomment %}
+
+{% comment %} <div style="text-align:center">
+Date:
+{% for record in OITotalValue %}
+<h2 style="text-align:center;color:white;font-size:medium;" class="btn btn-success"> <b>{{dateToday}}</b> </h2>
+Expiry:
+<h2 style="text-align:center;color:black;font-size:medium;" class="btn btn-warning"> <b>{{record.expiry}}</b> </h2>
+Symbol:
+<h2 style="text-align:center;color:black;font-size:medium;background-color:#e3f2fd;border-color:black" class="btn btn-warning"><b>{{symbol}}</b></h2>
+Gap: 
+<h2 style="text-align:center;color:black;b-color:pink;font-size:medium;" class="btn alert-warning"><b>({{record.strikegap}})</b>
+{% endfor %}
+</div>     {% endcomment %}
+{% for record in OITotalValue %}
+<nav aria-label="breadcrumb">
+
+              <ol class="breadcrumb">
+
+               <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center;color: black;"><b>Symbol:</b></span>
+                  {% comment %} <span class="bottom">{{ value.open }}</span> {% endcomment %}
+                  <h2 style="text-align:center;color:black;b-color:pink;font-size:medium;" class="btn btn-warning"> <b>{{symbol}}</b> </h2>
+                </div>
+                </li>
+
+                <br>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center;color: black;"><b>Expiry:</b></span>
+                  {% comment %} <span class="bottom">{{ value.high }}</span> {% endcomment %}
+                  <h2 style="text-align:center;color:black;font-size:medium;" class="btn btn-warning"> <b>{{record.expiry}}</b> </h2>
+                </div>
+                </li>
+                <br>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center;color: black;"><b>Gap:</b></span>
+                  {% comment %} <span class="bottom">{{ value.low }}</span> {% endcomment %}
+                  <h2 style="text-align:center;color:black;font-size:medium;border-color:black" class="btn btn-warning"><b>{{record.strikegap}}</b></h2>
+                </div>
+                </li>
+                <br>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center;color: black;"><b>Date: </b></span>
+                  {% comment %} <span class="bottom">{{ value.prev_day_close }}</span> {% endcomment %}
+                  <h2 style="text-align:center;color:black;b-color:pink;font-size:medium;" class="btn alert-warning">{{dateToday}}
+                </div>
+
+                </li>
+
+  
+
+              </ol>
+            </nav>
+{% endfor %}
+
+            {% for value in liveEqui %}
+
+            <nav aria-label="breadcrumb">
+
+              <ol class="breadcrumb">
+
+                {% comment %} <li class="breadcrumb-item"> {% endcomment %}
+                {% comment %} <button type="submit" class="btn btn-warning"><b>{{ key }}</b></button> {% endcomment %}
+                {% comment %} <button type="submit" id="button_1" class="btn btn-warning" value="Manoj"><b>{{ key }}</b></button> {% endcomment %}
+                {% comment %} <button id="1" name="1" class="btn btn-warning" value="{{ value.symbol }}">{{ value.symbol }}</button> {% endcomment %}
+                {% comment %} <span class="badge badge-warning"></span> {% endcomment %}
+                
+                {% comment %} </li> {% endcomment %}
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center;color: black;"><b>Open</b></span>
+                  <span class="bottom" style="color: black;">{{ value.open }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center;color: black;"><b>High</b></span>
+                  <span class="bottom" style="color: black;">{{ value.high }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center;color: black;"><b>Low</b></span>
+                  <span class="bottom" style="color: black;">{{ value.low }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center;color: black;" ><b>Pr_close</b></span>
+                  <span class="bottom" style="color: black;">{{ value.prev_day_close }}</span>
+                </div>
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center;color: black;"><b>Ltp</b></span>
+                  <span class="bottom" style="color: black;">{{ value.ltp }}</span>
+                </div>
+                </li>
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center;color: black;"><b>Time</b></span>
+                  <span class="bottom" style="text-align:center;color: black;"><b class="badge badge-info">{{ value.time }}</b></span>
+                  <!-- <span class="bottom" style="color: black;">{{ value.time }}</span> -->
+                </div>
+                </li>
+
+                <li class="breadcrumb-item">
+                  <div class="div-container">
+                    <span class="top" style="text-align:center;color: black;"><b>Diff</b></span>
+                    <span class="top" style="text-align:center;color: black;"><b class="badge badge-info">{{ value.section }}</b>
+                      {% if "Call" in value.strike %}
+                      <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">{{ value.strike }} </h2>
+                      {% else %}
+                      <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-danger text-wrap">{{ value.strike }} </h2>
+                      {% endif %}
+                    </span>
+                    <!-- <span class="bottom" style="color: black;">{{ value.section }}</span> -->
+                  </div>
+                </li>
+
+              </ol>
+            </nav>
+
+            {% endfor %}
+
+<div class="row">
+
+    <div class="col-sm-4">
+      <table id="manoj" style="font-size:14px">
+          <thead>
+              <tr>
+              <tr>
+                  <td colspan=5 style="width:10%;text-align:center;background-color: dimgrey;color:white"><b>Change % OI</b></td>
+              </tr>
+              <th><span>TIME</span></th>
+              <th><span>CALL</span></th>
+              <th colspan="2"><span>STRIKE</span></th>
+              <th><span>PUT</span></th>
+              </tr>
+          </thead>
+          <tbody>
+                      <tbody>
+
+                      {% for record in LiveChangePercentOI %}
+
+                        <tr>
+                        {% comment %} colspan=2 {% endcomment %}
+                        <td rowspan=2 style="width:2%"><b>{{ record.time|time }}<b></td>
+                          <td style="width:2%;background-color:green;color:white;text-align:center;">{{ record.call1 }}</td>
+                          {% comment %} <td style="width:2%;text-align:center"> <i class="fas fa-dot-circle xxx-small;color:blue"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td> {% endcomment %}
+                          {% if record.call1 > record.put2 %}
+                          <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i></td>
+                          {% else %}
+                          <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"></td>
+                          {% endif %}
+                          <td style="width:4%;text-align:center;background-color:#C8EFD5"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td>
+                          <td style="width:2%;text-align:center;">{{ record.put1 }}</td>
+                        </tr>
+                        <tr>
+                          {% comment %} <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> {% endcomment %}
+                          <td style="width:2%;text-align:center;">{{ record.call2 }}</td>
+                          {% if record.call1 < record.put2 %}
+                          <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> </td>
+                          {% else %}
+                          <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"></td>
+                          {% endif %}
+
+                          <td style="width:4%;text-align:center;background-color:#F9DDDC"><b>{{ record.putstrike }}</b><span style="color:red">  <b>PE</b></span></td>
+                          
+                          <td style="width:2%;text-align:center;background-color: darkred;color: white;">{{ record.put2 }}</td>
+                        </tr>
+
+                      {% endfor %}
+                      </tbody>
+          </tbody>
+            
+      </table>
+  </div>
+
+    <div class="col-sm-4">
+      <table id="manoj" style="font-size:14px">
+          <thead>
+              <tr>
+              <tr>
+                  <td colspan=5 style="width:10%;text-align:center;background-color: dimgrey;color:white"><b>Change in OI</b></td>
+              </tr>
+              <th><span>TIME</span></th>
+              <th><span>CALL</span></th>
+              <th colspan="2"><span>STRIKE</span></th>
+              <th><span>PUT</span></th>
+              </tr>
+          </thead>
+          <tbody>
+                      <tbody>
+
+                      {% for record in OIChangeValue %}
+
+                        <tr>
+                        {% comment %} colspan=2 {% endcomment %}
+                        <td rowspan=2 style="width:2%"><b>{{ record.time|time }}<b></td>
+                          <td style="width:2%;background-color:green;color:white;text-align:center;">{{ record.call1 }}</td>
+                          {% comment %} <td style="width:2%;text-align:center"> <i class="fas fa-dot-circle xxx-small;color:blue"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td> {% endcomment %}
+                          {% if record.call1 > record.put2 %}
+                          <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i></td>
+                          {% else %}
+                          <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"></td>
+                          {% endif %}
+                          <td style="width:4%;text-align:center;background-color:#C8EFD5"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td>
+                          <td style="width:2%;text-align:center;">{{ record.put1 }}</td>
+
+                        </tr>
+                        <tr>
+                          {% comment %} <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> {% endcomment %}
+                          <td style="width:2%;text-align:center;">{{ record.call2 }}</td>
+                          {% if record.call1 < record.put2 %}
+                          <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> </td>
+                          {% else %}
+                          <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"></td>
+                          {% endif %}
+
+                          <td style="width:4%;text-align:center;background-color:#F9DDDC"><b>{{ record.putstrike }}</b><span style="color:red">  <b>PE</b></span></td>
+                          
+                          <td style="width:2%;text-align:center;background-color: darkred;color: white;">{{ record.put2 }}</td>
+                        </tr>
+
+                      {% endfor %}
+                      </tbody>
+          </tbody>
+            
+      </table>
+  </div>
+
+  <div class="col-sm-4">
+      <table id="manoj" style="font-size:14px">
+          <thead>
+              <tr>
+              <tr>
+                  <td colspan=5 style="width:10%;text-align:center;background-color: dimgrey;color:white"><b>Total OI</b></td>
+              </tr>
+              <th><span>TIME</span></th>
+              <th><span>CALL</span></th>
+              <th colspan="2"><span>STRIKE</span></th>
+              
+              <!-- <th style="padding:2.5px;" colspan="2">AMOUNT</th> -->
+              <th><span>PUT</span></th>
+              </tr>
+          </thead>
+          <tbody>
+                      <tbody>
+
+                      {% for record in OITotalValue %}
+
+                        <tr>
+                        {% comment %} colspan=2 {% endcomment %}
+
+                          <td rowspan=2 style="width:2%"><b>{{ record.time|time }}<b></td>
+                          <td style="width:2%;background-color:green;color:white;text-align:center;">{{ record.call1 }}</td>
+                          {% comment %} <td style="width:2%;text-align:center"> <i class="fas fa-dot-circle xxx-small;color:blue"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td> {% endcomment %}
+                          {% if record.call1 > record.put2 %}
+                          <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i></td>
+                          {% else %}
+                          <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"></td>
+                          {% endif %}
+                          <td style="width:4%;text-align:center;background-color:#C8EFD5"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td>
+                          <td style="width:2%;text-align:center;">{{ record.put1 }}</td>
+
+                        </tr>
+                        <tr>
+                          {% comment %} <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> {% endcomment %}
+                          <td style="width:2%;text-align:center;">{{ record.call2 }}</td>
+                          {% if record.call1 < record.put2 %}
+                          <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"><i class="fas fa-dot-circle xx-small;color:blue" style"font-size:xx-small"></i> </td>
+                          {% else %}
+                          <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"></td>
+                          {% endif %}
+
+                          <td style="width:4%;text-align:center;background-color:#F9DDDC"><b>{{ record.putstrike }}</b><span style="color:red">  <b>PE</b></span></td>
+                          
+                          <td style="width:2%;text-align:center;background-color:darkred;color: white;">{{ record.put2 }}</td>
+                        </tr>
+
+                      {% endfor %}
+                      </tbody>
+          </tbody>
+            
+      </table>
+  </div>
+
+</div>
+
+
+
+
+<div style="margin-top:15px"></div>
+<div class="row">
+
+<div class="col-sm-4">
+
+  {% if HistoryOIPercentChg|length == 0 %}
+
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>No data!</strong> No History found for this symbol, Try other symbols.
+  </div>
+
+  {% else %}
+  <div class="fixTableHeadHistory">
+    <table class="table-striped">
+      <thead>
+        <tr class="header">
+              <tr>
+                  <td colspan=5 style="width:10%;text-align:center;background-color: dimgrey;color:white"><b>Change % OI</b></td>
+              </tr>
+
+              <th><span>TIME</span></th>
+              <th><span>CALL</span></th>
+              <th colspan="2"><span>STRIKE</span></th>
+              <th><span>PUT</span></th>
+
+              </tr>
+
+      </thead>
+  
+      <tbody>
+                      {% for record in HistoryOIPercentChg %}
+
+                        <tr>
+                        {% comment %} colspan=2 {% endcomment %}
+                        <td rowspan=2 style="width:2%"><b>{{ record.time|time }}<b></td>
+                          <td style="width:2%;background-color:green;color:white;text-align:center;">{{ record.call1 }}</td>
+                          {% comment %} <td style="width:2%;text-align:center"> <i class="fas fa-dot-circle xxx-small;color:blue"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td> {% endcomment %}
+
+                          <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"></td>
+
+                          <td style="width:4%;text-align:center;background-color:#C8EFD5"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td>
+                          <td style="width:2%;text-align:center;">{{ record.put1 }}</td>
+                        </tr>
+                        <tr>
+                          <!-- <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> -->
+                          <td style="width:2%;text-align:center;">{{ record.call2 }}</td>
+
+                          <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"></td>
+
+
+                          <td style="width:4%;text-align:center;background-color:#F9DDDC"><b>{{ record.putstrike }}</b><span style="color:red">  <b>PE</b></span></td>
+                          
+                          <td style="width:2%;text-align:center;background-color:darkred;color: white;">{{ record.put2 }}</td>
+                        </tr>
+
+                        <tr style="background-color: white;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        </tr>
+
+                      {% endfor %}
+      </tbody>
+        
+    </table>
+  </div>
+  {% endif %}
+  
+</div>
+
+<div class="col-sm-4">
+
+  {% if HistoryOIChg|length == 0 %}
+
+  <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>No data!</strong> No History found for this symbol, Try other symbols.
+  </div>
+
+  {% else %}
+  <div class="fixTableHeadHistory">
+    <table class="table-striped">
+      <thead>
+        <tr class="header">
+              <tr>
+                  <td colspan=5 style="width:10%;text-align:center;background-color: dimgrey;color:white"><b>Change in OI</b></td>
+              </tr>
+
+              <th><span>TIME</span></th>
+              <th><span>CALL</span></th>
+              <th colspan="2"><span>STRIKE</span></th>
+              <th><span>PUT</span></th>
+
+              </tr>
+
+      </thead>
+  
+      <tbody>
+                      {% for record in HistoryOIChg %}
+
+                        <tr>
+                        {% comment %} colspan=2 {% endcomment %}
+                        <td rowspan=2 style="width:2%"><b>{{ record.time|time }}<b></td>
+                          <td style="width:2%;background-color:green;color:white;text-align:center;">{{ record.call1 }}</td>
+                          {% comment %} <td style="width:2%;text-align:center"> <i class="fas fa-dot-circle xxx-small;color:blue"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td> {% endcomment %}
+                          <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"></td>
+
+                          <td style="width:4%;text-align:center;background-color:#C8EFD5"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td>
+                          <td style="width:2%;text-align:center;">{{ record.put1 }}</td>
+                        </tr>
+                        <tr>
+                          <!-- <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> -->
+                          <td style="width:2%;text-align:center;">{{ record.call2 }}</td>
+
+                          <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"></td>
+
+                          <td style="width:4%;text-align:center;background-color:#F9DDDC"><b>{{ record.putstrike }}</b><span style="color:red">  <b>PE</b></span></td>
+                          
+                          <td style="width:2%;text-align:center;background-color:darkred;color: white;">{{ record.put2 }}</td>
+                        </tr>
+
+                        <tr style="background-color: white;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        </tr> 
+
+
+                      {% endfor %}
+      </tbody>
+        
+    </table>
+  </div>
+  {% endif %}
+  
+</div>
+
+<div class="col-sm-4">
+    {% if HistoryOITot|length == 0 %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>No data!</strong> No History found for this symbol, Try other symbols.
+    </div>
+    {% else %}
+
+  <div class="fixTableHeadHistory">
+    <table class="table-striped">
+      <thead>
+        <tr class="header">
+              <tr>
+                  <td colspan=5 style="width:10%;text-align:center;background-color: dimgrey;color:white"><b>Total OI</b></td>
+              </tr>
+              <th><span>TIME</span></th>
+              <th><span>CALL</span></th>
+              <th colspan="2"><span>STRIKE</span></th>
+              <th><span>PUT</span></th>
+              </tr>
+      </thead>
+  
+      <tbody>
+                      {% for record in HistoryOITot %}
+
+                        <tr>
+                        {% comment %} colspan=2 {% endcomment %}
+                        <td rowspan=2 style="width:2%"><b>{{ record.time|time }}<b></td>
+                          <td style="width:2%;background-color:green;color:white;text-align:center;">{{ record.call1 }}</td>
+                          {% comment %} <td style="width:2%;text-align:center"> <i class="fas fa-dot-circle xxx-small;color:blue"></i> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td> {% endcomment %}
+
+                          <td style="width:1%;text-align:center;background-color:#C8EFD5;border-right-color: #C8EFD5"></td>
+
+                          <td style="width:4%;text-align:center;background-color:#C8EFD5"> <b>{{ record.callstrike }}</b><span style="color:green">  <b>CE</b></span> </td>
+                          <td style="width:2%;text-align:center;">{{ record.put1 }}</td>
+                        </tr>
+                        <tr>
+                          <!-- <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> -->
+                          <td style="width:2%;text-align:center;">{{ record.call2 }}</td>
+
+                          <td style="width:1%;text-align:center;background-color:#F9DDDC;border-right-color: #F9DDDC"></td>
+
+
+                          <td style="width:4%;text-align:center;background-color:#F9DDDC"><b>{{ record.putstrike }}</b><span style="color:red">  <b>PE</b></span></td>
+                          
+                          <td style="width:2%;text-align:center;background-color:darkred;color: white;">{{ record.put2 }}</td>
+                        </tr>
+                        <tr style="background-color: white;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        </tr>
+
+                      {% endfor %}
+      </tbody>
+        
+    </table>
+  </div>
+
+  {% endif %}
+</div>
+
+</div>
+

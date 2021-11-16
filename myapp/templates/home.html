@@ -1,0 +1,564 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en"> 
+  <head>
+
+  <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+  <meta content="utf-8" http-equiv="encoding">
+
+  </head>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"
+    rel="stylesheet">
+
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
+    rel="stylesheet">
+
+    
+
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"
+    rel="stylesheet">
+
+
+<style>
+body{
+    background:#dcdcdc;
+    margin-top:20px;}
+
+.widget-26 {
+  color: #3c4142;
+  font-weight: 400;
+}
+
+.widget-26 tr:first-child td {
+  border: 0;
+}
+
+.widget-26 .widget-26-job-emp-img img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+}
+
+.widget-26 .widget-26-job-title {
+  min-width: 200px;
+}
+
+.widget-26 .widget-26-job-title a {
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: #3c4142;
+  line-height: 1.5;
+}
+
+.widget-26 .widget-26-job-title a:hover {
+  color: #68CBD7;
+  text-decoration: none;
+}
+
+.widget-26 .widget-26-job-title .employer-name {
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #3c4142;
+  font-size: 0.8125rem;
+  color: #3c4142;
+}
+
+.widget-26 .widget-26-job-title .employer-name:hover {
+  color: #68CBD7;
+  text-decoration: none;
+}
+
+.widget-26 .widget-26-job-title .time {
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.widget-26 .widget-26-job-info {
+  min-width: 100px;
+  font-weight: 400;
+}
+
+.widget-26 .widget-26-job-info p {
+  line-height: 1.5;
+  color: #3c4142;
+  font-size: 0.8125rem;
+}
+
+.widget-26 .widget-26-job-info .location {
+  color: #3c4142;
+}
+
+.widget-26 .widget-26-job-salary {
+  min-width: 70px;
+  font-weight: 400;
+  color: #3c4142;
+  font-size: 0.8125rem;
+}
+
+.widget-26 .widget-26-job-category {
+  padding: .5rem;
+  display: inline-flex;
+  white-space: nowrap;
+  border-radius: 15px;
+}
+
+.widget-26 .widget-26-job-category .indicator {
+  width: 13px;
+  height: 13px;
+  margin-right: .5rem;
+  float: left;
+  border-radius: 50%;
+}
+
+.widget-26 .widget-26-job-category span {
+  font-size: 0.8125rem;
+  color: #3c4142;
+  font-weight: 600;
+}
+
+.widget-26 .widget-26-job-starred svg {
+  width: 20px;
+  height: 20px;
+  color: #fd8b2c;
+}
+
+.widget-26 .widget-26-job-starred svg.starred {
+  fill: #fd8b2c;
+}
+.bg-soft-base {
+  background-color: #e1f5f7;
+}
+.bg-soft-warning {
+    background-color: #fff4e1;
+}
+.bg-soft-success {
+    background-color: #d1f6f2;
+}
+.bg-soft-danger {
+    background-color: #fedce0;
+}
+.bg-soft-info {
+    background-color: #d7efff;
+}
+
+
+.search-form {
+  width: 80%;
+  margin: 0 auto;
+  margin-top: 1rem;
+}
+
+.search-form input {
+  height: 100%;
+  background: transparent;
+  border: 0;
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  height: 100%;
+  font-size: 1rem;
+}
+
+.search-form select {
+  background: transparent;
+  border: 0;
+  padding: 1rem;
+  height: 100%;
+  font-size: 1rem;
+}
+
+.search-form select:focus {
+  border: 0;
+}
+
+.search-form button {
+  height: 100%;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.search-form button svg {
+  width: 24px;
+  height: 24px;
+}
+
+.search-body {
+  margin-bottom: 1.5rem;
+}
+
+.search-body .search-filters .filter-list {
+  margin-bottom: 1.3rem;
+}
+
+.search-body .search-filters .filter-list .title {
+  color: #3c4142;
+  margin-bottom: 1rem;
+}
+
+.search-body .search-filters .filter-list .filter-text {
+  color: #727686;
+}
+
+.search-body .search-result .result-header {
+  margin-bottom: 2rem;
+}
+
+.search-body .search-result .result-header .records {
+  color: #3c4142;
+}
+
+.search-body .search-result .result-header .result-actions {
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-body .search-result .result-header .result-actions .result-sorting {
+  display: flex;
+  align-items: center;
+}
+
+.search-body .search-result .result-header .result-actions .result-sorting span {
+  flex-shrink: 0;
+  font-size: 0.8125rem;
+}
+
+.search-body .search-result .result-header .result-actions .result-sorting sebreadclect {
+  color: #68CBD7;
+}
+
+.search-body .search-result .result-header .result-actions .result-sorting select option {
+  color: #3c4142;
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .search-body .search-filters {
+    display: flex;
+  }
+  .search-body .search-filters .filter-list {
+    margin-right: 1rem;
+  }
+}
+
+.card-margin {
+    margin-bottom: 1.875rem;
+}
+
+@media (min-width: 992px){
+.col-lg-2 {
+    flex: 0 0 16.66667%;
+    max-width: 16.66667%;
+}
+}
+
+.card-margin {
+    margin-bottom: 1.875rem;
+}
+.card {
+    border: 0;
+    box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+    -ms-box-shadow: 0px 0px 10px 0px rgba(82, 63, 105, 0.1);
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 60%;
+    word-wrap: break-word;
+    background-color: #e9ecef;
+    background-clip: border-box;
+    border: 1px solid #e6e4e9;
+    border-radius: 8px;
+}
+
+.indicator-wrap{
+  display: flex;
+  align-items: center;
+}
+
+
+/* style for page loader */
+/* style for page loader */
+#overlay{	
+	position: fixed;
+	top: 0;
+  left : 0;
+	z-index: 100;
+	width: 100%;
+	height:100%;
+	display: none;
+	background: rgba(0,0,0,0.6);
+}
+.cv-spinner {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;  
+}
+.spinner {
+	width: 40px;
+	height: 40px;
+	border: 4px #ddd solid;
+	border-top: 4px #2e93e6 solid;
+	border-radius: 50%;
+	animation: sp-anime 0.8s infinite linear;
+}
+@keyframes sp-anime {
+	100% { 
+		transform: rotate(360deg); 
+	}
+}
+.is-hide{
+	display:none;
+}
+
+
+    .fixTableHead {
+      overflow-y: auto;
+      height: 213px;
+      width: 103%;
+      font-size: 15px;
+      border:solid;
+      border-color:black;
+    }
+    .fixTableHead thead th {
+      position: sticky;
+      top: 0;
+    }
+
+    .fixTableHeadHistory {
+      overflow-y: auto;
+      height: 260px;
+      width: 103%;
+      font-size: 12px;
+    }
+    .fixTableHeadHistory thead th {
+      position: sticky;
+      top: 0;
+    }
+
+
+    .fixTableHeadOnly {
+      height: 50px;
+      width: 103%;
+      font-size: 12px;
+    }
+    .fixTableHeadOnly thead th {
+      top: 0;
+    }
+
+
+
+    table {
+      border-collapse: collapse;        
+      width: 99%;
+      border-color:black;
+    }
+    th,
+    td {
+      padding: 2px 4px;
+      border: 2px solid white;
+      font-size:small;
+    }
+    th {
+      background: #ABDD93;
+    }
+
+table#manoj {
+    width: 105%;
+}
+
+.fa-dot-circle:before {
+    content: "\f192";
+    font-size: xx-small;
+    color:blue
+}
+
+#header-fixed {
+    position: fixed;
+    top: 0px; display:none;
+    background-color:white;
+}
+
+    .bs-example{
+        margin: 20px;        
+    }
+    /* Style to change separator  */
+    .breadcrumb-item + .breadcrumb-item::before {
+        content: "|";
+    }
+
+
+.div-container span{
+  display: block;
+}
+.div-container span.top{
+  display: flex;
+  align-items: flex-end;
+}
+
+.jumbotron {
+    padding: 0rem 2rem;
+}
+
+.breadcrumb {
+
+    background-color: #e3f2fd;
+}
+
+.breadcrumb li:after
+{
+	content: '  ';
+  display: inline;
+	font-size: 1.2em;
+	color: #AAA;
+	
+	padding: 0 .0725em 0 .15em; 
+}
+
+
+</style>
+
+  </head>
+  <body style="background-color: #146b34;">
+
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand">Script</a>
+        <form class="form-inline">
+          <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"> -->
+          {% if user.is_authenticated %}
+          <div style="color: white;"> Welcome <b>{{user.username}}</b></div>
+          <div> <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-secondary" style="color: white;">
+            <span class="glyphicon glyphicon-log-out"></span> Log out
+           </a></div>
+          <br>
+              {% endif %}
+        </form>
+    </nav>
+
+<div class="row">
+
+  <div class="col-sm-8">
+
+        <div class="row">
+                <div class="card">
+                    <div class="card-body">
+                    {% comment %} <button style="margin-left:10px" onclick="executeQuery3()" class="btn btn-primary">Run OpChain</button> {% endcomment %}
+                        <h5 class="card-title" style="width:700px">Option Chain - Realtime<span id ="optionClick" class="badge badge-light"></span><span id ="optionCli" class="badge badge-light"></span></h5>
+                        <form class="form-inline" method="POST" id="optionchainform" fno-optionchain-url="{% url 'optionChain' %}" >
+                            {% csrf_token %}
+
+                                <div class="form-group mx-sm-3 mb-2"></div>
+                              
+                                <div class="form-group mx-sm-3 mb-2">
+
+                                  <label for="EntryPrice" style="color: black;">Symbol: </label>
+
+                                    <select class="form-control" id="EntryPrice" name="symbol" required>
+                                          <option value="">---------</option>
+                                          {% for post in fnolist %}
+                                              <option value="{{ post }}">{{ post }}</option>
+                                          {% endfor %} 
+                                    </select>
+                                      <input style="margin-left:10px" class="btn btn-secondary" type="submit" value="Get data">
+                                    {% comment %} <button style="margin-left:10px" type="submit" class="btn btn-primary">Get data</button> {% endcomment %}
+                                    <br>
+
+                                </div>
+                        </form>  
+
+                        <div id="OptionChainSingleSymbol" class="slot"> </div>
+
+                    </div>
+                </div>
+        </div>
+
+  </div>
+
+
+  <div class="col-sm-4">
+    <div class="card">
+      <div class="card-body">
+      {% comment %} <button onclick="executeQuery1()" class="btn btn-primary">Run Equity</button> {% endcomment %}
+        <h5 class="card-title">Equity - Realtime - <input type='button' onclick='executeQuery1()' class="btn btn-primary" value='Refresh'> </h5>
+           <div id="EquitySpace" class="slot">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+
+$("#optionchainform").submit(function() {
+            var url = $("#optionchainform").attr("fno-optionchain-url")
+            var mydata = $("form#optionchainform").serialize();
+            // console.log(mydata); // it's only for test
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: mydata,
+                success: function(response, textStatus, xhr) {
+                    console.log(url);
+                    $("#OptionChainSingleSymbol").html(response); 
+
+                },
+                  error: function(result) {
+                      alert('error');
+                     $('.cssload-squeeze').hide(); 
+                     $("#overlay").hide()
+                  }
+            });
+            return false;
+        });
+
+
+function executeQuery1() {
+    var url = '{% url 'equity' %}';
+    $.ajax({
+    url: url,
+    async: false, 
+    success: function(response) {
+        console.log(url);
+        $("#EquitySpace").html(response);
+      // do something with the return value here if you like
+    }
+  });
+setTimeout(executeQuery1, 20000);
+}
+
+
+$(document).ready(function() {
+  // run the first time; all subsequent calls will take care of themselves
+  setTimeout(executeQuery1, 20000);
+});
+</script>
+
+  </body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

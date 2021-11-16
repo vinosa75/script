@@ -1,0 +1,368 @@
+{% load static %}
+<!DOCTYPE html>
+<!-- saved from url=(0053)https://getbootstrap.com/docs/5.0/examples/jumbotron/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0">
+    <title>ScriptData</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"
+    rel="stylesheet">
+
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
+    rel="stylesheet">
+
+    
+
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"
+    rel="stylesheet">
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/jumbotron/">
+
+    
+
+    <!-- Bootstrap core CSS -->
+<link href="./Jumbotron example · Bootstrap v5.0_files/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- Favicons -->
+<link rel="apple-touch-icon" href="https://getbootstrap.com/docs/5.0/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+<link rel="icon" href="https://getbootstrap.com/docs/5.0/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="https://getbootstrap.com/docs/5.0/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="manifest" href="https://getbootstrap.com/docs/5.0/assets/img/favicons/manifest.json">
+<link rel="mask-icon" href="https://getbootstrap.com/docs/5.0/assets/img/favicons/safari-pinned-tab.svg" color="#7952b3">
+<link rel="icon" href="https://getbootstrap.com/docs/5.0/assets/img/favicons/favicon.ico">
+<meta name="theme-color" content="#7952b3">
+<link href="{% static 'css/bootstrap.min.css'%}" rel="stylesheet" />
+<link href="{% static 'css/main.css'%}" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+
+<!-- Custom styles for this template -->
+<link href="{% static 'css/dashboard.css' %}" rel="stylesheet" />
+
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .container {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: 23px;
+    margin-left: 22px;
+}
+@media (min-width: 1200px)
+.container, .container-lg, .container-md, .container-sm, .container-xl {
+    max-width: 1327px;
+}
+
+
+    .fixTableHead {
+      overflow-y: auto;
+      height: 213px;
+      width: 103%;
+      font-size: 15px;
+      border:solid;
+    }
+    .fixTableHead thead th {
+      position: sticky;
+      top: 0;
+    }
+
+    .fixTableHeadHistory {
+      overflow-y: auto;
+      height: 260px;
+      width: 103%;
+      font-size: 12px;
+    }
+    .fixTableHeadHistory thead th {
+      position: sticky;
+      top: 0;
+    }
+
+
+    .fixTableHeadOnly {
+      height: 50px;
+      width: 103%;
+      font-size: 12px;
+    }
+    .fixTableHeadOnly thead th {
+      top: 0;
+    }
+
+th {
+    text-align: center;
+}
+
+    table {
+      border-collapse: collapse;        
+      width: 99%;
+      color: black;
+      background-color: lightgrey;
+    }
+    th,
+    td {
+      padding: 2px 0px;
+      border: 1px solid #80808061;
+      font-size:small
+    }
+    th {
+      background: darkgrey;
+    }
+
+table#manoj {
+    width: 105%;
+}
+
+#header-fixed {
+    position: fixed;
+    top: 0px; display:none;
+    background-color:black;
+}
+
+ .col-md-6.odd,.col-md-6.even{
+    position: relative;
+    width: 100%;
+    padding-right: 2px;
+    padding-left: 10px;
+}
+.col-md-6.even{
+    position: relative;
+    width: 100%;
+    padding-right: 2px;
+    padding-left: 10px;
+}
+.p-5 {
+    padding: 2rem!important;
+}
+
+strong:hover {
+  color: red;
+}
+
+.text-white {
+    color: black;
+}
+
+.bg-dark {
+    background-color: grey;
+}
+
+.h-100 p-5 bg-light border rounded-3{
+    background-color: gray;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: left;
+    background-color: darkgreen;
+}
+
+.breadcrumb {
+
+    background-color: lightgrey;
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 60%;
+    word-wrap: break-word;
+    background-color: #e9ecef;
+    background-clip: border-box;
+    border: 1px solid #e6e4e9;
+    border-radius: 8px;
+}
+
+.fa-dot-circle:before {
+    content: "\f192";
+    font-size: xx-small;
+    color:blue
+}
+
+.breadcrumb li:after
+{
+	content: '  ';
+  display: inline;
+	font-size: 1.2em;
+	color: #AAA;
+	
+	padding: 0 .0725em 0 .15em; 
+}
+
+.p-5 {
+    padding: 1rem!important;
+}
+
+.topnav-right {
+  float: right;
+}
+
+.navbar-header{
+  width:100%;
+  padding:0 50px;
+}
+
+.navbar-brand {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 1rem;
+    background-color: rgba(0, 0, 0, .25);
+    box-shadow: inset -1px 0 0 rgb(0 0 0 / 25%);
+}
+
+.right{
+    float:right;
+}
+
+.pl-md-5, .px-md-5 {
+    padding-left: 1rem !important;
+    padding-right: 2rem !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+
+.list-group-item {
+    text-align: left!important;
+}
+    </style>
+
+    
+  </head>
+  <body>
+
+
+
+<nav class="site-header sticky-top py-1 bg-dark" role="navigation">
+  <div class="navbar-header">
+    <a href="#" type="button" style="color: white;" class="btn btn-default navbar-btn">
+      <span class="glyphicon glyphicon-home" style="color: white;"></span>ScriptData
+    </a>
+
+    
+  
+   {% if user.is_authenticated %}
+    <div class="right">
+      <span class="navbar-brand" style="color: white;">Hi {{user.username|title}}</span>
+    <a class="btn navbar-btn btn-danger role="button" href="{% url 'logout' %}">Logout</a>
+      </div>
+  {% endif %}
+
+  </div>
+</nav>
+
+
+
+    <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+      <div class="bg-white mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden" style="width: 60%;">
+        <div class="my-3 py-3">
+
+          <form class="form-inline" method="POST" id="optionchainform" fno-optionchain-url="{% url 'optionChain' %}" >
+            {% csrf_token %}
+
+                <div class="form-group mx-sm-3 mb-2"></div>
+              
+                <div class="form-group mx-sm-3 mb-2">
+
+                  <label for="EntryPrice" style="color: black;">Symbol: </label>
+
+                    <select class="form-control" id="EntryPrice" name="symbol" required>
+                          <option value="">---------</option>
+                          {% for post in fnolist %}
+                              <option value="{{ post }}">{{ post }}</option>
+                          {% endfor %} 
+                    </select>
+                      <input style="margin-left:10px" class="btn btn-secondary" type="submit" value="Get data">
+                    {% comment %} <button style="margin-left:10px" type="submit" class="btn btn-primary">Get data</button> {% endcomment %}
+                    <br>
+
+                </div>
+        </form>  
+        <div id="OptionChainSingleSymbol" class="slot"> </div>
+
+        </div>
+      </div>
+
+      <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden" style="width: 40%;">
+        <div class="my-3 p-3">
+          <h5 class="card-title" style="color:black"><input type='button' onclick='executeQuery1()' class="btn btn-secondary" value='Refresh'> </h5>
+           <div id="EquitySpace" class="slot"></div>
+        </div>
+      </div>
+    </div>
+    
+
+
+
+    
+  
+
+</body>
+
+<script>
+
+
+$("#optionchainform").submit(function() {
+            var url = $("#optionchainform").attr("fno-optionchain-url")
+            var mydata = $("form#optionchainform").serialize();
+            // console.log(mydata); // it's only for test
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: mydata,
+                success: function(response, textStatus, xhr) {
+                    console.log(url);
+                    $("#OptionChainSingleSymbol").html(response); 
+
+                },
+                  error: function(result) {
+                      alert('error');
+                     $('.cssload-squeeze').hide(); 
+                     $("#overlay").hide()
+                  }
+            });
+            return false;
+        });
+
+
+
+function executeQuery1() {
+    var url = '{% url 'equity' %}';
+    $.ajax({
+    url: url,
+    async: false, 
+    success: function(response) {
+        console.log(url);
+        $("#EquitySpace").html(response);
+      // do something with the return value here if you like
+    }
+  });
+setTimeout(executeQuery1, 20000);
+}
+</script>
+<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration></html>

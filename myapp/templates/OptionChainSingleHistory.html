@@ -1,0 +1,36 @@
+    <table>
+    <thead>
+        <tr>
+        <tr>
+            <td colspan=4 style="width:10%;text-align:center;background-color: grey"><b>History Total OI</b></td>
+        </tr>
+        <th><span>TIME</span></th>
+        <th><span>CALL</span></th>
+        <th><span>STRIKE</span></th>
+        <th><span>PUT</span></th>
+        </tr>
+    </thead>
+    <tbody>
+                <tbody>
+
+                {% for record in OIChangeValue %}
+
+                  <tr>
+                  {% comment %} colspan=2 {% endcomment %}
+                    <td rowspan=2 style="width:2%">{{ record.time }}</td>
+                    <td style="width:2%" class="bg-success"><b>{{ record.call1 }}<b></td>
+                    <td style="width:2%;text-align:center"><b>{{ record.callstrike }}</b></td>
+                    <td style="width:2%">{{ record.put1 }}</td>
+                  </tr>
+                  <tr>
+                    {% comment %} <td style="width:2%">{{ OIChangeValue.peltt|time }}</td> {% endcomment %}
+                    <td style="width:2%">{{ record.call2 }}</td>
+                    <td style="width:2%;text-align:center"><b>{{ record.putstrike }}</b></td>
+                    <td style="width:2%;background-color:red"><b>{{ record.put2 }}</b></td>
+                  </tr>
+
+                {% endfor %}
+                </tbody>
+    </tbody>
+      
+</table>

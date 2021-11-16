@@ -1,0 +1,553 @@
+<div class="row">
+
+    <div class="col-md-6">
+    <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">Call Crossed </h2><b>- {{callCrossed|length}}</b>
+        {% if callCrossed|length == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols crossed call.
+        </div>
+        {% else %}
+        <div class="row">
+          <div class="col">
+            <b class="badge badge-" style="margin-top:6px;margin-bottom:6px;color: white;background-color: black;">1,3,5,7,9 </b> <b>- {{callcrossedodd|length}}</b>
+          </div>
+
+          <div class="col">
+            <b class="badge badge-warning" style="margin-top:6px;margin-bottom:6px;color: white;background-color: black;">0,2,4,6,8 </b> <b>- {{callcrossedeven|length}}</b>
+          </div>
+          
+        </div>
+
+
+        <div class="fixTableHead">
+
+            <nav aria-label="breadcrumb">
+
+              <ul class="list-group">
+              {% for value in callCrossed %}
+              <li style="font-size:13px;padding:0px" class="list-group-item"><button id="1" name="1" style="font-size: 1.1em;padding:0px" class="btn btn-warning btn-sm" value="{{ value.symbol }}">{{ value.symbol }}</button> |                 
+                {%if value.opencrossed == "call" %}
+                <span class="top" style="text-align:center"><b class="badge badge-success">{{ value.open }}</b></span>
+                {% else %}
+                  <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
+                {% endif %} | 
+                
+                <b>{{ value.time }}</b> | 
+                <b class="badge badge-info">{{ value.section }}</b> |  
+                <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span>
+              </li>
+
+              {% endfor %}
+              </ul>
+
+            </nav>
+
+        </div>
+
+        {% endif %}
+  </div>
+
+  <div class="col-md-6">
+    <h2 style="text-align:center;color:white;font-size:medium;" class="badge bg-success text-wrap">Call (50%) </h2><b>- {{call_result_count }}</b>
+
+        {% if call_result_count == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols crossed put.
+        </div>
+        {% else %}
+        <div class="row">
+          <div class="col-md-6 odd">
+            <h4 style="text-align:center;color:white;font-size:small;color: white;background-color: black;" class="badge badge-warning text-wrap">1,3,5,7,9 </h4><b>- {{callodd|length}}</b>
+
+            <div class="fixTableHead">
+            
+  
+  
+              <nav aria-label="breadcrumb">
+  
+                <ul class="list-group">
+                {% for value in callodd %}
+                <!-- <b class="badge badge-success">{{ value.symbol }}</b> -->
+                <li style="font-size:13px;padding:0px;align-content:left;" class="list-group-item"> <button id="1" name="1" style="font-size: 0.95em;padding:0px" class="btn btn-success btn-sm" value="{{ value.symbol }}">{{ value.symbol }}</button>   |
+                  <b class="badge badge-info">{{ value.section }}</b> |  
+                  <!-- <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span> -->
+                  
+                  <!-- {%if value.opencrossed == "call" %}
+                    <span class="top" style="text-align:center"><b class="badge badge-success" style="background-color: #6c3;">{{ value.open }}</b></span>
+                  {% else %}
+                    <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
+                  {% endif %} | 
+                  <b>{{ value.time }}</b></li> -->
+
+                {% endfor %}
+                </ul>
+    
+              </nav>
+  
+  
+            
+        
+          </div>
+          </div>
+          <div class="col-md-6 even">
+            <h4 style="text-align:center;color:white;font-size:small;color: white;background-color: black;" class="badge badge-warning text-wrap">0,2,4,6,8,10</h4><b>- {{calleven|length}}</b>
+
+            <div class="fixTableHead">
+            
+  
+  
+              <nav aria-label="breadcrumb">
+  
+                <ul class="list-group" style="align-content: flex-start;">
+                {% for value in calleven %}
+                <li style="font-size:13px;padding:0px;align-content:left;" class="list-group-item"><button id="1" name="1" style="font-size: 0.95em;padding:0px" class="btn btn-success btn-xs" value="{{ value.symbol }}">{{ value.symbol }}</button> |
+                  <b class="badge badge-info">{{ value.section }}</b> |  
+                  <!-- <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span> -->
+
+                  <!-- {%if value.opencrossed == "call" %}
+                    <span class="top" style="text-align:center"><b class="badge badge-success" >{{ value.open }}</b></span>
+                  {% else %}
+                    <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
+                  {% endif %} | 
+                   -->
+                  </li>
+                {% endfor %}
+                </ul>
+  
+
+  
+              </nav>
+  
+  
+            
+        
+          </div>
+          </div>
+        </div>
+
+
+
+
+        {% endif %}
+
+  </div>
+
+</div>
+  
+
+
+
+<div class="row">
+<div class="col-md-6">
+<h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-danger text-wrap">Put Crossed </h2><b>- {{putCrossed|length}}</b>
+
+        {% if putCrossed|length == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols crossed put.
+        </div>
+        {% else %}
+        <div class="row">
+          <div class="col">
+            <b class="badge badge-warning" style="margin-top:6px;margin-bottom:6px;color: white;background-color: black;">1,3,5,7,9 </b> <b>- {{putcrossedodd|length}}</b>
+          </div>
+
+          <div class="col">
+            <b class="badge badge-warning" style="margin-top:6px;margin-bottom:6px;color: white;background-color: black;">0,2,4,6,8 </b> <b>- {{putcrossedeven|length}}</b>
+          </div>
+          
+        </div>
+
+
+        <div class="fixTableHead">
+          
+
+
+            <nav aria-label="breadcrumb">
+
+              <ul class="list-group">
+              {% for value in putCrossed %}
+              <li style="font-size:13px;padding:0px" class="list-group-item"><button id="1" name="1" style="font-size: 0.95em;padding:0px" class="btn btn-warning btn-sm" value="{{ value.symbol }}">{{ value.symbol }}</button> |                 
+                {%if value.opencrossed == "call" %}
+                  <span class="top" style="text-align:center"><b class="badge badge-success">{{ value.open }}</b></span>
+                {% else %}
+                  <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
+                {% endif %} | 
+                
+                <b>{{ value.time }}</b> | 
+                <b class="badge badge-info">{{ value.section }}</b> |  
+                <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span>
+              </li>
+
+              {% endfor %}
+              </ul>
+
+            </nav>
+
+
+          
+      
+        </div>
+
+        {% endif %}
+  </div>
+
+  
+  <div class="col-md-6">
+    <h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-danger text-wrap">Put (50%) </h2><b>- {{put_result_count}}</b>
+
+        {% if put_result_count == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols crossed put.
+        </div>
+        {% else %}
+
+
+        <div class="row">
+          <div class="col-md-6 odd">
+            <h4 style="text-align:center;color:white;font-size:small;color: white;background-color: black;" class="badge badge-warning text-wrap">1,3,5,7,9 </h4><b>- {{putodd|length}}</b>
+
+            <div class="fixTableHead">
+            
+  
+  
+              <nav aria-label="breadcrumb">
+  
+                <ul class="list-group">
+                {% for value in putodd %}
+
+
+                <li style="font-size:13px;padding:0px;align-content:left;" class="list-group-item"><button id="1" name="1" style="font-size: 0.95em;padding:0px;background-color:#cc3434 ;" class="btn btn-danger btn-xs" value="{{ value.symbol }}">{{ value.symbol }}</button> |
+                  <b class="badge badge-info">{{ value.section }}</b> |  
+                  <!-- <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span> -->
+
+                  <!-- {%if value.opencrossed == "call" %}
+                    <span class="top" style="text-align:center"><b class="badge badge-success">{{ value.open }}</b></span>
+                  {% else %}
+                    <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
+                  {% endif %} -->
+                  
+                  </li>
+                {% endfor %}
+                </ul>
+  
+ 
+  
+              </nav>
+  
+  
+            
+        
+          </div>
+          </div>
+          <div class="col-md-6 even">
+            <h4 style="text-align:center;color:white;font-size:small;color: white;background-color: black;" class="badge badge-warning text-wrap">0,2,4,6,8,10</h4><b>- {{puteven|length}}</b>
+
+            <div class="fixTableHead">
+            
+  
+  
+              <nav aria-label="breadcrumb">
+  
+                <ul class="list-group">
+                {% for value in puteven %}
+                <li style="font-size:13px;padding:0px;align-content:left;" class="list-group-item"><button id="1" name="1" style="font-size: 1.1em;padding:0px;background-color:#cc3434 ;" class="btn btn-danger btn-xs" value="{{ value.symbol }}">{{ value.symbol }}</button> |
+                  <b class="badge badge-info">{{ value.section }}</b> |  
+                  <!-- <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span> -->
+
+                  <!-- {%if value.opencrossed == "call" %}
+                    <span class="top" style="text-align:center"><b class="badge badge-success">{{ value.open }}</b></span>
+                  {% else %}
+                    <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
+                  {% endif %}  -->
+                  
+                  </li>
+                {% endfor %}
+                </ul>
+  
+
+  
+              </nav>
+  
+  
+            
+        
+          </div>
+          </div>
+        </div>
+
+        {% endif %}
+
+   
+  </div>
+
+
+</div>
+
+<div class="row">
+
+<div class="col-md-6">
+
+    
+  <h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-success text-wrap">Top Gainers </h2><b>- {{gain|length}}</b>
+  {% if gain|length == 0 %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>No data!</strong> No symbols more than 3%.
+  </div>
+  {% else %}
+
+  <div class="fixTableHead" style="min-width:110%">
+
+      <nav aria-label="breadcrumb">
+
+        <ul class="list-group">
+        {% for value in gain %}
+        <li style="font-size:13px;padding:0px" class="list-group-item"><b class="badge badge-success">{{ value.symbol }}</b> | <b>{{ value.change_perc|floatformat:"2" }}</b></li>
+        {% endfor %}
+        </ul>
+
+      </nav>
+
+  </div>
+
+  {% endif %}
+
+
+  </div>
+
+  
+<div class="col-md-6">
+
+  <h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-danger text-wrap">Top Losers</h2><b>- {{loss|length}}</b>
+  {% if loss|length == 0 %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+  <strong>No data!</strong> No symbols less than 3%.
+  </div>
+  {% else %}
+
+  <div class="fixTableHead">
+    
+
+      <nav aria-label="breadcrumb">
+
+        {% comment %} <ol class="breadcrumb"> {% endcomment %}
+
+        <ul class="list-group">
+        {% for value in loss %}
+        <li style="font-size:13px;padding:0px" class="list-group-item"><b class="badge badge-danger">{{ value.symbol }}</b> | <b>{{ value.change_perc|floatformat:"2" }}</b></li>
+        {% endfor %}
+        </ul>
+         
+        {% comment %} </ol> {% endcomment %}
+      </nav>
+
+    
+
+  </div>
+
+  {% endif %}
+
+  
+
+  </div>
+
+
+</div>
+
+{% comment %}
+
+<h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-success text-wrap">Call (1%) </h2><b>- {{callOnePercent|length}}</b>
+
+        {% if callOnePercent|length == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols near to call(1%).
+        </div>
+        {% else %}
+
+        <div class="fixTableHead">
+              {% for value in callOnePercent %}
+
+            <nav aria-label="breadcrumb">
+
+              <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+                <button type="submit" class="btn btn-warning"><b>{{ key }}</b></button>
+                <button id="1" name="1" class="btn btn-warning" value="{{ value.symbol }}">{{ value.symbol }}</button>
+                <span class="badge badge-warning"></span> 
+                
+                </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Open</b></span>
+                  <span class="bottom">{{ value.open }}</span>
+                </div>
+                </li>
+
+              {% comment %} 
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-info">High</b></span>
+                  <span class="bottom">{{ value.high }}</span>
+                </div>
+                </li>
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-info">low</b></span>
+                  <span class="bottom">{{ value.low }}</span>
+                </div>
+                </li>
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-info">Pr_close</b></span>
+                  <span class="bottom">{{ value.prev_day_close }}</span>
+                </div>
+                </li>
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-info">Ltp</b></span>
+                  <span class="bottom">{{ value.ltp }}</span>
+                </div>
+                </li> 
+
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-info">Time</b></span>
+                  <span class="bottom">{{ value.time }}</span>
+                </div>
+                </li>
+
+
+              </ol>
+            </nav>
+
+              {% endfor %} 
+      
+        </div>
+
+        {% endif %}
+
+
+<h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-danger text-wrap">Put (1%) </h2><b>- {{putOnePercent|length}}</b>
+
+          {% if putOnePercent|length == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols near to put(1%).
+        </div>
+        {% else %}
+
+        <div class="fixTableHead">
+              {% for value in putOnePercent %}
+
+            <nav aria-label="breadcrumb">
+
+              <ol class="breadcrumb">
+
+                <li class="breadcrumb-item">
+                <button type="submit" id="button_1" class="btn btn-warning"><b>{{ key }}</b></button>
+                <button id="1" name="1" class="btn btn-warning" value="{{ value.symbol }}">{{ value.symbol }}</button>
+                <span class="badge badge-warning"></span>
+                
+                 </li>
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b>Open</b></span>
+                  <span class="bottom">{{ value.open }}</span>
+                </div>
+                </li> 
+                
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-info">High</b></span>
+                  <span class="bottom">{{ value.high }}</span>
+                </div>
+                </li>
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-info">low</b></span>
+                  <span class="bottom">{{ value.low }}</span>
+                </div>
+                </li>
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-info">Pr_close</b></span>
+                  <span class="bottom">{{ value.prev_day_close }}</span>
+                </div>
+                </li>
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-info">Ltp</b></span>
+                  <span class="bottom">{{ value.ltp }}</span>
+                </div>
+                </li> 
+
+
+                <li class="breadcrumb-item">
+                <div class="div-container">
+                  <span class="top" style="text-align:center"><b class="badge badge-info">Time</b></span>
+                  <span class="bottom">{{ value.time }}</span>
+                </div>
+                </li> 
+              </ol>
+            </nav>
+
+              {% endfor %} 
+      
+        </div>
+
+        {% endif %}
+</div>
+
+
+  </div>
+
+
+
+
+
+
+{% comment %} 
+<div class="jumbotron">
+  <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">Top Gainers </h2><b>- {{gain|length}}</b>
+  <p class="lead" style="font-size:13px">    
+    {% for value in gain %}
+    <span class="badge badge-secondary badge-pill">{{ value.symbol }}</span>,
+    {% endfor %}</p>
+  <hr class="my-4">
+</div>
+
+<div class="jumbotron">
+ <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-danger text-wrap">Top Losers </h2><b>- {{loss|length}}</b>
+  <p class="lead"  style="font-size:13px">    
+    {% for value in loss %}
+    <span class="badge badge-secondary badge-pill">{{ value.symbol }}</span>,
+    {% endfor %}</p>
+  <hr class="my-4">
+</div> {% endcomment %}
+
+<script>
+
+$("button").click(function() {
+   var url = '{% url 'optionChain' %}';
+    var fired_button = $(this).val();
+        $.ajax({
+        url:url,
+        data: {
+          'symbol': fired_button       // add the country id to the GET parameters
+        },
+      success: function (data) { 
+          console.log(data);  // `data` is the return of the `load_cities` view function
+          $("#OptionChainSingleSymbol").html(data);   // replace the contents of the city input with the data that came from the server
+        }
+    });
+});
+
+
+</script>

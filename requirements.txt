@@ -1,0 +1,11 @@
+django
+gunicorn
+django-heroku
+truedata-ws
+dj-database-url
+nsepython
+nsetools
+pendulum
+redis
+celery
+django_celery_beat
