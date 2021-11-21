@@ -1,47 +1,130 @@
+<style>
+
+.btn-outline-primary {
+    color:#800000;
+    background-color:white;
+    border-color: #800000; /*set the color you want here*/
+    font-size: 1.1em;
+    padding:0px
+}
+
+
+  .btn-outline-primary:hover,.btn-outline-primary:focus, .btn-outline-primary:active, .btn-outline-primary.visited {
+    color: white;
+    background-color: #800000;
+    border-color:#800000; /*set the color you want here*/
+    
+}
+
+.btn-outline-primary:focus {
+    color: white;
+    background-color: #800000;
+    border-color:#800000; /*set the color you want here*/
+    
+}
+
+.btn-outline-secondary {
+    color:red;
+    background-color:white;
+    border-color: #cc3434; /*set the color you want here*/
+    font-size: 1.1em;
+    padding:0px
+}
+
+
+  .btn-outline-secondary:hover,.btn-outline-secondary:focus, .btn-outline-secondary:active, .btn-outline-secondary.visited {
+    color: white;
+    background-color: #cc3434;
+    border-color:#cc3434; /*set the color you want here*/
+    
+}
+
+.btn-outline-Success {
+    color:#006400;
+    background-color:white;
+    border-color: #006400; /*set the color you want here*/
+    font-size: 1.1em;
+    padding:0px
+}
+
+
+  .btn-outline-Success:hover,.btn-outline-Success:focus, .btn-outline-Success:active, .btn-outline-Success.visited {
+    color: white;
+    background-color: #006400;
+    border-color:#006400; /*set the color you want here*/
+    
+}
+
+
+.btn-outline-danger {
+    color:#3fb618;
+    background-color:white;
+    border-color: #3fb618; /*set the color you want here*/
+    font-size: 1.1em;
+    padding:0px
+}
+
+
+  .btn-outline-danger:hover,.btn-outline-danger:focus, .btn-outline-danger:active, .btn-outline-danger.visited {
+    color: white;
+    background-color: #3fb618;
+    border-color:#3fb618; /*set the color you want here*/
+    
+}
+
+.badge-bg-danger-put{
+    background-color:white;
+    border-color: #7A7874; /*set the color you want here*/
+    color: grey;
+}
+
+.badge-bg-light-text-dark-text-wrap {
+    color: #7A7874;
+    border: 1px solid #999;
+    background-color: transparent;
+}
+
+.fixTableHead{
+  background-color: white;
+}
+
+/* <button type="button" class="btn btn-outline-secondary">Secondary</button>
+<button type="button" class="btn btn-outline-success">Success</button> */
+</style>
 <div class="row">
 
     <div class="col-md-6">
+      <h2 style="text-align:center;color:white;font-size:medium;color: white;background-color: #7A7874;border: 1px solid;" class="badge bg-light text-dark text-wrap">1,3,5,7,9 </h2>      
+        {% if call_result_odd_count|length == 0 %}
 
-    <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-success text-wrap">Call Crossed </h2><b>- {{callCrossed|length}}</b>
-        {% if callCrossed|length == 0 %}
-          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>No data!</strong> No symbols crossed call.
         </div>
         {% else %}
-
-        <!-- <div class="row">
-          <div class="col">
-            <b class="badge badge-" style="margin-top:6px;margin-bottom:6px;color: white;background-color: black;">1,3,5,7,9 </b> <b>- {{callcrossedodd|length}}</b>
-          </div>
-
-          <div class="col">
-            <b class="badge badge-warning" style="margin-top:6px;margin-bottom:6px;color: white;background-color: black;">0,2,4,6,8 </b> <b>- {{callcrossedeven|length}}</b>
-          </div>
-        </div> -->
-
         <div class="row">
           <div class="col-md-6 odd">
-            <h4 style="text-align:center;color:white;font-size:small;color: white;background-color: black;" class="badge badge-warning text-wrap">1,3,5,7,9 </h4><b>- {{callcrossedodd|length}}</b>
+            <h4 style="text-align:center;color:white;font-size:medium;background-color: #274E13;" class="badge text-wrap">Call Crossed </h4><b>- {{callCrossed_odd|length}}</b>
 
-            <div class="fixTableHead">
+
+            <div class="fixTableHead" style="background-color: white;">
             
   
   
               <nav aria-label="breadcrumb">
   
-                <ul class="list-group">
-                  {% for value in callcrossedodd %}
-                  <li style="font-size:13px;padding:0px" class="list-group-item"><button id="1" name="1" style="font-size: 1.1em;padding:0px" class="btn btn-warning btn-sm" value="{{ value.symbol }}">{{ value.symbol }}</button> |                 
+                <ul class="list-group" ></ul>
+                  {% for value in callCrossed_odd %}
+                  <li style="font-size:13px;padding:0px;background-color: white;border-width: 0.1em;border-color: white;" class="list-group-item"><button type="button" id="1" name="1" class="btn btn-outline-primary" value="{{ value.symbol }}"><b>{{ value.symbol }}</b></button> |                 
                     {%if value.opencrossed == "call" %}
-                    <span class="top" style="text-align:center"><b class="badge badge-success">{{ value.open }}</b></span>
+                    <span class="top" style="text-align:center"><b class="badge badge-warning">{{ value.open }}</b></span>
                     {% else %}
                       <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
                     {% endif %} | 
-                    <span class="top" style="text-align:center"><b class="badge badge-secondary">{{ value.ltp }}</b></span> |
+                    <!-- <span class="top" style="text-align:center"><b class="badge badge-secondary">{{ value.ltp }}</b></span> | -->
                     
                     <b>{{ value.time }}</b> | 
                     <b class="badge badge-info">{{ value.section }}</b> |  
-                    <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span>
+                    <!-- <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span> -->
                   </li>
     
                   {% endfor %}
@@ -54,85 +137,8 @@
         
           </div>
           </div>
-          <div class="col-md-6 even">
-            <h4 style="text-align:center;color:white;font-size:small;color: white;background-color: black;" class="badge badge-warning text-wrap">0,2,4,6,8,10</h4><b>- {{callcrossedeven|length}}</b>
-
-            <div class="fixTableHead">
-            
-  
-  
-              <nav aria-label="breadcrumb">
-  
-                <ul class="list-group" style="align-content: flex-start;">
-                  {% for value in callcrossedeven %}
-                  <li style="font-size:13px;padding:0px" class="list-group-item"><button id="1" name="1" style="font-size: 1.1em;padding:0px" class="btn btn-warning btn-sm" value="{{ value.symbol }}">{{ value.symbol }}</button> |                 
-                    {%if value.opencrossed == "call" %}
-                    <span class="top" style="text-align:center"><b class="badge badge-success">{{ value.open }}</b></span>
-                    {% else %}
-                      <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
-                    {% endif %} | 
-                    <span class="top" style="text-align:center"><b class="badge badge-secondary">{{ value.ltp }}</b></span> |
-                    
-                    <b>{{ value.time }}</b> | 
-                    <b class="badge badge-info">{{ value.section }}</b> |  
-                    <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span>
-                  </li>
-                  {% endfor %}
-                </ul>
-  
-
-  
-              </nav>
-  
-  
-            
-        
-          </div>
-          </div>
-        </div>
-
-
-        <!-- <div class="fixTableHead">
-
-            <nav aria-label="breadcrumb">
-
-              <ul class="list-group">
-              {% for value in callCrossed %}
-              <li style="font-size:13px;padding:0px" class="list-group-item"><button id="1" name="1" style="font-size: 1.1em;padding:0px" class="btn btn-warning btn-sm" value="{{ value.symbol }}">{{ value.symbol }}</button> |                 
-                {%if value.opencrossed == "call" %}
-                <span class="top" style="text-align:center"><b class="badge badge-success">{{ value.open }}</b></span>
-                {% else %}
-                  <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
-                {% endif %} | 
-                <span class="top" style="text-align:center"><b class="badge badge-secondary">{{ value.ltp }}</b></span> |
-                
-                <b>{{ value.time }}</b> | 
-                <b class="badge badge-info">{{ value.section }}</b> |  
-                <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span>
-              </li>
-
-              {% endfor %}
-              </ul>
-
-            </nav>
-
-        </div> -->
-
-        {% endif %}
-  </div>
-
-  <div class="col-md-6">
-    <h2 style="text-align:center;color:white;font-size:medium;" class="badge bg-success text-wrap">Call (50%) </h2><b>- {{call_result_count }}</b>
-
-        {% if call_result_count == 0 %}
-          <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>No data!</strong> No symbols crossed put.
-        </div>
-        {% else %}
-
-        <div class="row">
           <div class="col-md-6 odd">
-            <h4 style="text-align:center;color:white;font-size:small;color: white;background-color: black;" class="badge badge-warning text-wrap">1,3,5,7,9 </h4><b>- {{callodd|length}}</b>
+            <h4 style="text-align:center;color:white;font-size:medium;background-color: #274E13;" class="badge text-wrap">Call (50%) </h4><b>- {{callodd|length }}</b>
 
             <div class="fixTableHead">
             
@@ -143,7 +149,7 @@
                 <ul class="list-group">
                 {% for value in callodd %}
                 <!-- <b class="badge badge-success">{{ value.symbol }}</b> -->
-                <li style="font-size:13px;padding:0px;align-content:left;" class="list-group-item"> <button id="1" name="1" style="font-size: 0.95em;padding:0px" class="btn btn-success btn-sm" value="{{ value.symbol }}">{{ value.symbol }}</button>   |
+                <li style="font-size:13px;padding:0px;align-content:left;" class="list-group-item"> <button type="button" id="1" name="1" class="btn btn-outline-secondary" value="{{ value.symbol }}"><b>{{ value.symbol }}</b></button>   |
                   <b class="badge badge-info">{{ value.section }}</b> |  
                   <!-- <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span> -->
                   
@@ -164,8 +170,22 @@
         
           </div>
           </div>
+        </div>
+        {% endif %}
+  </div>
+
+
+  <div class="col-md-6">
+    <h4 style="text-align:center;color:white;font-size:medium;color: white;background-color: #7A7874;border: 1px solid;" class="badge bg-light text-dark text-wrap">0,2,4,6,8,10</h4> 
+
+        {% if call_result_even_count == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols crossed put.
+        </div>
+        {% else %}
+        <div class="row">
           <div class="col-md-6 even">
-            <h4 style="text-align:center;color:white;font-size:small;color: white;background-color: black;" class="badge badge-warning text-wrap">0,2,4,6,8,10</h4><b>- {{calleven|length}}</b>
+            <h4 style="text-align:center;color:white;font-size:medium;background-color: #274E13;" class="badge text-wrap">Call Crossed </h4><b>- {{callCrossed_even|length}}</b>
 
             <div class="fixTableHead">
             
@@ -174,19 +194,20 @@
               <nav aria-label="breadcrumb">
   
                 <ul class="list-group" style="align-content: flex-start;">
-                {% for value in calleven %}
-                <li style="font-size:13px;padding:0px;align-content:left;" class="list-group-item"><button id="1" name="1" style="font-size: 0.95em;padding:0px" class="btn btn-success btn-xs" value="{{ value.symbol }}">{{ value.symbol }}</button> |
-                  <b class="badge badge-info">{{ value.section }}</b> |  
-                  <!-- <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span> -->
-
-                  <!-- {%if value.opencrossed == "call" %}
-                    <span class="top" style="text-align:center"><b class="badge badge-success" >{{ value.open }}</b></span>
-                  {% else %}
-                    <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
-                  {% endif %} | 
-                   -->
+                  {% for value in callCrossed_even %}
+                  <li style="font-size:13px;padding:0px" class="list-group-item"><button type="button" id="1" name="1" class="btn btn-outline-Success" value="{{ value.symbol }}"><b>{{ value.symbol }}</b></button> |                 
+                    {%if value.opencrossed == "call" %}
+                    <span class="top" style="text-align:center"><b class="badge badge-warning">{{ value.open }}</b></span>
+                    {% else %}
+                      <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
+                    {% endif %} | 
+                    <!-- <span class="top" style="text-align:center"><b class="badge badge-secondary">{{ value.ltp }}</b></span> | -->
+                    
+                    <b>{{ value.time }}</b> | 
+                    <b class="badge badge-info">{{ value.section }}</b> |  
+                    <!-- <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span> -->
                   </li>
-                {% endfor %}
+                  {% endfor %}
                 </ul>
   
 
@@ -198,8 +219,43 @@
         
           </div>
           </div>
-        </div>
+          <div class="col-md-6 even">
+            <h4 style="text-align:center;color:white;font-size:medium;background-color: #274E13;" class="badge text-wrap">Call (50%) </h4><b>- {{calleven|length }}</b>
+        
+            <div class="fixTableHead">
+            
+        
+        
+              <nav aria-label="breadcrumb">
+        
 
+
+                <ul class="list-group" style="align-content: flex-start;">
+                  {% for value in calleven %}
+                  <li style="font-size:13px;padding:0px;align-content:left;" class="list-group-item"><button type="button" id="1" name="1" class="btn btn-outline-danger" value="{{ value.symbol }}"><b>{{ value.symbol }}</b></button> |
+                    <b class="badge badge-info">{{ value.section }}</b> |  
+                    <!-- <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span> -->
+  
+                    <!-- {%if value.opencrossed == "call" %}
+                      <span class="top" style="text-align:center"><b class="badge badge-success" >{{ value.open }}</b></span>
+                    {% else %}
+                      <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
+                    {% endif %} | 
+                     -->
+                    </li>
+                  {% endfor %}
+                  </ul>
+        
+        
+        
+              </nav>
+        
+        
+            
+        
+          </div>
+          </div>
+        </div>
         {% endif %}
 
   </div>
@@ -211,26 +267,26 @@
 
 <div class="row">
 <div class="col-md-6">
-<h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-danger text-wrap">Put Crossed </h2><b>- {{putCrossed|length}}</b>
+  <h2 style="text-align:center;color:white;font-size:medium;color: white;background-color: #7A7874;border: 1px solid;margin-top:22px" class="badge bg-light text-dark text-wrap">1,3,5,7,9 </h2>      
 
-        {% if putCrossed|length == 0 %}
+        {% if put_result__odd_count|length == 0 %}
           <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <strong>No data!</strong> No symbols crossed put.
         </div>
         {% else %}
         <!-- <div class="row">
           <div class="col">
-            <b class="badge badge-warning" style="margin-top:6px;margin-bottom:6px;color: white;background-color: black;">1,3,5,7,9 </b> <b>- {{putcrossedodd|length}}</b>
+            <b class="badge badge-warning" style="margin-top:6px;margin-bottom:6px;color: white;background-color: #7A7874;">1,3,5,7,9 </b> <b>- {{putcrossedodd|length}}</b>
           </div>
 
           <div class="col">
-            <b class="badge badge-warning" style="margin-top:6px;margin-bottom:6px;color: white;background-color: black;">0,2,4,6,8 </b> <b>- {{putcrossedeven|length}}</b>
+            <b class="badge badge-warning" style="margin-top:6px;margin-bottom:6px;color: white;background-color: #7A7874;">0,2,4,6,8 </b> <b>- {{putcrossedeven|length}}</b>
           </div>
           
         </div> -->
         <div class="row">
           <div class="col-md-6 odd">
-            <h4 style="text-align:center;color:white;font-size:small;color: white;background-color: black;" class="badge badge-warning text-wrap">1,3,5,7,9 </h4><b>- {{putcrossedodd|length}}</b>
+            <h2 style="text-align:center;color:white;font-size:medium;background-color: #660000;" class="badge text-wrap">Put Crossed </h2><b>- {{putCrossed_odd|length}}</b>
 
             <div class="fixTableHead">
             
@@ -239,17 +295,17 @@
               <nav aria-label="breadcrumb">
   
                 <ul class="list-group">
-                  {% for value in putcrossedodd %}
-                  <li style="font-size:13px;padding:0px" class="list-group-item"><button id="1" name="1" style="font-size: 0.95em;padding:0px" class="btn btn-warning btn-sm" value="{{ value.symbol }}">{{ value.symbol }}</button> |                 
+                  {% for value in putCrossed_odd %}
+                  <li style="font-size:13px;padding:0px" class="list-group-item"><button type="button" id="1" name="1" class="btn btn-outline-Success" value="{{ value.symbol }}"><b>{{ value.symbol }}</b></button> |                 
                     {%if value.opencrossed == "call" %}
-                      <span class="top" style="text-align:center"><b class="badge badge-success">{{ value.open }}</b></span>
+                      <span class="top" style="text-align:center"><b class="badge badge-warning">{{ value.open }}</b></span>
                     {% else %}
                       <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
                     {% endif %} | 
-                    <span class="top" style="text-align:center"><b class="badge badge-secondary">{{ value.ltp }}</b></span> |
+                    <!-- <span class="top" style="text-align:center"><b class="badge badge-secondary">{{ value.ltp }}</b></span> | -->
                     <b>{{ value.time }}</b> | 
                     <b class="badge badge-info">{{ value.section }}</b> |  
-                    <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span>
+                    <!-- <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span> -->
                   </li>
     
                   {% endfor %}
@@ -264,90 +320,8 @@
         
           </div>
           </div>
-          <div class="col-md-6 even">
-            <h4 style="text-align:center;color:white;font-size:small;color: white;background-color: black;" class="badge badge-warning text-wrap">0,2,4,6,8,10</h4><b>- {{putcrossedeven|length}}</b>
-
-            <div class="fixTableHead">
-            
-  
-  
-              <nav aria-label="breadcrumb">
-  
-                <ul class="list-group">
-                  {% for value in putcrossedeven %}
-                  <li style="font-size:13px;padding:0px" class="list-group-item"><button id="1" name="1" style="font-size: 0.95em;padding:0px" class="btn btn-warning btn-sm" value="{{ value.symbol }}">{{ value.symbol }}</button> |                 
-                    {%if value.opencrossed == "call" %}
-                      <span class="top" style="text-align:center"><b class="badge badge-success">{{ value.open }}</b></span>
-                    {% else %}
-                      <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
-                    {% endif %} | 
-                    <span class="top" style="text-align:center"><b class="badge badge-secondary">{{ value.ltp }}</b></span> |
-                    <b>{{ value.time }}</b> | 
-                    <b class="badge badge-info">{{ value.section }}</b> |  
-                    <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span>
-                  </li>
-    
-                  {% endfor %}
-                </ul>
-  
-
-  
-              </nav>
-  
-  
-            
-        
-          </div>
-          </div>
-        </div>
-
-        <!-- <div class="fixTableHead">
-          
-
-
-            <nav aria-label="breadcrumb">
-
-              <ul class="list-group">
-              {% for value in putCrossed %}
-              <li style="font-size:13px;padding:0px" class="list-group-item"><button id="1" name="1" style="font-size: 0.95em;padding:0px" class="btn btn-warning btn-sm" value="{{ value.symbol }}">{{ value.symbol }}</button> |                 
-                {%if value.opencrossed == "call" %}
-                  <span class="top" style="text-align:center"><b class="badge badge-success">{{ value.open }}</b></span>
-                {% else %}
-                  <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
-                {% endif %} | 
-                <span class="top" style="text-align:center"><b class="badge badge-secondary">{{ value.ltp }}</b></span> |
-                <b>{{ value.time }}</b> | 
-                <b class="badge badge-info">{{ value.section }}</b> |  
-                <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span>
-              </li>
-
-              {% endfor %}
-              </ul>
-
-            </nav>
-
-
-          
-      
-        </div> -->
-
-        {% endif %}
-  </div>
-
-  
-  <div class="col-md-6">
-    <h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-danger text-wrap">Put (50%) </h2><b>- {{put_result_count}}</b>
-
-        {% if put_result_count == 0 %}
-          <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <strong>No data!</strong> No symbols crossed put.
-        </div>
-        {% else %}
-
-
-        <div class="row">
           <div class="col-md-6 odd">
-            <h4 style="text-align:center;color:white;font-size:small;color: white;background-color: black;" class="badge badge-warning text-wrap">1,3,5,7,9 </h4><b>- {{putodd|length}}</b>
+            <h2 style="text-align:center;color:white;font-size:medium;background-color: #660000;" class="badge text-wrap">Put (50%) </h2><b>- {{putodd|length}}</b>
 
             <div class="fixTableHead">
             
@@ -359,7 +333,7 @@
                 {% for value in putodd %}
 
 
-                <li style="font-size:13px;padding:0px;align-content:left;" class="list-group-item"><button id="1" name="1" style="font-size: 0.95em;padding:0px;background-color:#cc3434 ;" class="btn btn-danger btn-xs" value="{{ value.symbol }}">{{ value.symbol }}</button> |
+                <li style="font-size:13px;padding:0px;align-content:left;" class="list-group-item"><button type="button" id="1" name="1" class="btn btn-outline-danger" value="{{ value.symbol }}"><b>{{ value.symbol }}</b></button> |
                   <b class="badge badge-info">{{ value.section }}</b> |  
                   <!-- <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span> -->
 
@@ -382,8 +356,60 @@
         
           </div>
           </div>
+
+        </div>
+        {% endif %}
+  </div>
+
+  
+  <div class="col-md-6">
+    <h4 style="text-align:center;color:white;font-size:medium;color: white;background-color: #7A7874;border: 1px solid;margin-top:22px" class="badge bg-light text-dark text-wrap">0,2,4,6,8,10</h4>
+
+        {% if put_result_even_count == 0 %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>No data!</strong> No symbols crossed put.
+        </div>
+        {% else %}
+
+
+        <div class="row">
           <div class="col-md-6 even">
-            <h4 style="text-align:center;color:white;font-size:small;color: white;background-color: black;" class="badge badge-warning text-wrap">0,2,4,6,8,10</h4><b>- {{puteven|length}}</b>
+            <h2 style="text-align:center;color:white;font-size:medium;background-color: #660000;" class="badge text-wrap">Put Crossed </h2><b>- {{putCrossed_even|length}}</b>
+
+            <div class="fixTableHead">
+            
+  
+  
+              <nav aria-label="breadcrumb">
+  
+                <ul class="list-group">
+                  {% for value in putCrossed_even %}
+                  <li style="font-size:13px;padding:0px;" class="list-group-item"><button type="button" id="1" name="1" class="btn btn-outline-primary" value="{{ value.symbol }}"><b>{{ value.symbol }}</b></button> |                 
+                    {%if value.opencrossed == "call" %}
+                      <span class="top" style="text-align:center"><b class="badge badge-warning">{{ value.open }}</b></span>
+                    {% else %}
+                      <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
+                    {% endif %} | 
+                    <!-- <span class="top" style="text-align:center"><b class="badge badge-secondary">{{ value.ltp }}</b></span> | -->
+                    <b>{{ value.time }}</b> | 
+                    <b class="badge badge-info">{{ value.section }}</b> |  
+                    <!-- <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span> -->
+                  </li>
+    
+                  {% endfor %}
+                </ul>
+  
+
+  
+              </nav>
+  
+  
+            
+        
+          </div>
+          </div>
+          <div class="col-md-6 even">
+            <h2 style="text-align:center;color:white;font-size:medium;background-color: #660000;" class="badge text-wrap">Put (50%) </h2><b>- {{puteven|length}}</b>
 
             <div class="fixTableHead">
             
@@ -393,7 +419,7 @@
   
                 <ul class="list-group">
                 {% for value in puteven %}
-                <li style="font-size:13px;padding:0px;align-content:left;" class="list-group-item"><button id="1" name="1" style="font-size: 1.1em;padding:0px;background-color:#cc3434 ;" class="btn btn-danger btn-xs" value="{{ value.symbol }}">{{ value.symbol }}</button> |
+                <li style="font-size:13px;padding:0px;align-content:left;" class="list-group-item"><button type="button" id="1" name="1" class="btn btn-outline-secondary" value="{{ value.symbol }}"><b>{{ value.symbol }}</b></button> |
                   <b class="badge badge-info">{{ value.section }}</b> |  
                   <!-- <span class="top" style="text-align:center"><b>{{ value.difference }}</b></span> -->
 
@@ -431,7 +457,7 @@
 <div class="col-md-6">
 
     
-  <h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-success text-wrap">Top Gainers </h2><b>- {{gain|length}}</b>
+  <h2 style="text-align:center;color:white;font-size:medium;margin-top:22px;background-color: #274E13;" class="badge text-wrap">Top Gainers </h2><b>- {{gain|length}}</b>
   {% if gain|length == 0 %}
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
   <strong>No data!</strong> No symbols more than 3%.
@@ -460,7 +486,7 @@
   
 <div class="col-md-6">
 
-  <h2 style="text-align:center;color:white;font-size:medium;margin-top:22px" class="badge bg-danger text-wrap">Top Losers</h2><b>- {{loss|length}}</b>
+  <h2 style="text-align:center;color:white;font-size:medium;margin-top:22px;background-color: #660000;" class="badge text-wrap">Top Losers</h2><b>- {{loss|length}}</b>
   {% if loss|length == 0 %}
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
   <strong>No data!</strong> No symbols less than 3%.
@@ -667,7 +693,7 @@
 </div>
 
 <div class="jumbotron">
- <h2 style="text-align:center;color:white;font-size:medium" class="badge bg-danger text-wrap">Top Losers </h2><b>- {{loss|length}}</b>
+ <h2 style="text-align:center;color:white;font-size:medium;background-color: #660000;" class="badge text-wrap">Top Losers </h2><b>- {{loss|length}}</b>
   <p class="lead"  style="font-size:13px">    
     {% for value in loss %}
     <span class="badge badge-secondary badge-pill">{{ value.symbol }}</span>,

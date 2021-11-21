@@ -193,9 +193,9 @@ body {
     flex-direction: column;
     min-width: 60%;
     word-wrap: break-word;
-    background-color: #e9ecef;
+    background-color: #EFEFEF;
     background-clip: border-box;
-    border: 1px solid #e6e4e9;
+    border: 1px solid #EFEFEF;
     border-radius: 8px;
 }
 
@@ -250,6 +250,8 @@ body {
 .list-group-item {
     text-align: left!important;
 }
+
+
     </style>
 
     
@@ -279,7 +281,7 @@ body {
 
 
     <div class="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
-      <div class="bg-white mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden" style="width: 60%;">
+      <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center text-white overflow-hidden" style="width: 60%;background-color: #F4F1E9;">
         <div class="my-3 py-3">
 
           <form class="form-inline" method="POST" id="optionchainform" fno-optionchain-url="{% url 'optionChain' %}" >
@@ -297,7 +299,7 @@ body {
                               <option value="{{ post }}">{{ post }}</option>
                           {% endfor %} 
                     </select>
-                      <input style="margin-left:10px" class="btn btn-secondary" type="submit" value="Get data">
+                      <input style="margin-left:10px;background-color: #7A7874;" class="btn btn-secondary" type="submit" value="Get data">
                     {% comment %} <button style="margin-left:10px" type="submit" class="btn btn-primary">Get data</button> {% endcomment %}
                     <br>
 
@@ -308,9 +310,9 @@ body {
         </div>
       </div>
 
-      <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden" style="width: 40%;">
+      <div class="mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden" style="width: 40%;background-color:#d4d4d4;">
         <div class="my-3 p-3">
-          <h5 class="card-title" style="color:black"><input type='button' onclick='executeQuery1()' class="btn btn-secondary" value='Refresh'> </h5>
+          <h5 class="card-title" style="color:#7A7874"><input type='button' style="background-color: #7A7874;" onclick='executeQuery1()' class="btn btn-secondary" value='Refresh'> </h5>
            <div id="EquitySpace" class="slot"></div>
         </div>
       </div>

@@ -140,6 +140,7 @@ class LiveEquityResult(models.Model):
     opencrossed = models.CharField(max_length=20,default="")
     section = models.IntegerField(default=0)
     difference = models.CharField(max_length=10,default="")
+    change_perc = models.FloatField(default=0)
 
     def __str__(self):
         return self.symbol+" "+self.ltp+" "+self.strike
