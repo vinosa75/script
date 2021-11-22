@@ -119,7 +119,7 @@ def create_currency():
  
             for key,value in liveData.items():
                 if key in fnolist:
-                    
+                    LiveSegment.objects.filter(symbol=key).all().delete
                     if float(value[6]) >= 2:
                         # print(key)
                         if LiveSegment.objects.filter(symbol=key,segment="gain").exists():
