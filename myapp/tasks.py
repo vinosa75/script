@@ -47,6 +47,15 @@ def create_currency():
     LiveSegment.objects.filter(time__lte = segpastDate).delete()
     LiveSegment.objects.filter(date__lt = nsepadDate).delete()
 
+    LiveOITotal.objects.filter(time__lte = segpastDate).delete()
+    LiveOIChange.objects.filter(time__lte = segpastDate).delete()
+    LiveOIPercentChange.objects.filter(time__lte = segpastDate).delete()
+    
+    HistoryOITotal.objects.filter(time__lte = segpastDate).delete()
+    HistoryOIChange.objects.filter(time__lte = segpastDate).delete()
+    HistoryOIPercentChange.objects.filter(time__lte = segpastDate).delete()
+
+
 
     def initialEquity():
         try:
