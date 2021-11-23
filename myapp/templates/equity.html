@@ -276,7 +276,7 @@
                 <ul class="list-group">
                   {% for value in putCrossed_odd %}
                   <li style="font-size:13px;padding:0px" class="list-group-item"><button type="button" id="1" name="1" class="btn btn-outline-Success" value="{{ value.symbol }}"><b>{{ value.symbol }}</b></button> |                 
-                    {%if value.opencrossed == "call" %}
+                    {%if value.opencrossed == "put" %}
                       <span class="top" style="text-align:center"><b class="badge badge-warning">{{ value.open }}</b></span>
                     {% else %}
                       <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
@@ -358,7 +358,7 @@
                 <ul class="list-group">
                   {% for value in putCrossed_even %}
                   <li style="font-size:13px;padding:0px;" class="list-group-item"><button type="button" id="1" name="1" class="btn btn-outline-primary" value="{{ value.symbol }}"><b>{{ value.symbol }}</b></button> |                 
-                    {%if value.opencrossed == "call" %}
+                    {%if value.opencrossed == "put" %}
                       <span class="top" style="text-align:center"><b class="badge badge-warning">{{ value.open }}</b></span>
                     {% else %}
                       <span class="top" style="text-align:center"><b>{{ value.open }}</b></span>
