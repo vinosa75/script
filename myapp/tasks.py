@@ -719,8 +719,8 @@ def create_currency():
                             #     loss = LiveSegment(symbol=key,segment="above",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                             #     loss.save()
 
-                gainList = list(LiveSegment.objects.filter(segment="above").values_list('symbol', flat=True))
-                lossList = list(LiveSegment.objects.filter(segment="below").values_list('symbol', flat=True))
+                gainList = list(LiveSegment.objects.filter(segment="gain").values_list('symbol', flat=True))
+                lossList = list(LiveSegment.objects.filter(segment="loss").values_list('symbol', flat=True))
 
 
                 for e in LiveOITotalAllSymbol.objects.all():
