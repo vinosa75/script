@@ -965,6 +965,10 @@ def create_currency():
                 symbol1 = r
                 symbol2 = g
                 symbol3 = b
+                try:
+                    td_obj.disconnect()
+                except Exception:
+                    pass
                 td_obj = TD('tdws127', 'saaral@127')
                 first_chain = td_obj.start_option_chain( symbol1 , dt(dte.year , dte.month , dte.day) ,chain_length = 74)
                 second_chain = td_obj.start_option_chain( symbol2 , dt(dte.year , dte.month , dte.day) ,chain_length = 74)
@@ -1036,6 +1040,10 @@ def create_currency():
             # td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
             symbol1 = fnolist[-1]
             symbol2 = fnolist[-2]
+            try:
+                td_obj.disconnect()
+            except Exception:
+                pass
             td_obj = TD('tdws127', 'saaral@127')
             first_chain = td_obj.start_option_chain( symbol1 , dt(dte.year , dte.month , dte.day) ,chain_length = 75)
             second_chain = td_obj.start_option_chain( symbol2 , dt(dte.year , dte.month , dte.day) ,chain_length = 75)
@@ -1099,6 +1107,10 @@ def create_currency():
 
             # td_obj = TD(TrueDatausername, TrueDatapassword, log_level= logging.WARNING )
             symbol1 = fnolist[-1]
+            try:
+                td_obj.disconnect()
+            except Exception:
+                pass
             td_obj = TD('tdws127', 'saaral@127')
             first_chain = td_obj.start_option_chain( symbol1 , dt(dte.year , dte.month , dte.day) ,chain_length = 75)
 
