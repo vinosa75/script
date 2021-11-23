@@ -671,9 +671,9 @@ def create_currency():
                     if key in fnolistreal:
                         print(key)
                         LiveSegment.objects.filter(symbol=key).all().delete()
-                        if key == "SRF":
-                            print("Change per value")
-                            print(value[6])
+                        # if key == "SRF":
+                        #     print("Change per value")
+                        #     print(value[6])
                         if float(value[6]) >= 2:
                             gain = LiveSegment(symbol=key,segment="gain",change_perc=value[6],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d'),time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'))
                             gain.save()
@@ -807,6 +807,11 @@ def create_currency():
                         # print(float(liveData[e.symbol][1]))
                         # print("call Strike")
                         # print(float(callstrike))
+
+                        if e.symbol == "SRF":
+                            print("printing cal and live data")
+                            print(liveData[e.symbol][0])
+                            print(callstrike)
 
                         if float(liveData[e.symbol][1]) > float(callstrike):
                             if e.symbol in opencallcrossDict:
