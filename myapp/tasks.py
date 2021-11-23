@@ -671,6 +671,9 @@ def create_currency():
                     if key in fnolistreal:
                         print(key)
                         LiveSegment.objects.filter(symbol=key).all().delete()
+                        if key == "SRF":
+                            print("Change per value")
+                            print(value[6])
                         if float(value[6]) >= 2:
                             if len(LiveSegment.objects.filter(symbol=key,segment="gain")) > 0:
                                 LiveSegment.objects.filter(symbol=key,segment="gain").delete()
