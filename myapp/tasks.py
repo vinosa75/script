@@ -724,7 +724,7 @@ def create_currency():
 
 
                 for e in LiveOITotalAllSymbol.objects.all():
-                    print(e.symbol)
+                    # print(e.symbol)
                     # callcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="common",opencrossed="common",time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'),date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                     # callcross.save()
 
@@ -753,6 +753,8 @@ def create_currency():
                     strikegp = LiveOITotal.objects.filter(symbol=e.symbol)
 
                     if e.symbol in liveData and e.symbol in gainList:
+                        print(e.symbol)
+                        print(liveData)
 
                         # Difference Calculation
                         historyput = HistoryOIChange.objects.filter(symbol=e.symbol)
