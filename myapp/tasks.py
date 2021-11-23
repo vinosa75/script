@@ -669,7 +669,7 @@ def create_currency():
 
                 for key,value in liveData.items():
                     if key in fnolistreal:
-                        print(key)
+                        # print(key)
                         LiveSegment.objects.filter(symbol=key).all().delete()
                         # if key == "SRF":
                         #     print("Change per value")
@@ -724,7 +724,7 @@ def create_currency():
 
 
                 for e in LiveOITotalAllSymbol.objects.all():
-                    # print(e.symbol)
+                    print(e.symbol)
                     # callcross = TestEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="common",opencrossed="common",time=dt.now(timezone("Asia/Kolkata")).strftime('%H:%M:%S'),date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'))
                     # callcross.save()
 
@@ -754,19 +754,10 @@ def create_currency():
 
                     if e.symbol in liveData and e.symbol in gainList:
 
-                        # print(e.symbol)
-
                         # Difference Calculation
                         historyput = HistoryOIChange.objects.filter(symbol=e.symbol)
                         historycall = HistoryOITotal.objects.filter(symbol=e.symbol)
                         strikegp = LiveOITotal.objects.filter(symbol=e.symbol)
-
-                        # if len(strikegp) == 0:
-                        #     pass
-                        # else: 
-                        #     print(strikegp)
-                        #     print(strikegp[0])
-                        #     print(strikegp[0].strikegap)
 
                         if len(historyput) > 0:
                             diffputstrike = HistoryOIChange.objects.filter(symbol=e.symbol).earliest('time')
@@ -783,30 +774,9 @@ def create_currency():
                             diffcallstrike = LiveOITotal.objects.filter(symbol=e.symbol).earliest('time')
                             diffcallstrike = diffcallstrike.callstrike
                             # diffcallstrike = e.callstrike
-
-                        # print("diff put strike")
-                        # print(diffputstrike)
-                        # print("diff call strike")
-                        # print(diffcallstrike)
                         
                         difference = float(diffputstrike) - float(diffcallstrike)
                         section = int(abs((float(diffputstrike) - float(diffcallstrike))/float(strikegp[0].strikegap)))
-                        # print("strike")
-                        # print(section)
-
-                        # LiveEquityResult.objects.create(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call 1 percent",opencrossed="Nil",time=liveData[e.symbol][5],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),section=section,difference=difference)
-                        
-                        
-                        # Call
-                        # print("call live")
-                        # print(float(liveData[e.symbol][0]))
-                        # print("call one")
-                        # print(float(callone))
-
-                        # print("strike")
-                        # print(float(liveData[e.symbol][1]))
-                        # print("call Strike")
-                        # print(float(callstrike))
 
                         if e.symbol == "SRF":
                             print("printing cal and live data")
