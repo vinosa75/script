@@ -754,7 +754,7 @@ def create_currency():
 
                     if e.symbol in liveData and e.symbol in gainList:
                         print(e.symbol)
-                        print(liveData)
+                        # print(liveData)
 
                         # Difference Calculation
                         historyput = HistoryOIChange.objects.filter(symbol=e.symbol)
@@ -780,10 +780,8 @@ def create_currency():
                         difference = float(diffputstrike) - float(diffcallstrike)
                         section = int(abs((float(diffputstrike) - float(diffcallstrike))/float(strikegp[0].strikegap)))
 
-                        if e.symbol == "SRF":
-                            print("printing cal and live data")
-                            print(liveData[e.symbol][0])
-                            print(callstrike)
+                        print(liveData[e.symbol][0])
+                        print(callstrike)
 
                         if float(liveData[e.symbol][1]) > float(callstrike):
                             if e.symbol in opencallcrossDict:
