@@ -301,6 +301,8 @@ def optionChain(request):
     # Equity data
     symbol = symbol.strip()
     liveEqui = LiveEquityResult.objects.filter(symbol=symbol)
+    print("printing live equi")
+    print(liveEqui)
 
     # Optionchain data
     LiveOI = LiveOITotal.objects.filter(symbol=symbol)
