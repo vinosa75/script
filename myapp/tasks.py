@@ -798,7 +798,7 @@ def create_currency():
                         if float(liveData[e.symbol][2]) > float(callstrike):
                             if e.symbol in callcrossedsetDict:
                                 LiveEquityResult.objects.filter(symbol = e.symbol).delete()
-                                callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="Nil",time=opencallcrossDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),section=section,difference=difference,change_perc=liveData[e.symbol][6])
+                                callcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Call Crossed",opencrossed="Nil",time=callcrossedsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),section=section,difference=difference,change_perc=liveData[e.symbol][6])
                                 callcross.save()
                                 continue
                             else:
@@ -894,7 +894,7 @@ def create_currency():
                         if float(liveData[e.symbol][2]) < float(putstrike):
                             if e.symbol in putcrossedsetDict:
                                 LiveEquityResult.objects.filter(symbol = e.symbol).delete()
-                                putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=openputcrossDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),section=section,difference=difference,change_perc=liveData[e.symbol][6])
+                                putcross = LiveEquityResult(symbol=e.symbol,open=liveData[e.symbol][1],high=liveData[e.symbol][2],low=liveData[e.symbol][3],prev_day_close=liveData[e.symbol][4],ltp=liveData[e.symbol][0],strike="Put Crossed",opencrossed="Nil",time=putcrossedsetDict[e.symbol],date=dt.now(timezone("Asia/Kolkata")).strftime('%Y-%m-%d %H:%M:%S'),section=section,difference=difference,change_perc=liveData[e.symbol][6])
                                 putcross.save()
                                 continue
                             else:
