@@ -437,11 +437,11 @@ def create_currency():
         newDict = {}
         # for key,value in FutureData.items():
         # Call 1 percent 
-        callone = float(OITotalValue['cestrike']) - (float(strikeGap))*0.5
+        callone = float(OITotalValue['cestrike']) - (float(strikeGap))*0.99
         # Call 1/2 percent 
         callhalf = float(OITotalValue['cestrike']) - (float(strikeGap))*0.05
         # Put 1 percent
-        putone = float(OITotalValue['pestrike']) + (float(strikeGap))*0.5
+        putone = float(OITotalValue['pestrike']) + (float(strikeGap))*0.99
         # Put 1/2 percent
         puthalf = float(OITotalValue['pestrike']) + (float(strikeGap))*0.05
 
@@ -737,9 +737,9 @@ def create_currency():
                         callstrike = historyStrike.callstrike
                         putstrike = historyStrike.putstrike
                         # Call 1 percent 
-                        callone = float(callstrike) - (float(strikegp[0].strikegap))*0.5
+                        callone = float(callstrike) - (float(strikegp[0].strikegap))*0.99
                         # Put 1 percent
-                        putone = float(putstrike) + (float(strikegp[0].strikegap))*0.5
+                        putone = float(putstrike) + (float(strikegp[0].strikegap))*0.99
 
                     else:
                         callstrike = e.callstrike
@@ -1335,9 +1335,9 @@ def create_equity():
             callstrike = historyStrike.callstrike
             putstrike = historyStrike.putstrike
             # Call 1 percent 
-            callone = float(callstrike) - (float(strikegp[0].strikegap))*0.5
+            callone = float(callstrike) - (float(strikegp[0].strikegap))*0.99
             # Put 1 percent
-            putone = float(putstrike) + (float(strikegp[0].strikegap))*0.5
+            putone = float(putstrike) + (float(strikegp[0].strikegap))*0.99
 
         else:
             callstrike = e.callstrike
