@@ -1003,7 +1003,7 @@ def create_currency():
                             dte = dt.strptime(expiry, '%d-%b-%Y')
                 else:
                     # print("inside monthend")
-                    expiry = "02-Dec-2021"
+                    expiry = "30-Dec-2021"
                     dte = dt.strptime(expiry, '%d-%b-%Y')
 
                 # print("After exception")
@@ -1070,16 +1070,16 @@ def create_currency():
             if fnolist[-1] in exceptionList:
                     if calendar.day_name[date.today().weekday()] == "Thrusday":
                         expiry = date.today()
-                        expiry = "7-Oct-2021"
+                        expiry = "2-Dec-2021"
                         dte = dt.strptime(expiry, '%d-%b-%Y')
                         # print("inside thursday")
                     else:
                         expiry = pendulum.now().next(pendulum.THURSDAY).strftime('%d-%b-%Y')
-                        expiry = "7-Oct-2021"
+                        expiry = "2-Dec-2021"
                         dte = dt.strptime(expiry, '%d-%b-%Y')
             else:
                 # print("inside monthend")
-                expiry = "02-Dec-2021"
+                expiry = "30-Dec-2021"
                 dte = dt.strptime(expiry, '%d-%b-%Y')
 
             # print("After exception")
@@ -1147,7 +1147,7 @@ def create_currency():
                         dte = dt.strptime(expiry, '%d-%b-%Y')
             else:
                 # print("inside monthend")
-                expiry = "02-Dec-2021"
+                expiry = "30-Dec-2021"
                 dte = dt.strptime(expiry, '%d-%b-%Y')
 
             # print("After exception")
